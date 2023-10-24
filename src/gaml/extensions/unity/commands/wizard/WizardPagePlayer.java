@@ -49,11 +49,60 @@ public class WizardPagePlayer extends WizardPage {
 		 groupPlayer.setLayout(new GridLayout(2, false));
 		 groupPlayer.setText("Information about the player");
 		
-		 Label lp = new Label(groupPlayer, SWT.LEFT);
+		 Label lma = new Label(groupPlayer, SWT.LEFT);
+		 lma.setText("Min number of players" );
+			Text tma =  new Text(groupPlayer, SWT.BORDER);
+			tma.setText(generator.getMin_num_player() + "");
+			tma.addModifyListener(new ModifyListener() {
+				
+				@Override
+				public void modifyText(ModifyEvent e) {
+					Integer tami = Integer.valueOf(tma.getText());
+					if (tami != null)
+						generator.setMin_num_player(tami);
+				}
+		    });
+			
+			Label lhmaa = new Label(groupPlayer, SWT.LEFT);
+			lhmaa.setText("Has a max number of players?" );
+			Button bhmaa = new Button(groupPlayer, SWT.CHECK);
+			bhmaa.setSelection(true);
+			 
+			Label lmaa = new Label(groupPlayer, SWT.LEFT);
+			lmaa.setText("Max number of players" );
+				Text tmaa =  new Text(groupPlayer, SWT.BORDER);
+				tmaa.setText(generator.getMax_num_player() + "");
+				tmaa.addModifyListener(new ModifyListener() {
+					
+					@Override
+					public void modifyText(ModifyEvent e) {
+						Integer tmaai = Integer.valueOf(tmaa.getText());
+						if (tmaai != null)
+							generator.setMax_num_player(tmaai);
+					}
+			    });
+				
+				bhmaa.addSelectionListener(new SelectionAdapter() {
+
+					public void widgetSelected(SelectionEvent event) {
+						Button btn = (Button) event.getSource();
+				        generator.setHas_max_num_player(btn.getSelection());
+				        if (btn.getSelection()) {
+				        	tmaa.setEnabled(true);
+				        	
+				        } else {
+				        	tmaa.setEnabled(false);
+				        }
+				           
+				    }
+				});
+			 
+			 
+		/* Label lp = new Label(groupPlayer, SWT.LEFT);
 			lp.setText("Add a player agent?" );
 			Button bt = new Button(groupPlayer, SWT.CHECK);
 			 bt.setSelection(true);
-			
+		*/	
 			
 			Label lic = new Label(groupPlayer, SWT.LEFT);
 			lic.setText("Init location of the player" );
@@ -155,7 +204,7 @@ public class WizardPagePlayer extends WizardPage {
 								}
 						    });
 						
-							bt.addSelectionListener(new SelectionAdapter() {
+							/*bt.addSelectionListener(new SelectionAdapter() {
 
 								public void widgetSelected(SelectionEvent event) {
 									Button btn = (Button) event.getSource();
@@ -179,7 +228,7 @@ public class WizardPagePlayer extends WizardPage {
 							        }
 							           
 							    }
-							});
+							});*/
 		 setControl(container);
 			
 	}
