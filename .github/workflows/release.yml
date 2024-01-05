@@ -1,0 +1,62 @@
+name: Test and release
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    name: Build my project
+    runs-on: ubuntu-latest
+    steps:
+      # The following step as short on disk space
+      # docs here: https://github.com/marketplace/actions/maximize-build-disk-space
+      - name: Maximize build space 🪶
+        uses: easimon/maximize-build-space@master
+        with:
+          remove-haskell: true
+          remove-codeql: true
+          remove-docker-images: true
+          # We can afford to uninstall android & dotnet as game-ci relies on docker containers
+          remove-android: true
+          remove-dotnet: true
+          root-reserve-mb: 20480 
+          #  9216 - 9GB not enough
+
+      # Checkout
+      - name: Checkout repository 📥
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: '1'
+
+      # Cache
+      #- uses: actions/cache@v3
+      #  with:
+      #    path: Library
+      #    key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+      #    restore-keys: |
+      #      Library-
+
+      # Test
+      #- name: Run tests
+      #  uses: game-ci/unity-test-runner@v4
+      #  env:
+      #    UNITY_LICENSE: ${{ secrets.ARTHUR_UNITY_PERSONAL_LICENSE }}
+      #  with:
+      #    githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build
+      - name: Build project 👷
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.ARTHUR_UNITY_PERSONAL_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.ARTHUR_UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.ARTHUR_UNITY_PASSWORD }}
+        with:
+          targetPlatform: Android
+
+      # Output
+      - name: Save built artefact 📦
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build
+          path: build
