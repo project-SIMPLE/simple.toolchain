@@ -105,7 +105,8 @@ public class WizardPagePlayer extends WizardPage {
 		*/	
 			
 			Label lic = new Label(groupPlayer, SWT.LEFT);
-			lic.setText("Init location of the player" );
+			lic.setText("Init location of the players" );
+			 generator.setLocationInit(new GamaPoint(50.0,50.0,0.0));
 		
 			 Group groupPlayerLoc = new Group(groupPlayer, SWT.NONE);
 			 groupPlayerLoc.setLayout(new GridLayout(6, false));

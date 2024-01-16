@@ -45,7 +45,7 @@ public class WizardPageGeneralInformation extends WizardPage {
 	public void createControl(Composite parent) {
 		container = new Composite(parent, SWT.NONE);
 		 container.setLayout(new FillLayout(SWT.VERTICAL));
-		 Group groupConnection = new Group(container, SWT.NONE);
+		/* Group groupConnection = new Group(container, SWT.NONE);
 		 groupConnection.setLayout(new GridLayout(2, false));
 		 groupConnection.setText("Information about the connection");
 			
@@ -62,7 +62,7 @@ public class WizardPageGeneralInformation extends WizardPage {
 					if (port != null)
 						generator.setPort(port);
 				}
-		    });
+		    });*/
 			
 			 Group groupExperiment = new Group(container, SWT.NONE);
 			 groupExperiment.setLayout(new GridLayout(2, false));
