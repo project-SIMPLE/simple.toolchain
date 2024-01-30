@@ -119,14 +119,14 @@ public class WizardPagePlayer extends WizardPage {
 			 	lily.setText("Y:" );
 			 	
 			 	Text tily =  new Text(groupPlayerLoc, SWT.BORDER);
-			 	Label lilz = new Label(groupPlayerLoc, SWT.LEFT);
-			 	lilz.setText("Z:" );
+			 //	Label lilz = new Label(groupPlayerLoc, SWT.LEFT);
+			 //	lilz.setText("Z:" );
 			 	
-			 	Text tilz =  new Text(groupPlayerLoc, SWT.BORDER);
+			 //	Text tilz =  new Text(groupPlayerLoc, SWT.BORDER);
 				
 			 	tilx.setText("" + generator.getLocationInit().x);
 			 	tily.setText("" + generator.getLocationInit().y);
-			 	tilz.setText("" + generator.getLocationInit().z);
+			 //	tilz.setText("" + generator.getLocationInit().z);
 			 	
 			 	ModifyListener ml = new ModifyListener() {
 					
@@ -134,9 +134,9 @@ public class WizardPagePlayer extends WizardPage {
 					public void modifyText(ModifyEvent e) {
 						Double x = Double.valueOf(tilx.getText());
 						Double y = Double.valueOf(tily.getText());
-						Double z = Double.valueOf(tilz.getText());
-						if (x != null && y != null && z != null  )
-							generator.setLocationInit(new GamaPoint(x,y,z));
+						//Double z = Double.valueOf(tilz.getText());
+						if (x != null && y != null  )
+							generator.setLocationInit(new GamaPoint(x,y));
 							
 					}
 				};
@@ -144,7 +144,7 @@ public class WizardPagePlayer extends WizardPage {
 			    
 			 	tilx.addModifyListener(ml);
 			 	tily.addModifyListener(ml);
-			 	tilz.addModifyListener(ml);
+			 	//tilz.addModifyListener(ml);
 				
 			 	
 				 Label lpr = new Label(groupPlayer, SWT.LEFT);
