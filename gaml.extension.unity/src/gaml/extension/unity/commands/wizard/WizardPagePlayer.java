@@ -180,7 +180,7 @@ public class WizardPagePlayer extends WizardPage {
 						Label lps = new Label(groupPlayer, SWT.LEFT);
 						lps.setText("Player Size (display):" );
 							Text tps =  new Text(groupPlayer, SWT.BORDER);
-							tps.setText(generator.getPlayerAgentsPerceptionRadius().toString());
+							tps.setText(generator.getPlayerSize().toString());
 							tps.addModifyListener(new ModifyListener() {
 								
 								@Override
