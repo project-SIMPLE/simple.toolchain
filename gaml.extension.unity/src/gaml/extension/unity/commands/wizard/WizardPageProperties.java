@@ -69,6 +69,7 @@ public class WizardPageProperties extends WizardPage {
 	private Button btnHasACollider;
 	private Button btnIsInteractable;
 	private Button btnIsGrabable;
+	private Button btnFollow;
 	private Button btnHasAPrefab;
 	/**
 	 * Instantiates a new wizard page display.
@@ -111,7 +112,7 @@ public class WizardPageProperties extends WizardPage {
 		    	  if ((e.type ==  SWT.Selection) && (properiesList.getSelectionIndex() >= 0)) {
 		    		 String item = properiesList.getItem(properiesList.getSelectionIndex());
 		    		 currentValues = definedProperties.get(item);
-		    		 for( String id : textAreas.keySet()) {
+		    		for( String id : textAreas.keySet()) {
 		    			 textAreas.get(id).setText(currentValues.get(id) == null ? "" : currentValues.get(id));
 		    		}
 		    		for(String id :  booleanAreas.keySet()) {
@@ -143,7 +144,7 @@ public class WizardPageProperties extends WizardPage {
 		
 		Group grpInteraction = new Group(grpDefinitionOfA, SWT.NONE);
 		grpInteraction.setText("Interaction");
-		grpInteraction.setBounds(10, 50, 413, 51);
+		grpInteraction.setBounds(10, 50, 500, 51);
 		
 		btnHasACollider = new Button(grpInteraction, SWT.CHECK);
 		btnHasACollider.setBounds(30, 10, 93, 16);
@@ -180,6 +181,17 @@ public class WizardPageProperties extends WizardPage {
 			public void widgetSelected(final SelectionEvent event) {
 				Button btn = (Button) event.getSource();
 				currentValues.put("grabable", btn.getSelection() +"");
+			}
+		});
+		
+		btnFollow = new Button(grpInteraction, SWT.CHECK);
+		btnFollow.setBounds(350, 10, 150, 16);
+		btnFollow.setText("send back to GAMA");
+		btnFollow.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent event) {
+				Button btn = (Button) event.getSource();
+				currentValues.put("follow", btn.getSelection() +"");
 			}
 		});
 		
@@ -231,12 +243,10 @@ public class WizardPageProperties extends WizardPage {
 		text_3 = new Text(grpGeometry, SWT.BORDER);
 		text_3.setBounds(170, 25, 109, 19);
 		text_3.addModifyListener(e -> currentValues.put("color", text_3.getText()));
-		text_3.setText("gray");
 		
 		text_5 = new Text(grpGeometry, SWT.BORDER);
 		text_5.setBounds(170, 0, 109, 19);
 		text_5.addModifyListener(e -> currentValues.put("height", text_5.getText()));
-		text_5.setText("1.0");
 		
 		Label lblHeight = new Label(grpGeometry, SWT.NONE);
 		lblHeight.setBounds(4, 3, 165, 14);
@@ -253,7 +263,6 @@ public class WizardPageProperties extends WizardPage {
 		text_2 = new Text(grpPrefav, SWT.BORDER);
 		text_2.setBounds(220, 23, 109, 19);
 		text_2.addModifyListener(e -> currentValues.put("size", text_2.getText()));
-		text_2.setText("1.0");
 		
 		Label lblPrefabPath = new Label(grpPrefav, SWT.NONE);
 		lblPrefabPath.setBounds(4, 3, 200, 14);
@@ -266,22 +275,18 @@ public class WizardPageProperties extends WizardPage {
 		text_4 = new Text(grpPrefav, SWT.BORDER);
 		text_4.setBounds(220, 0, 109, 19);
 		text_4.addModifyListener(e -> currentValues.put("prefab", text_4.getText()));
-		text_4.setText("Prefabs/Visual Prefabs/City/Vehicles/Car");
 		
 		text_6 = new Text(grpPrefav, SWT.BORDER);
 		text_6.setBounds(220, 48, 109, 19);
 		text_6.addModifyListener(e -> currentValues.put("rotation_coeff", text_6.getText()));
-		text_6.setText("1.0");
 		
 		text_7 = new Text(grpPrefav, SWT.BORDER);
 		text_7.setBounds(220, 98, 109, 19);
 		text_7.addModifyListener(e -> currentValues.put("y-offset", text_7.getText()));
-		text_7.setText("0.0");
 		
 		text_8 = new Text(grpPrefav, SWT.BORDER);
 		text_8.setBounds(220, 73, 109, 19);
 		text_8.addModifyListener(e -> currentValues.put("rotation_offset", text_8.getText()));
-		text_8.setText("0.0");
 		
 		Label lblRotationCoeff = new Label(grpPrefav, SWT.NONE);
 		lblRotationCoeff.setBounds(4, 51, 200, 14);
@@ -302,7 +307,6 @@ public class WizardPageProperties extends WizardPage {
 		      public void handleEvent(Event e) {
 		    	  if ((e.type ==  SWT.Selection)) {
 		    		  String name = currentValues.get("name");
-		    		  System.out.println("name: " + name);
 		    		  if (!name.isBlank()) {
 		    			 for (int i = 0; i < properiesList.getItemCount(); i ++) {
 		    				String it = properiesList.getItem(i);
@@ -313,14 +317,8 @@ public class WizardPageProperties extends WizardPage {
 		    			 }
 		    			 properiesList.add(name);
 		    			 definedProperties.put(name, new HashMap<String, String>(currentValues));
-		    			 currentValues.clear();
-			    			for( Text t : textAreas.values()) {
-			    				t.setText("");
-			    			}
-			    			for( Button t : booleanAreas.values()) {
-			    				t.setSelection(false);
-			    			}
-			    		updateList() ;
+		    			 initValue();
+		    			 updateList() ;
 		    		 }
 		    		  
 		          }
@@ -333,13 +331,7 @@ public class WizardPageProperties extends WizardPage {
 		btnReset.addListener(SWT.Selection, new Listener() {
 		      public void handleEvent(Event e) {
 		    	  if ((e.type ==  SWT.Selection)) {
-		    		  currentValues.clear();
-		    			for( Text t : textAreas.values()) {
-		    				t.setText("");
-		    			}
-		    			for( Button t : booleanAreas.values()) {
-		    				t.setSelection(false);
-		    			}
+		    		  initValue();
 		          }
 		      } 
 		    });
@@ -348,17 +340,10 @@ public class WizardPageProperties extends WizardPage {
 		lblName_1.setText("Name:");
 		lblName_1.setBounds(10, 8, 59, 14);
 		
-		text_2.setEnabled(false);
-		text_3.setEnabled(true);
-		text_4.setEnabled(false);
-		text_5.setEnabled(true);
-		text_6.setEnabled(false);
-		text_7.setEnabled(false);
-		text_8.setEnabled(false);
-		
 		text_1 = new Text(grpDefinitionOfA, SWT.BORDER);
 		text_1.setBounds(64, 25, 127, 19);
 		text_1.addModifyListener(e -> currentValues.put("tag", text_1.getText()));
+		
 		
 		textAreas = new Hashtable<String, Text>();
 		textAreas.put("name", text);
@@ -376,16 +361,53 @@ public class WizardPageProperties extends WizardPage {
 		booleanAreas.put("grabable", btnIsGrabable);
 		booleanAreas.put("interactable", btnIsInteractable);
 		booleanAreas.put("collider", btnHasACollider);
+		booleanAreas.put("follow", btnFollow);
 		
-		booleanAreas.put("has_prefab", btnHasAPrefab);
-		booleanAreas.put("has_prefab", btnHasAPrefab);
-		booleanAreas.put("has_prefab", btnHasAPrefab);
+		initValue();
+	
 	}
 
 	
+	void initValue(){
+		currentValues.clear();
+		
+		text_2.setEnabled(false);
+		text_3.setEnabled(true);
+		text_4.setEnabled(false);
+		text_5.setEnabled(true);
+		text_6.setEnabled(false);
+		text_7.setEnabled(false);
+		text_8.setEnabled(false);
+		text.setText("");
+		text_1.setText("");
+		text_2.setText("1.0");
+		text_3.setText("gray");
+		text_4.setText("Prefabs/Visual Prefabs/City/Vehicles/Car");
+		text_5.setText("1.0");
+		text_6.setText("1.0");
+		text_7.setText("0.0");
+		text_8.setText("0.0");
+		
+		btnHasACollider.setSelection(false);
+		btnIsInteractable.setSelection(false);
+		btnIsGrabable.setSelection(false);
+		btnFollow.setSelection(false);
+		btnHasAPrefab.setSelection(false);
+		
+		for( String id : textAreas.keySet()) {
+			currentValues.put(id,textAreas.get(id).getText());
+		}
+		for(String id :  booleanAreas.keySet()) {
+			currentValues.put(id,booleanAreas.get(id).getSelection() + "");
+	    		
+		}
+		
+		
+	}
+	
 	
 	void updateList() {
-		wpStS.setItemsP(new ArrayList<>(definedProperties.keySet()));
+		wpStS.setItemsP(definedProperties);
 		
 	}
 	public WizardPageSpeciesToSend getWpStS() {
