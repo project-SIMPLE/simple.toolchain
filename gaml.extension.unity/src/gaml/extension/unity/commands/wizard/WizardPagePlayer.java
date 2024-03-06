@@ -142,14 +142,14 @@ public class WizardPagePlayer extends WizardPage {
 		ModifyListener ml = e -> {
 			Double x = Double.valueOf(tilx.getText());
 			Double y = Double.valueOf(tily.getText());
-			// Double z = Double.valueOf(tilz.getText());
-			if (x != null && y != null) { generator.setLocationInit(new GamaPoint(x, y)); }
+			Double z = Double.valueOf(tilz.getText());
+			if (x != null && y != null && z != null) { generator.setLocationInit(new GamaPoint(x, y, z)); }
 
 		};
 
 		tilx.addModifyListener(ml);
 		tily.addModifyListener(ml);
-		// tilz.addModifyListener(ml);
+		 tilz.addModifyListener(ml);
 
 		Label lpr = new Label(groupPlayer, SWT.LEFT);
 		lpr.setText("Perception radius of the player agent:");
