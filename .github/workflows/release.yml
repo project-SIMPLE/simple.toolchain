@@ -25,8 +25,6 @@ jobs:
 
     - name: Build with Maven
       run: |
-        mvn clean install deploy
-        -Prelease-composite
-        -Dgithub-update-repo=https://x-access-token:${{ secrets.ACTIONS_TOKEN }}@github.com/project-SIMPLE/gaml.extension.unity
+        mvn clean install deploy -Prelease-composite -Dgithub-update-repo=https://x-access-token:${{ secrets.ACTIONS_TOKEN }}@github.com/project-SIMPLE/gaml.extension.unity
       working-directory: eu.project-simple.parent
 
