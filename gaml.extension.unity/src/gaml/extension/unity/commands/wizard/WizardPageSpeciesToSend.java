@@ -98,7 +98,7 @@ public class WizardPageSpeciesToSend extends WizardPage {
 			speciesBtn.add(bt);
 			Map<String, String> data =  new Hashtable<>();
 			speciesToSend.put(sp,data);
-			data.put("keep", "true");
+			data.put("keep", "false");
 			
 			bt.pack();
 
