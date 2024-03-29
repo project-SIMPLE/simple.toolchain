@@ -10,7 +10,6 @@
  ********************************************************************************************************/
 package gaml.extension.unity.commands.wizard;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -54,6 +53,8 @@ public class WizardPageProperties extends WizardPage {
 	
 	
 	WizardPageSpeciesToSend wpStS;
+	
+	WizardPagePlayer playerPage;
 	
 	
 	private Text text;
@@ -408,6 +409,7 @@ public class WizardPageProperties extends WizardPage {
 	
 	void updateList() {
 		wpStS.setItemsP(definedProperties);
+		playerPage.updateUnityProperties();
 		
 	}
 	public WizardPageSpeciesToSend getWpStS() {
@@ -416,6 +418,11 @@ public class WizardPageProperties extends WizardPage {
 
 	public void setWpStS(WizardPageSpeciesToSend wpStS) {
 		this.wpStS = wpStS;
+	}
+
+	public void setPlayerPage(WizardPagePlayer playerPage) {
+		this.playerPage = playerPage;
+		
 	}
 
 	
