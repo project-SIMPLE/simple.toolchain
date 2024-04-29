@@ -169,9 +169,10 @@ public class WizardPageSpeciesToSend extends WizardPage {
 				}
 			});
 			
-			setControl(scroll);
 
 		}
+
+		setControl(scroll);
 	}
 
 	Button addBooleanProperty(Group groupProperties, String name, String legend, Map<String, String> data) {
