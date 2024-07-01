@@ -17,6 +17,21 @@ jobs:
         distribution: 'adopt'
         java-version: 21
 
+    - name: Update Maven to 3.9.X
+      run: |
+        # Needed for Tycho 4.X.X and support for JDK 21
+        wget https://dlcdn.apache.org/maven/maven-3/3.9.7/binaries/apache-maven-3.9.7-bin.tar.gz
+        tar -xvf apache-maven-3.9.7-bin.tar.gz
+        mv apache-maven-3.9.7 /opt/
+        M2_HOME='/opt/apache-maven-3.9.7'
+        PATH="$M2_HOME/bin:$PATH"
+        export PATH
+        # Overwrite PATH with updated maven install
+        echo $PATH > $GITHUB_PATH
+        echo "=== Check if well installed ==="
+        echo "$ mvn -version"
+        mvn -version
+
     - name: Build with Maven
       run: mvn verify
       working-directory: eu.project-simple.parent
