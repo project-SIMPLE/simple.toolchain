@@ -38,9 +38,6 @@ public class WizardPagePlayer extends WizardPage {
 	/** The model. */
 	IModel model;
 
-	/** The container. */
-	private Composite container;
-
 	/** The generator. */
 	VRModelGenerator generator;
 

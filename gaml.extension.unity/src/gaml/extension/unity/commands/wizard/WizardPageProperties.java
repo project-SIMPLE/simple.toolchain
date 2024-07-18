@@ -66,6 +66,7 @@ public class WizardPageProperties extends WizardPage {
 	private Text text_6;
 	private Text text_7;
 	private Text text_8;
+	private Text text_material;
 	
 	private Button btnHasACollider;
 	private Button btnIsInteractable;
@@ -224,6 +225,7 @@ public class WizardPageProperties extends WizardPage {
 					text_6.setEnabled(true);
 					text_7.setEnabled(true);
 					text_8.setEnabled(true);
+					text_material.setEnabled(false);
 					
 				} else {
 					text_2.setEnabled(false);
@@ -233,17 +235,23 @@ public class WizardPageProperties extends WizardPage {
 					text_6.setEnabled(false);
 					text_7.setEnabled(false);
 					text_8.setEnabled(false);
+					text_material.setEnabled(true);
 				}
 			}
 		});
 		
 		Group grpGeometry = new Group(grpAspect, SWT.NONE);
 		grpGeometry.setText("Geometry");
-		grpGeometry.setBounds(460, 11, 300, 82);
+		grpGeometry.setBounds(460, 11, 300, 107);
 		
 		text_3 = new Text(grpGeometry, SWT.BORDER);
 		text_3.setBounds(170, 25, 109, 19);
 		text_3.addModifyListener(e -> currentValues.put("color", text_3.getText()));
+		
+		text_material = new Text(grpGeometry, SWT.BORDER);
+		text_material.setBounds(170, 50, 109, 19);
+		text_material.addModifyListener(e -> currentValues.put("material", text_material.getText()));
+		
 		
 		text_5 = new Text(grpGeometry, SWT.BORDER);
 		text_5.setBounds(170, 0, 109, 19);
@@ -256,6 +264,11 @@ public class WizardPageProperties extends WizardPage {
 		Label lblColor = new Label(grpGeometry, SWT.NONE);
 		lblColor.setBounds(4, 28, 165, 14);
 		lblColor.setText("Color of the geometry:");
+		
+		Label lblMaterial = new Label(grpGeometry, SWT.NONE);
+		lblMaterial.setBounds(4, 53, 165, 14);
+		lblMaterial.setText("Material for the geometry:");
+		
 		
 		Group grpPrefav = new Group(grpAspect, SWT.NONE);
 		grpPrefav.setText("Prefab");
@@ -355,6 +368,7 @@ public class WizardPageProperties extends WizardPage {
 		textAreas.put("y-offset", text_7);
 		textAreas.put("rotation_offset", text_8);
 		textAreas.put("color", text_3);
+		textAreas.put("material", text_material);
 		textAreas.put("height", text_5);
 		
 		booleanAreas = new Hashtable<>();
@@ -374,6 +388,7 @@ public class WizardPageProperties extends WizardPage {
 		
 		text_2.setEnabled(false);
 		text_3.setEnabled(true);
+		text_material.setEnabled(true);
 		text_4.setEnabled(false);
 		text_5.setEnabled(true);
 		text_6.setEnabled(false);
@@ -383,6 +398,7 @@ public class WizardPageProperties extends WizardPage {
 		text_1.setText("");
 		text_2.setText("1.0");
 		text_3.setText("gray");
+		text_material.setText("");
 		text_4.setText("Prefabs/Visual Prefabs/City/Vehicles/Car");
 		text_5.setText("1.0");
 		text_6.setText("1.0");
