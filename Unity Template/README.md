@@ -3,7 +3,7 @@
 This project allows to adapt a GAMA simulation to a VR environment created with Unity. It provides the VR developer with a game and connection management system, including GameObjects, methods and events that can be hooked. A list of these elements and how to use them is provided in the [**Documentation**](#documentation) section.
 
 
-A description of the use of the template with a tutorial can be found [here](https://github.com/project-SIMPLE/documentation/wiki).
+A description of the use of the template with a tutorial can be found [here](https://github.com/project-SIMPLE/simple.toolchain/wiki/Tutorial-%E2%80%90-From-GAMA-model-to-Virtual-Universe-%E2%80%90-case-of-a-traffic-model).
 
 ## Installation
 
@@ -57,14 +57,14 @@ Composed of two types of elements:
 ### Quick Start
 
 1. Download the silmple.template.project.
-![qs1](./ReadmeRes/download.png)
+![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/download.png)
 1. Import it as a Unity project. **Make sure to use the right Editor version (Unity Editor 2022.3.5f1)**.
-![qs1](./ReadmeRes/qs-1.png)
+![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/qs-1.png)
 1. In the Menu "File" select "Build Settings..."
-![qs1](./ReadmeRes/Build-setting_menu.png)
+![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/Build-setting_menu.png)
 1. Select "Android" in "Platform", then click on "Switch Platform". You can after build and deploy the application on the headset by clicking on "Build and Run".
-![qs1](./ReadmeRes/Build-setting.png)
-1. To run the application in conjunction with GAMA, make sure you have installed [GAMA 2024.07](https://github.com/gama-platform/gama/releases/tag/2024.07.0) and the [Unity Plugin for GAMA](https://github.com/project-SIMPLE/gaml.extension.unity). Information on installing the plugin is available [here] (https://github.com/project-SIMPLE/gaml.extension.unity?tab=readme-ov-file#from-gama). The plugin provides a set of model (added in Plugin models/LinkToUnity) that works with the Unity project.  
+![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/Build-setting.png)
+1. To run the application in conjunction with GAMA, make sure you have installed [GAMA 2024.07](https://github.com/gama-platform/gama/releases/tag/2024.07.0) and the [Unity Plugin for GAMA](https://github.com/project-SIMPLE/simple.toolchain/tree/2024-06/GAMA%20Plugin). Information on installing the plugin is available [here] (https://github.com/project-SIMPLE/gaml.extension.unity?tab=readme-ov-file#from-gama). The plugin provides a set of model (added in Plugin models/LinkToUnity) that works with the Unity project.  
    
 
 ## Documentation
