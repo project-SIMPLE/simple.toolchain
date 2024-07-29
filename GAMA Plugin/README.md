@@ -1,6 +1,6 @@
 # Overview
 The gaml.extension.unity GAMA plugin  provides a number of tools and GAML extensions (built-in species and new experiment type) to transform a GAMA model into a Unity 3D universe.
-It works with the [simple UNITY template](https://github.com/project-SIMPLE/simple.template.unity) and the [simple server middleware](https://github.com/project-SIMPLE/GamaServerMiddleware). 
+It works with the [simple UNITY template](https://github.com/project-SIMPLE/simple.toolchain/tree/2024-06/Unity%20Template) and the [simple server middleware](https://github.com/project-SIMPLE/GamaServerMiddleware). 
 
 The plugin integrates:
 * 2 new abstract agent species for GAMA: 
@@ -16,17 +16,17 @@ In addition, the plugin integrates a tool accessible from the UnityVR menu that 
 
 Finally, the plugin includes several templates illustrating how to use the plugin (Single player and Multi-player Demos) or how to send or receive geometries from GAMA to Unity or from Unity to GAMA. 
 
-A description of the use of the plugin with a tutorial can be found [here](https://github.com/project-SIMPLE/documentation/wiki).
+A description of the use of the plugin with a tutorial can be found [here](https://github.com/project-SIMPLE/simple.toolchain/wiki/Tutorial-%E2%80%90-From-GAMA-model-to-Virtual-Universe-%E2%80%90-case-of-a-traffic-model).
 
 # Installation
 
 ## From GAMA
 To use the plugin from a release version of GAMA (version 2024-03), it can be installed directly from the plugin installer.
 Specifically, select "Support/Install new plugins..." from the menu, 
-![qs1](https://github.com/project-SIMPLE/gaml.extension.unity/raw/2024-06/images/InstallPlugin.png)
+![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/InstallPlugin.png)
 
 then "Work with", copy the address [https://project-simple.github.io/gaml.extension.unity/](https://project-simple.github.io/gaml.extension.unity/) and select the plugin afterwards.
-![qs1](https://github.com/project-SIMPLE/gaml.extension.unity/raw/2024-06/images/Plugin.png)
+![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/Plugin.png)
 
 ## Developer mode 
 If you have a developer version of GAMA (branch 2024/06), you can clone the project directly to add the plugin to GAMA. 
