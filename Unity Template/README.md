@@ -1,4 +1,4 @@
-# GAMA VR Provider
+# SIMPLE Unity Template
 
 This project allows to adapt a GAMA simulation to a VR environment created with Unity. It provides the VR developer with a game and connection management system, including GameObjects, methods and events that can be hooked. A list of these elements and how to use them is provided in the [**Documentation**](#documentation) section.
 
