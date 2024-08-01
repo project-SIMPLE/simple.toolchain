@@ -25,7 +25,7 @@ To use the plugin from a release version of GAMA (version 2024-03), it can be in
 Specifically, select "Support/Install new plugins..." from the menu, 
 ![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/InstallPlugin.png)
 
-then "Work with", copy the address [https://project-simple.github.io/gaml.extension.unity/]([https://project-simple.github.io/simple.toolchain/](https://project-simple.github.io/simple.toolchain/) and select the plugin afterwards.
+then "Work with", copy the address [https://project-simple.github.io/gaml.extension.unity/](https://project-simple.github.io/simple.toolchain/) and select the plugin afterwards.
 ![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/Plugin.png)
 
 ## Developer mode 
