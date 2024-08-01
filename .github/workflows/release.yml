@@ -27,6 +27,7 @@ jobs:
         with:
           lfs: false
           fetch-depth: '1'
+          sparse-checkout: "Unity Template"
 
       # Cache
       #- uses: actions/cache@v3
@@ -53,6 +54,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.ARTHUR_UNITY_PASSWORD }}
         with:
           targetPlatform: Android
+        working-directory: "Unity Template"
 
       # Output
       - name: Save built artefact 📦
@@ -60,3 +62,4 @@ jobs:
         with:
           name: Build
           path: build
+        working-directory: "Unity Template"
