@@ -1,8 +1,12 @@
-name: Java CI with Maven
+name: "[GAMA Plugin] Java CI with Maven"
 
 on:
   push:
+    paths:
+    - 'GAMA Plugin/**'
   pull_request:
+    paths:
+    - 'GAMA Plugin/**'
   workflow_dispatch:
 
 jobs:
@@ -34,4 +38,4 @@ jobs:
 
     - name: Build with Maven
       run: mvn verify
-      working-directory: eu.project-simple.parent
+      working-directory: "GAMA Plugin/eu.project-simple.parent"

@@ -1,4 +1,4 @@
-name: Release with Maven
+name: "[GAMA Plugin] Release with Maven"
 
 on:
   push:
@@ -40,6 +40,5 @@ jobs:
 
     - name: Build with Maven
       run: |
-        mvn deploy -Prelease-composite -Dgithub-update-repo=https://x-access-token:${{ secrets.ACTIONS_TOKEN }}@github.com/project-SIMPLE/gaml.extension.unity
-      working-directory: eu.project-simple.parent
-
+        mvn deploy -Prelease-composite -Dgithub-update-repo=https://x-access-token:${{ secrets.ACTIONS_TOKEN }}@github.com/project-SIMPLE/simple.toolchain
+      working-directory: "GAMA Plugin/eu.project-simple.parent"
