@@ -1,6 +1,6 @@
 /**
 * Name: ManageAnimationForAgents
-* Show how to send manage the animation of an agent in Unity. It works with the Scene "Assets/Scenes/Code Example/Manage Anmation for Agents" from the Unity Template
+* Show how to manage the animation of an agent in Unity from GAMA. It works with the Scene "Assets/Scenes/Code Example/Manage Animation for Agents" from the Unity Template
 * Author: Patrick Taillandier
 * Tags: Unity, dynamic geometries/agents, animation
 */
