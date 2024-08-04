@@ -13,7 +13,7 @@ A description of the use of the template with a tutorial can be found [here](htt
 ### Prerequisites
 
 Once the project is opened in Unity, if you have any errors, you can check the following points: 
-- Make sure that **Newtonsoft Json** is installed. Normaly, cloning this repo should ensure that it is installed. But if it's not the case, follow the tutorial on this [link](https://github.com/applejag/Newtonsoft.Json-for-Unity/wiki/Install-official-via-UPM).
+- Make sure that **Newtonsoft Json** is installed. Normaly, [cloning this repo](https://github.com/project-SIMPLE/simple.toolchain/) should ensure that it is installed. But if it's not the case, follow the tutorial on this [link](https://github.com/applejag/Newtonsoft.Json-for-Unity/wiki/Install-official-via-UPM).
 - To work properly, we assume that you already have a compatible GAMA model. It is also highly recommended that you install [**Gama Server Middleware**](https://github.com/project-SIMPLE/GamaServerMiddleware) as well.
 
 > [!TIP]
