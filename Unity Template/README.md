@@ -65,7 +65,7 @@ Composed of two types of elements:
 4. Select "Android" in "Platform", then click on "Switch Platform". You can after build and deploy the application on the headset by clicking on "Build and Run".
 <img width="642" alt="Build-setting" src="https://github.com/user-attachments/assets/5fab90c2-c11d-4a5b-a5c8-c0503b2a413f">
 
-5. To run the application in conjunction with GAMA, make sure you have installed [GAMA 2024.07](https://github.com/gama-platform/gama/releases/tag/2024.07.0) and the [Unity Plugin for GAMA](https://github.com/project-SIMPLE/simple.toolchain/tree/2024-06/GAMA%20Plugin). Information on installing the plugin is available [here] (https://github.com/project-SIMPLE/gaml.extension.unity?tab=readme-ov-file#from-gama). The plugin provides a set of model (added in Plugin models/LinkToUnity) that works with the Unity project.  
+5. To run the application in conjunction with GAMA, make sure you have installed [GAMA 2024.07](https://github.com/gama-platform/gama/releases/tag/2024.07.0) and the [Unity Plugin for GAMA](https://github.com/project-SIMPLE/simple.toolchain/tree/2024-06/GAMA%20Plugin). Information on installing the plugin is available [here](https://github.com/project-SIMPLE/gaml.extension.unity?tab=readme-ov-file#from-gama). The plugin provides a set of model (added in Plugin models/LinkToUnity) that works with the Unity project.  
    
 
 ## Documentation
