@@ -10,8 +10,7 @@ public class GAMAGeometryExport : ConnectionWithGama
 {
 
     protected ConnectionParameter parameters = null;
-    protected CoordinateConverter converter;
-
+    
     // optional: define a scale between GAMA and Unity for the location given
     public float GamaCRSCoefX = 1.0f;
     public float GamaCRSCoefY = 1.0f;
@@ -21,11 +20,12 @@ public class GAMAGeometryExport : ConnectionWithGama
     private bool continueProcess = true;
     GameObject objectToSend;
 
-
+    Dictionary<string, string> argsToSend = null;
 
     public void ManageGeometries(GameObject objectToSend_, string ip_, string port_, float x, float y, float ox, float oy)
     {
         objectToSend = objectToSend_;
+        if (objectToSend == null) return;
         parameters = null;
 
         ip = ip_;
@@ -34,6 +34,15 @@ public class GAMAGeometryExport : ConnectionWithGama
         GamaCRSCoefY = y;
         GamaCRSOffsetX = ox;
         GamaCRSOffsetY = oy;
+
+        UnityGeometry ug = new UnityGeometry(objectToSend, new CoordinateConverter(10000, x, y, ox, oy));
+
+        string message = ug.ToJSON();
+
+        Dictionary<string, string> argsToSend = new Dictionary<string, string> {
+                    {"geoms", message}
+                  };
+
         socket = new WebSocket("ws://" + ip + ":" + port + "/");
 
          continueProcess = true; 
@@ -83,19 +92,11 @@ public class GAMAGeometryExport : ConnectionWithGama
     private void ExportGeoms()
     {
         Debug.Log("export Geom");
-        if (parameters != null && objectToSend != null)
+        if (parameters != null )
         {
-            string message = "";
-            
-            UnityGeometry ug = new UnityGeometry(objectToSend, converter);
-         
-            message = ug.ToJSON();
-
-            Dictionary<string, string> args = new Dictionary<string, string> {
-                    {"geoms", message}
-                  };
+           
           
-            SendExecutableAsk("receive_geometries", args);
+            SendExecutableAsk("receive_geometries", argsToSend);
 
            
             continueProcess = false;
@@ -107,8 +108,6 @@ public class GAMAGeometryExport : ConnectionWithGama
     {
 
         if (content == null || content.Equals("{}")) return;
-        if (content.Contains("points"))
-            firstKey = "points";
         else if (content.Contains("precision"))
             firstKey = "precision";
 
@@ -116,9 +115,7 @@ public class GAMAGeometryExport : ConnectionWithGama
         {
             // handle general informations about the simulation
             case "precision":
-
                 parameters = ConnectionParameter.CreateFromJSON(content);
-                converter = new CoordinateConverter(parameters.precision, GamaCRSCoefX, GamaCRSCoefY, GamaCRSOffsetX, GamaCRSOffsetY);
                 Debug.Log("Received parameter data");
                 break;
 
