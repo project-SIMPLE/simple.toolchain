@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="gaml.feature.unity" version="0.0.0">
+      <category name="eu-simple.gaml.unity"/>
+   </feature>
+
+   <category-def name="eu-simple.gaml.unity" label="SIMPLE GAMA plugin for Unity"/>
+</site>

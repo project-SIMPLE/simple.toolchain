@@ -1,0 +1,26 @@
+*.class
+bin/
+bin1/
+*~
+logs.zip
+*.orig
+*.java._trace
+*.smap
+.DS_Store
+/*/gaml/
+
+src-gen/
+xtend-gen/
+
+buildroot
+
+target
+generated
+generated-sources
+/gaml.extension.unity/gaml
+
+# MacOS metadata
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
