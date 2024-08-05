@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8130529563546616615}
-  - component: {fileID: 5198000710259723483}
   m_Layer: 0
   m_Name: ManagersSolo
   m_TagString: Untagged
@@ -34,27 +33,6 @@ Transform:
   - {fileID: 7053002505406041103}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5198000710259723483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1077568249799591053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbea15ef8fccc48ed85a2aa403cb322c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  primaryRightHandButton: {fileID: 3951697458631832198, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  TryReconnectButton: {fileID: 6120076715984773150, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  player: {fileID: 0}
-  Ground: {fileID: 0}
-  GamaCRSCoefX: 1
-  GamaCRSCoefY: 1
-  GamaCRSOffsetX: 0
-  GamaCRSOffsetY: 0
-  GamaCRSOffsetZ: 0
 --- !u!1001 &234471186284424324
 PrefabInstance:
   m_ObjectHideFlags: 0

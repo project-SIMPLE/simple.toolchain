@@ -38,8 +38,8 @@ public class GAMAGeometryExport : ConnectionWithGama
         UnityGeometry ug = new UnityGeometry(objectToSend, new CoordinateConverter(10000, x, y, ox, oy));
 
         string message = ug.ToJSON();
-
-        Dictionary<string, string> argsToSend = new Dictionary<string, string> {
+      
+        argsToSend = new Dictionary<string, string> {
                     {"geoms", message}
                   };
 
@@ -54,8 +54,6 @@ public class GAMAGeometryExport : ConnectionWithGama
         socket.Connect();
 
 
-        DateTime dt = DateTime.Now;
-        dt = dt.AddSeconds(60);
         while (continueProcess)
         {
             if (parameters != null)

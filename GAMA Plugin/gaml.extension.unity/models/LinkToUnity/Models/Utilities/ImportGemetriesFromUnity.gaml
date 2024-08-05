@@ -29,7 +29,6 @@ species unity_linker parent: abstract_unity_linker {
 	bool do_send_world <- true;
 	
 	action receive_geometries(string geoms) {
-		
 		if ("points" in geoms) {
 			map answer <- from_json(geoms);
 			list<list<list>> objects <- answer["points"];
