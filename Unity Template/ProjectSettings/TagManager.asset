@@ -19,6 +19,7 @@ TagManager:
   - dem
   - Teleportation
   - InvisibleWall
+  - road
   layers:
   - Default
   - TransparentFX
