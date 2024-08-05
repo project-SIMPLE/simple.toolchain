@@ -56,14 +56,13 @@ Composed of two types of elements:
 
 ### Quick Start
 
-1. Download the silmple.template.project.
-![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/download.png)
+1. Download the silmple.template.project ([here](https://github.com/project-SIMPLE/simple.toolchain/archive/refs/heads/2024-06.zip))
 1. Import it as a Unity project. **Make sure to use the right Editor version (Unity Editor 2022.3.5f1)**.
-![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/qs-1.png)
+![qs-1](https://github.com/user-attachments/assets/58dfd971-b89a-44aa-aaf6-77767784a596)
 1. In the Menu "File" select "Build Settings..."
-![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/Build-setting_menu.png)
+<img width="1027" alt="Build-setting_menu" src="https://github.com/user-attachments/assets/f8e5583d-c3f6-4e22-826b-c36cea979e52">
 1. Select "Android" in "Platform", then click on "Switch Platform". You can after build and deploy the application on the headset by clicking on "Build and Run".
-![qs1](https://github.com/project-SIMPLE/simple.toolchain/blob/2024-06/Resources/Images/Build-setting.png)
+<img width="642" alt="Build-setting" src="https://github.com/user-attachments/assets/5fab90c2-c11d-4a5b-a5c8-c0503b2a413f">
 1. To run the application in conjunction with GAMA, make sure you have installed [GAMA 2024.07](https://github.com/gama-platform/gama/releases/tag/2024.07.0) and the [Unity Plugin for GAMA](https://github.com/project-SIMPLE/simple.toolchain/tree/2024-06/GAMA%20Plugin). Information on installing the plugin is available [here] (https://github.com/project-SIMPLE/gaml.extension.unity?tab=readme-ov-file#from-gama). The plugin provides a set of model (added in Plugin models/LinkToUnity) that works with the Unity project.  
    
 
