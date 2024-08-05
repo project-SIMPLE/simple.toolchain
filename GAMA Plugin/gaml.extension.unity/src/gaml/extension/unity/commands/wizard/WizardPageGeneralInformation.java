@@ -15,6 +15,8 @@ import java.util.List;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -37,7 +39,7 @@ public class WizardPageGeneralInformation extends WizardPage {
 	IModel model;
 
 	/** The container. */
-	private Composite container;
+	// private Composite container;
 
 	/** The generator. */
 	VRModelGenerator generator;
@@ -57,7 +59,7 @@ public class WizardPageGeneralInformation extends WizardPage {
 	 */
 	protected WizardPageGeneralInformation(final String path, final IModel model, final VRModelGenerator gen) {
 		super("GeneralInformation");
-		setTitle("Define the general information to define the VR experiment");
+		setTitle("Provide the general information to define the VR experiment");
 		setDescription("Please enter information about VR experiment");
 		this.model = model;
 		this.generator = gen;
@@ -67,27 +69,42 @@ public class WizardPageGeneralInformation extends WizardPage {
 
 	@Override
 	public void createControl(final Composite parent) {
-		container = new Composite(parent, SWT.NONE);
+		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout(SWT.VERTICAL));
+
+		ScrolledComposite scroll = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
+		setControl(container);
+		// scroll.setLayoutData(new FillData());
+
+		scroll.setAlwaysShowScrollBars(false);
+		scroll.setExpandVertical(true);
+		scroll.setExpandHorizontal(true);
+
+		scroll.setLayout(new FillLayout());
+
 		/*
 		 * Group groupConnection = new Group(container, SWT.NONE); groupConnection.setLayout(new GridLayout(2, false));
 		 * groupConnection.setText("Information about the connection");
-		 * 
+		 *
 		 * Label lp = new Label(groupConnection, SWT.LEFT); lp.setText("Port:" ); Text tp = new Text(groupConnection,
 		 * SWT.BORDER); tp.setText(generator.getPort().toString()); tp.addModifyListener(new ModifyListener() {
-		 * 
+		 *
 		 * @Override
-		 * 
+		 *
 		 * public void modifyText(ModifyEvent e) { Integer port = Integer.decode(tp.getText()); if (port != null)
 		 * generator.setPort(port); } });
 		 */
 
-		Group groupExperiment = new Group(container, SWT.NONE);
+		Group groupExperiment = new Group(scroll, SWT.NONE);
+		scroll.setContent(groupExperiment);
+		scroll.addControlListener(ControlListener.controlResizedAdapter(e -> {
+			scroll.setMinSize(groupExperiment.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		}));
 		groupExperiment.setLayout(new GridLayout(2, false));
 		groupExperiment.setText("Information about the experiment");
 
 		Label lc = new Label(groupExperiment, SWT.LEFT);
-		lc.setText("Minimium duration of a cycle in s (minimum_cycle_duration):");
+		lc.setText("Minimum duration of a cycle in seconds (minimum_cycle_duration):");
 		Text tc = new Text(groupExperiment, SWT.BORDER);
 		tc.setText(generator.getMinimumCycleDuration().toString());
 		tc.addModifyListener(e -> {
@@ -116,8 +133,6 @@ public class WizardPageGeneralInformation extends WizardPage {
 				wDisplay.updateExperiment();
 			}
 		});
-
-		setControl(container);
 
 	}
 

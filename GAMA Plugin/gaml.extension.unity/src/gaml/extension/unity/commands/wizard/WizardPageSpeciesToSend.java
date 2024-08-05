@@ -15,11 +15,14 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -46,13 +49,14 @@ public class WizardPageSpeciesToSend extends WizardPage {
 	VRModelGenerator generator;
 	Map<String, Map<String, String>> speciesToSend;
 	Map<String, Boolean> geometryB;
-	
 
 	/**
 	 * Instantiates a new wizard page display.
 	 *
-	 * @param model the model
-	 * @param gen   the gen
+	 * @param model
+	 *            the model
+	 * @param gen
+	 *            the gen
 	 */
 	protected WizardPageSpeciesToSend(final IModel model, final VRModelGenerator gen) {
 		super("Properties");
@@ -74,11 +78,16 @@ public class WizardPageSpeciesToSend extends WizardPage {
 		scroll.setExpandVertical(true);
 		scroll.setExpandHorizontal(true);
 
-		scroll.setMinHeight(600);
+		// scroll.setMinHeight(600);
+
 		scroll.setLayout(new GridLayout(1, false));
-	
+
 		Composite group = new Composite(scroll, SWT.NONE);
 		scroll.setContent(group);
+		scroll.addControlListener(ControlListener.controlResizedAdapter(e -> {
+			Rectangle r = scroll.getClientArea();
+			scroll.setMinSize(group.computeSize(r.width, SWT.DEFAULT));
+		}));
 		group.setLayout(new GridLayout(2, false));
 		// group.setText("Species of agents to send to Unity as static geometries");
 		Label lma = new Label(group, SWT.LEFT);
@@ -89,57 +98,51 @@ public class WizardPageSpeciesToSend extends WizardPage {
 		speciesBtn = new ArrayList<>();
 		for (String sp : model.getAllSpecies().keySet()) {
 
-			if (sp.equals(model.getName())) {
-				continue;
-			}
+			if (sp.equals(model.getName())) { continue; }
 			Button bt = new Button(group, SWT.CHECK);
 			bt.setText(sp);
 			bt.setEnabled(false);
 			speciesBtn.add(bt);
-			Map<String, String> data =  new Hashtable<>();
-			speciesToSend.put(sp,data);
+			Map<String, String> data = new Hashtable<>();
+			speciesToSend.put(sp, data);
 			data.put("keep", "false");
-			
+
 			bt.pack();
 
 			Group groupSp = new Group(group, SWT.NONE);
-
-			groupSp.setLayout(new GridLayout(2, false));
+			groupSp.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+			groupSp.setLayout(new GridLayout(4, false));
 			Button staticBtn = addBooleanProperty(groupSp, "static", "Static?", data);
 			staticBtn.setEnabled(false);
 			data.put("static", "" + staticBtn.getSelection());
-			
+
 			Label ld = new Label(groupSp, SWT.LEFT);
 			ld.setText("Unity Properties:");
 
 			Combo cd = new Combo(groupSp, SWT.READ_ONLY);
 			combos.add(cd);
 
-			
 			data.put("properties", cd.getText());
-			
+
 			Text buffer = addStringProperty(groupSp, "buffer", "Buffer to apply to the geometry", data);
 			buffer.setEnabled(false);
 			buffer.setText("0.0");
 			data.put("buffer", buffer.getText());
-			
-			
 
 			final Text when = addStringProperty(groupSp, "when", "When updating the agent list:", data);
 			when.setText("every(1 #cycle)");
 			data.put("when", when.getText());
 			when.setEnabled(false);
-			
+
 			staticBtn.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent event) {
 					Button btn = (Button) event.getSource();
-					data.put("static", btn.getSelection() +"");
-					when.setEnabled(!cd.getText().isBlank() && !btn.getSelection() );
-					
+					data.put("static", btn.getSelection() + "");
+					when.setEnabled(!cd.getText().isBlank() && !btn.getSelection());
+
 				}
 			});
-			
 
 			bt.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -148,34 +151,33 @@ public class WizardPageSpeciesToSend extends WizardPage {
 					cd.setEnabled(btn.getSelection());
 					staticBtn.setEnabled(btn.getSelection());
 					buffer.setEnabled(!cd.getText().isBlank() && btn.getSelection() && geometryB.get(cd.getText()));
-					when.setEnabled(!cd.getText().isBlank() && btn.getSelection()  && !staticBtn.getSelection());
-					
-					data.put("keep", ""+btn.getSelection());
+					when.setEnabled(!cd.getText().isBlank() && btn.getSelection() && !staticBtn.getSelection());
+
+					data.put("keep", "" + btn.getSelection());
 
 				}
 			});
 
 			cd.setEnabled(false);
 			cd.addSelectionListener(new SelectionAdapter() {
-				
+
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 					data.put("properties", cd.getText());
-					
+
 					buffer.setEnabled(!cd.getText().isBlank() && bt.getSelection() && geometryB.get(cd.getText()));
-					when.setEnabled(!cd.getText().isBlank() && bt.getSelection()  && !staticBtn.getSelection());
-					
-					
+					when.setEnabled(!cd.getText().isBlank() && bt.getSelection() && !staticBtn.getSelection());
+
 				}
 			});
-			
 
 		}
 
 		setControl(scroll);
 	}
 
-	Button addBooleanProperty(Group groupProperties, String name, String legend, Map<String, String> data) {
+	Button addBooleanProperty(final Group groupProperties, final String name, final String legend,
+			final Map<String, String> data) {
 		Button bt = new Button(groupProperties, SWT.CHECK);
 		bt.setText(legend);
 		bt.addSelectionListener(new SelectionAdapter() {
@@ -193,46 +195,38 @@ public class WizardPageSpeciesToSend extends WizardPage {
 
 	}
 
-	Text addStringProperty(Composite groupProperties, String name, String legend, Map<String,String> data) {
+	Text addStringProperty(final Composite groupProperties, final String name, final String legend,
+			final Map<String, String> data) {
 		Label lpc = new Label(groupProperties, SWT.LEFT);
 		lpc.setText(legend);
 		Text tpc = new Text(groupProperties, SWT.BORDER);
 		tpc.setText("");
-		 tpc.addModifyListener(e -> data.put(name, tpc.getText()));
+		tpc.addModifyListener(e -> data.put(name, tpc.getText()));
 		return tpc;
 	}
 
-	public List<String> getItemsP() {
-		return itemsP;
-	}
+	public List<String> getItemsP() { return itemsP; }
 
-	public void setItemsP(Map<String, Map<String, String>> items) {
+	public void setItemsP(final Map<String, Map<String, String>> items) {
 		this.itemsP = new ArrayList<>(items.keySet());
 		this.geometryB = new Hashtable<>();
-		
-		for (String p: items.keySet()) {
-			 Map<String, String> it = items.get(p);
-			 geometryB.put(p, ! ("true".equals(it.get("has_prefab"))));
+
+		for (String p : items.keySet()) {
+			Map<String, String> it = items.get(p);
+			geometryB.put(p, !"true".equals(it.get("has_prefab")));
 		}
 		if (!itemsP.isEmpty()) {
-			for (Button bt : speciesBtn) {
-				bt.setEnabled(true);
-			}
+			for (Button bt : speciesBtn) { bt.setEnabled(true); }
 			for (Combo cd : combos) {
 				cd.setItems(itemsP.toArray(new String[itemsP.size()]));
 				if (!itemsP.isEmpty()) {
 					cd.setText(itemsP.get(0));
-					for (Map<String,String> data : speciesToSend.values()) {
-						data.put("properties", itemsP.get(0));
-					}
-					
+					for (Map<String, String> data : speciesToSend.values()) { data.put("properties", itemsP.get(0)); }
 
 				}
 			}
 		} else {
-			for (Button bt : speciesBtn) {
-				bt.setEnabled(false);
-			}
+			for (Button bt : speciesBtn) { bt.setEnabled(false); }
 		}
 	}
 
