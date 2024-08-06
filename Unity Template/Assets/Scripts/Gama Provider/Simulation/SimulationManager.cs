@@ -544,21 +544,23 @@ public class SimulationManager : MonoBehaviour
                 else
                 {
                     List<object> o = geometryMap[name];
-
+                    GameObject obj2 = (GameObject)o[0];
                     PropertiesGAMA p = (PropertiesGAMA)o[1];
                     if (p == prop)
                     {
-                        obj = (GameObject)o[0];
+                        obj = obj2;
                     }
                     else
                     {
 
-                        obj.transform.position = new Vector3(0, -100, 0);
-                        if (toFollow.Contains(obj))
-                            toFollow.Remove(obj);
+                        obj2.transform.position = new Vector3(0, -100, 0);
+                        geometryMap.Remove(name);
+                        if (toFollow != null && toFollow.Contains(obj2))
+                            toFollow.Remove(obj2);
 
-                        GameObject.Destroy(obj);
+                        GameObject.Destroy(obj2);
                         obj = instantiatePrefab(name, prop, initGame);
+
                     }
 
                 }
