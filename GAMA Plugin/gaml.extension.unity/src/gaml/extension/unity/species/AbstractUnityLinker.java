@@ -118,6 +118,10 @@ import gaml.extension.unity.types.UnityPropertiesType;
 				doc = { @doc ("List of geometries to sent to Unity with the unity properties to use. It could be updated each simulation step") }),
 
 		@variable (
+				name = AbstractUnityLinker.GEOMETRIES_TO_KEEP,
+				type = IType.LIST,
+				doc = { @doc ("List of geometries to keep in Unity") }),
+		@variable (
 				name = AbstractUnityLinker.DO_SEND_WORLD,
 				type = IType.BOOL,
 				init = "true",
@@ -211,6 +215,9 @@ public class AbstractUnityLinker extends GamlAgent {
 
 	/** The Constant PRECISION. */
 	public static final String PRECISION = "precision";
+
+	/** The Constant GEOMETRIES_TO_KEEP. */
+	public static final String GEOMETRIES_TO_KEEP = "geometries_to_keep";
 
 	/** The Constant GEOMETRIES_TO_SEND. */
 	public static final String GEOMETRIES_TO_SEND = "geometries_to_send";
@@ -529,6 +536,31 @@ public class AbstractUnityLinker extends GamlAgent {
 	@getter (AbstractUnityLinker.GEOMETRIES_TO_SEND)
 	public static IMap<IShape, UnityProperties> getGeometriesToSend(final IAgent agent) {
 		return (IMap<IShape, UnityProperties>) agent.getAttribute(GEOMETRIES_TO_SEND);
+	}
+
+	/**
+	 * Sets the geometries to send.
+	 *
+	 * @param agent
+	 *            the agent
+	 * @param val
+	 *            the val
+	 */
+	@setter (AbstractUnityLinker.GEOMETRIES_TO_KEEP)
+	public static void setGeometriesToKeep(final IAgent agent, final IList<IShape> val) {
+		agent.setAttribute(GEOMETRIES_TO_KEEP, val);
+	}
+	
+	/**
+	 * Gets the geometries to send.
+	 *
+	 * @param agent
+	 *            the agent
+	 * @return the geometries to send
+	 */
+	@getter (AbstractUnityLinker.GEOMETRIES_TO_KEEP)
+	public static IList<IShape> getGeometriesToKeep(final IAgent agent) {
+		return (IList<IShape>) agent.getAttribute(GEOMETRIES_TO_KEEP);
 	}
 
 	/**
@@ -1199,8 +1231,11 @@ public class AbstractUnityLinker extends GamlAgent {
 				getPlayers(ag).remove(playerName);
 				continue;
 			}
+			IList<IShape> geomsKeep = getGeometriesToKeep(ag);
 			
-				IMap<IShape, UnityProperties> geoms = getGeometriesToSend(ag);
+			
+			
+			IMap<IShape, UnityProperties> geoms = getGeometriesToSend(ag);
 						
 				
 				if (propertiesForPlayer !=null && !propertiesForPlayer.isEmpty() && getPlayers(ag).size() > 1) {
@@ -1243,8 +1278,14 @@ public class AbstractUnityLinker extends GamlAgent {
 					}
 
 					doAction4Arg(scope, "send_geometries", "player", player, "geoms", geoms, "update_position",
-							getNewPlayerPosition(ag) !=null	&& getNewPlayerPosition(ag).get(player.getName()) !=null	&&!getNewPlayerPosition(ag).get(player.getName()).isEmpty(), "is_init", false);
+							getNewPlayerPosition(ag) !=null	&& getNewPlayerPosition(ag).get(player.getName()) !=null&&!getNewPlayerPosition(ag).get(player.getName()).isEmpty(), "is_init", false);
 
+				}
+				if (geomsKeep != null && !geomsKeep.isEmpty()) {
+					if (geoms == null) 
+						geoms = GamaMapFactory.create();
+					for(IShape s : geomsKeep)
+						geoms.put(s, null);
 				}
 			
 			if (! toSend.isEmpty())
@@ -1254,6 +1295,8 @@ public class AbstractUnityLinker extends GamlAgent {
 		}
 		if (getGeometriesToSend(ag) != null)
 			getGeometriesToSend(ag).clear();
+		if (getGeometriesToKeep(ag) != null)
+			getGeometriesToKeep(ag).clear();
 		
 	}
 	
@@ -1442,6 +1485,8 @@ public class AbstractUnityLinker extends GamlAgent {
 		int precision = getPrecision(ag);
 
 		List<String> names = new ArrayList<>();
+		List<String> namesToKeep = new ArrayList<>();
+		
 		List<String> propertyID = new ArrayList<>();
 		List<Integer> yOffset = new ArrayList<>();
 		
@@ -1451,7 +1496,14 @@ public class AbstractUnityLinker extends GamlAgent {
 		for (IShape g : geoms.keySet()) {
 			UnityProperties up = geoms.get(g);
 			String name = getName(g, up);
+			
+			if (up == null) {
+				namesToKeep.add(name);
+				continue;
+			}
+				
 			names.add(name);
+			
 			propertyID.add(up.getId());
 			boolean hp = up.getAspect().isPrefabAspect();
 			if (hp) {
@@ -1466,6 +1518,8 @@ public class AbstractUnityLinker extends GamlAgent {
 		toSend.put("offsetYGeom", yOffset);
 		
 		toSend.put("names", names);
+		toSend.put("keepNames", namesToKeep);
+		
 		toSend.put("propertyID", propertyID);
 		toSend.put("pointsGeom", pointsGeom);
 		if (updatePos) {
@@ -1986,8 +2040,30 @@ public class AbstractUnityLinker extends GamlAgent {
 							doc = @doc ("the unity properties to attach this list of geometries")) },
 
 			doc = { @doc (
-					value = "Action called by the send_world action that returns the sub-list of geometries to send to Unity from a given list of geometries according to a max distance to the player") })
+					value = "Action allows to define the list of geometries to send to Unity") })
 	public void primAddGeometriesToSend(final IScope scope) throws GamaRuntimeException {
+		IList<IShape> geometries = Cast.asList(scope, scope.getListArg("geometries"));
+		IAgent ag = getAgent();
+		Map gts = getGeometriesToSend(ag);
+		UnityProperties property = (UnityProperties) scope.getArg("property", UnityPropertiesType.UNITYPROPERTIESTYPE_ID);
+		if (geometriesToFollow == null) { geometriesToFollow = GamaMapFactory.create(); }
+		for (IShape s : geometries) {
+			gts.put(s, property);
+			String name = s instanceof IAgent ? ((IAgent) s).getName() : (String) s.getAttribute("name");
+			if (!geometriesToFollow.containsKey(name)) { geometriesToFollow.put(name, s); }
+		}
+	}
+	
+	@action (
+			name = "add_geometries_to_keep",
+			args = { @arg (
+					name = "geometries",
+					type = IType.CONTAINER,
+					doc = @doc ("list of geometries to keep in Unity"))},
+
+			doc = { @doc (
+					value = "Action allows to define the list of geometries to keep in Unity (and not sent)") })
+	public void primAddGeometriesToKeep(final IScope scope) throws GamaRuntimeException {
 		IList<IShape> geometries = Cast.asList(scope, scope.getListArg("geometries"));
 		IAgent ag = getAgent();
 		Map gts = getGeometriesToSend(ag);

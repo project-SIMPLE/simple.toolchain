@@ -527,6 +527,8 @@ public class SimulationManager : MonoBehaviour
         }
         int cptPrefab = 0;
         int cptGeom = 0;
+        foreach (string n in infoWorld.keepNames) 
+            toRemove.Remove(n);
         for (int i = 0; i < infoWorld.names.Count; i++)
         {
             string name = infoWorld.names[i];

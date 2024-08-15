@@ -1,6 +1,8 @@
 /**
 * Name: SendStaticdata
-* Show how to send dynamic geometries/agents to Unity. It works with the Scene "Assets/Scenes/Code Example/Receive Dynamic Data" from the Unity Template
+* Show how to send dynamic geometries/agents to Unity. It shows in particular how to send agents at different time step. 
+* Here, agents represented by a car will be sent at every cycle, and agents represented by their geometry at every 100 cycle. 
+* It works with the Scene "Assets/Scenes/Code Example/Receive Dynamic Data" from the Unity Template
 * Author: Patrick Taillandier
 * Tags: Unity, dynamic geometries/agents
 */
@@ -12,7 +14,6 @@ global {
 	//unity properties that will be used for sending geometries/agents to Unity
 	unity_property up_car ;
 	unity_property up_geom;
-	
 	
 	
  	init {
@@ -27,7 +28,8 @@ global {
 
 species moving_agent skills: [moving] {
 	float speed <- 0.5;
-	reflex move {
+	int frequency <- 1;
+	reflex move when: every(frequency #cycle){
 		do wander amplitude: 10.0;
 	}
 }
@@ -38,8 +40,10 @@ species dynamic_punctual_agent parent: moving_agent{
 	}
 }
 
-
+//the dynamic_geometry_agent will only move once every 100 cycle
 species dynamic_geometry_agent parent: moving_agent{
+	float speed <- 2.0;
+	int frequency <- 100;
 	aspect default {
 		draw shape color: #gray;
 	}
@@ -90,10 +94,17 @@ species unity_linker parent: abstract_unity_linker {
 	}
 	
 	reflex send_agents when: not empty(unity_player) {
-		do add_geometries_to_send(dynamic_punctual_agent,up_car);
+		//at every step, we send the dynamic_punctual_agent agents with the up_car properties
+		do add_geometries_to_send(dynamic_punctual_agent,up_car);	
+		
+		//we want to keep the dynamic_geometry_agent in their current state in Unity, so we add them in the geometries_to_keep list
+		do add_geometries_to_keep(dynamic_geometry_agent);	
+	}
+	
+	
+	reflex send_agents_every_100_steps when: every(100 #cycle) and not empty(unity_player){
+		//at every 100 step, we send the new geometries of the dynamic_geometry_agent agents with the up_geom properties
 		do add_geometries_to_send(dynamic_geometry_agent,up_geom);
-		
-		
 	}
 }
 

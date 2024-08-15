@@ -8,6 +8,7 @@ public class WorldJSONInfo
 
     public List<int> position;
     public List<string> names;
+    public List<string> keepNames;
     public List<string> propertyID;
     public List<GAMAPoint> pointsLoc;
 
