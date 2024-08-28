@@ -10,40 +10,30 @@
  ********************************************************************************************************/
 package gaml.extension.unity.commands.wizard;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.jface.dialogs.PageChangedEvent;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-
-import gama.core.kernel.experiment.IExperimentPlan;
-import gama.core.kernel.model.IModel;
 
 /**
  * The Class WizardPageGeneralInformation.
  */
-public class WizardPageGeneralInformation extends WizardPage {
+public class WizardPageGeneralInformation extends UnityWizardPage {
 
-	/** The model. */
-	IModel model;
-
-	/** The container. */
-	private Composite container;
-
-	/** The generator. */
-	VRModelGenerator generator;
-
-	/** The w display. */
-	WizardPageDisplay wDisplay;
+	/** The items D. */
+	Composite parent;
+	Group groupExperiment;
+	Group groupDisplay;
 
 	/**
 	 * Instantiates a new wizard page general information.
@@ -55,89 +45,133 @@ public class WizardPageGeneralInformation extends WizardPage {
 	 * @param gen
 	 *            the gen
 	 */
-	protected WizardPageGeneralInformation(final String path, final IModel model, final VRModelGenerator gen) {
-		super("GeneralInformation");
-		setTitle("Define the general information to define the VR experiment");
-		setDescription("Please enter information about VR experiment");
-		this.model = model;
-		this.generator = gen;
-		gen.setModelName(model.getName() + "_VR");
-		gen.setModelPath(path);
+	protected WizardPageGeneralInformation(final VRModelGenerator gen) {
+		super("GeneralInformation", gen);
+		setTitle("Definition of the VR experiment");
+		setDescription("Enter information to build the VR experiment");
+	}
+
+	/**
+	 * Update experiment.
+	 */
+	public void updateExperiment() {
+		createDisplayGroup(parent);
+		parent.requestLayout();
 	}
 
 	@Override
-	public void createControl(final Composite parent) {
-		container = new Composite(parent, SWT.NONE);
-		container.setLayout(new FillLayout(SWT.VERTICAL));
-		/*
-		 * Group groupConnection = new Group(container, SWT.NONE); groupConnection.setLayout(new GridLayout(2, false));
-		 * groupConnection.setText("Information about the connection");
-		 * 
-		 * Label lp = new Label(groupConnection, SWT.LEFT); lp.setText("Port:" ); Text tp = new Text(groupConnection,
-		 * SWT.BORDER); tp.setText(generator.getPort().toString()); tp.addModifyListener(new ModifyListener() {
-		 * 
-		 * @Override
-		 * 
-		 * public void modifyText(ModifyEvent e) { Integer port = Integer.decode(tp.getText()); if (port != null)
-		 * generator.setPort(port); } });
-		 */
+	public void createControlsIn(final Composite parent) {
+		this.parent = parent;
+		parent.setLayout(new GridLayout(1, false));
 
-		Group groupExperiment = new Group(container, SWT.NONE);
-		groupExperiment.setLayout(new GridLayout(2, false));
-		groupExperiment.setText("Information about the experiment");
-
-		Label lc = new Label(groupExperiment, SWT.LEFT);
-		lc.setText("Minimium duration of a cycle in s (minimum_cycle_duration):");
-		Text tc = new Text(groupExperiment, SWT.BORDER);
-		tc.setText(generator.getMinimumCycleDuration().toString());
-		tc.addModifyListener(e -> {
-			Double duration = Double.valueOf(tc.getText());
-			if (duration != null) { generator.setMinimumCycleDuration(duration); }
-		});
-		Label lxp = new Label(groupExperiment, SWT.LEFT);
-		lxp.setText("Main Experiment:");
+		groupExperiment = new Group(parent, SWT.NONE);
+		groupExperiment.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		groupExperiment.setText("Experiment");
+		groupExperiment.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+		label(groupExperiment, "Choose the experiment to extend:");
 
 		Combo cXp = new Combo(groupExperiment, SWT.READ_ONLY);
-		List<String> items = new ArrayList<>();
-		for (IExperimentPlan ep : model.getExperiments()) { items.add(ep.getName()); }
-
-		cXp.setItems(items.toArray(new String[items.size()]));
-		if (!items.isEmpty()) {
-			cXp.setText(items.get(0));
-			generator.setExperimentName(cXp.getText());
-			wDisplay.updateExperiment();
-
+		cXp.setLayoutData(GridDataFactory.fillDefaults().create());
+		String[] items = generator.displays.keySet().toArray(new String[0]);
+		cXp.setItems(items);
+		if (items.length > 0) {
+			String name = items[0];
+			cXp.setText(name);
+			generator.setExperimentName(name);
+			updateExperiment();
 		}
 
 		cXp.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				generator.setExperimentName(cXp.getText());
-				wDisplay.updateExperiment();
+				updateExperiment();
 			}
 		});
+		label(groupExperiment, "Minimum duration of a cycle in seconds (minimum_cycle_duration):");
+		Text tc = text(groupExperiment, generator.getMinimumCycleDuration().toString());
+		tc.addModifyListener(e -> {
+			Double duration = Double.valueOf(tc.getText());
+			if (duration != null) { generator.setMinimumCycleDuration(duration); }
+		});
+		createGeneralGroup(parent);
+		createDisplayGroup(parent);
+	}
 
-		setControl(container);
+	private void createDisplayGroup(final Composite parent) {
+		List<String> itemsD = generator.displays.get(generator.getExperimentName());
+		if (groupDisplay != null) { groupDisplay.dispose(); }
+		if (itemsD == null || itemsD.isEmpty()) return;
+
+		groupDisplay = new Group(parent, SWT.NONE);
+		groupDisplay.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		groupDisplay.setText("Displays");
+
+		label(groupDisplay, "Main display:");
+
+		Combo cd = new Combo(groupDisplay, SWT.READ_ONLY);
+		cd.setItems(itemsD.toArray(new String[itemsD.size()]));
+		cd.setText(itemsD.get(0));
+		cd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				generator.setMainDisplay(cd.getText());
+			}
+		});
+		generator.setMainDisplay(cd.getText());
+		label(groupDisplay, "Displays to hide:");
+		Group groupDisplayH = new Group(groupDisplay, SWT.NONE);
+		groupDisplayH.setLayout(new GridLayout(2, false));
+
+		for (String sp : itemsD) {
+			Button bt = new Button(groupDisplayH, SWT.CHECK);
+			bt.addSelectionListener(new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(final SelectionEvent event) {
+					Button btn = (Button) event.getSource();
+					if (btn.getSelection()) {
+						generator.getDisplaysToHide().add(btn.getText());
+					} else {
+						generator.getDisplaysToHide().remove(btn.getText());
+					}
+
+				}
+			});
+			bt.setSelection(true);
+			bt.setText(sp);
+			generator.getDisplaysToHide().add(bt.getText());
+			bt.pack();
+		}
+
+		GridLayoutFactory.swtDefaults().numColumns(2).equalWidth(false).generateLayout(groupDisplay);
 
 	}
 
-	/**
-	 * Gets the w display.
-	 *
-	 * @return the w display
-	 */
-	public WizardPageDisplay getwDisplay() {
-		return wDisplay;
+	void createGeneralGroup(final Composite parent) {
+		Group grpAttributes = new Group(parent, SWT.NONE);
+		grpAttributes.setText("General parameters");
+		grpAttributes.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		grpAttributes.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+		{
+			label(grpAttributes, "Perception radius of players");
+			Text text_radius = text(grpAttributes, String.valueOf(generator.getDefaultPlayerAgentsPerceptionRadius()));
+			text_radius.addModifyListener(e -> { generator.perceptionRadius = Double.valueOf(text_radius.getText()); });
+		}
+		{
+			label(grpAttributes, "Min distance between agents to send to be considered");
+			Text text_distance = text(grpAttributes, String.valueOf(generator.getDefaultPlayerAgentsMinDist()));
+			text_distance.addModifyListener(e -> { generator.minDistance = Double.valueOf(text_distance.getText()); });
+		}
 	}
 
-	/**
-	 * Sets the w display.
-	 *
-	 * @param wDisplay
-	 *            the new w display
-	 */
-	public void setwDisplay(final WizardPageDisplay wDisplay) {
-		this.wDisplay = wDisplay;
-	}
+	@Override
+	protected void propertyChanged(final String item) {}
+
+	@Override
+	protected String getPropertyNameHint() { return "default"; }
+
+	@Override
+	public void pageChanged(final PageChangedEvent event) {}
 
 }

@@ -10,10 +10,6 @@
  ********************************************************************************************************/
 package gaml.extension.unity.commands.wizard;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -24,17 +20,8 @@ import gama.core.kernel.model.IModel;
  */
 public class ModelToVRWizard extends Wizard {
 
-	/** The model. */
-	IModel model;
-
 	/** The generator. */
 	VRModelGenerator generator;
-
-	/** The file. */
-	File file;
-
-	/** The path. */
-	String path;
 
 	/** The final page. */
 	IWizardPage finalPage;
@@ -49,35 +36,19 @@ public class ModelToVRWizard extends Wizard {
 	 * @param file
 	 *            the file
 	 */
-	public ModelToVRWizard(final String path, final IModel model, final File file) {
-		generator = new VRModelGenerator();
+	public ModelToVRWizard(final IModel model) {
+		generator = new VRModelGenerator(model);
 		setWindowTitle("VR Experiment generation");
-		// setNeedsProgressMonitor(true);
-		this.model = model;
-		this.file = file;
-		this.path = path;
-
 	}
 
 	@Override
 	public void addPages() {
-
-		WizardPageGeneralInformation wizI = new WizardPageGeneralInformation(path, model, generator);
+		WizardPageGeneralInformation wizI = new WizardPageGeneralInformation(generator);
 		addPage(wizI);
-		WizardPageDisplay wizD = new WizardPageDisplay(model, generator);
-		wizI.setwDisplay(wizD);
-		addPage(wizD);
-		WizardPageProperties wpp = new WizardPageProperties(model, generator);
-		addPage(wpp);
-		WizardPageSpeciesToSend wpSTS = new WizardPageSpeciesToSend(model, generator);
-		wpp.setWpStS(wpSTS);
-		addPage(wpSTS);
-		
-		//addPage(new WizardPageAgentsToSend(model, generator));
-		//addPage(new WizardPageGeometries(model, generator));
-		finalPage = new WizardPagePlayer(model, generator);
-		wpp.setPlayerPage((WizardPagePlayer) finalPage);
-		
+		WizardPageSpecies speciesPage = new WizardPageSpecies(generator);
+		addPage(speciesPage);
+		finalPage = new WizardPagePlayer(generator);
+
 		addPage(finalPage);
 		getShell().setSize(820, 650);
 	}
@@ -90,24 +61,7 @@ public class ModelToVRWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		String modelVRStr = generator.BuildVRModel();
-
-		try {
-			FileWriter fw = new FileWriter(file);
-
-			fw.write(modelVRStr);
-			fw.close();
-			/*
-			 * IFileStore fileStore = EFS.getLocalFileSystem().getStore(file.toURI()); IWorkbenchPage page =
-			 * PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(); try { IDE.openEditorOnFileStore(
-			 * page, fileStore ); } catch ( PartInitException e ) { e.printStackTrace();
-			 * System.out.println("An Error occured while loading the file."); }
-			 */
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		generator.buildAndSaveVRModel();
 		return true;
 	}
 

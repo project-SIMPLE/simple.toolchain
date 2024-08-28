@@ -10,53 +10,49 @@
  ********************************************************************************************************/
 package gaml.extension.unity.commands.wizard;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.eclipse.jface.dialogs.PageChangedEvent;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.preference.ColorSelector;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import gama.core.kernel.model.IModel;
 import gama.core.metamodel.shape.GamaPoint;
+import gama.core.util.GamaColor;
+import gaml.extension.unity.commands.wizard.VRModelGenerator.Player;
 
 /**
  * The Class WizardPagePlayer.
  */
-public class WizardPagePlayer extends WizardPage {
+public class WizardPagePlayer extends UnityWizardPage {
 
-	/** The model. */
-	IModel model;
+	String currentPlayer;
 
-	/** The generator. */
-	VRModelGenerator generator;
+	UnityPropertiesEditor propertiesEditor = new UnityPropertiesEditor(this);
 
-	/** The items D. */
-	List<String> itemsD;
-	
-	
-	private Text text;
-	private Text text_1;
-	private Text text_2;
-	private Text txtPlayerColor;
-	private Text text_3;
-	private Text text_4;
-	private Text text_5;
-	private Text text_6;
-	private Text text_7;
+	private Text text_x;
+	private Text text_y;
+	private Text text_z;
+	private ColorSelector cs_color;
+	private Text text_min;
+	private Text text_max;
+	private Text text_size;
 
-	private org.eclipse.swt.widgets.List list;
-	private org.eclipse.swt.widgets.List list_1;
+	private ListViewer playersList;
+	private Group grpAttributes;
+
 	/**
 	 * Instantiates a new wizard page player.
 	 *
@@ -65,291 +61,195 @@ public class WizardPagePlayer extends WizardPage {
 	 * @param gen
 	 *            the gen
 	 */
-	
-	
-	
-	protected WizardPagePlayer(final IModel model, final VRModelGenerator gen) {
-		super("Player");
-		setTitle("Define the information about the player");
-		setDescription("Please enter information about the player");
+
+	protected WizardPagePlayer(final VRModelGenerator gen) {
+		super("Players", gen);
+		setTitle("Define the information about the players");
+		setDescription("Please enter information about the players");
 		setPageComplete(true);
-		this.model = model;
-		this.generator = gen;
 
 	}
-	
-	
 
 	@Override
-	public void createControl(final Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
+	public void createControlsIn(final Composite compo) {
+		Composite globalContainer = new Composite(compo, SWT.NONE);
+		globalContainer.setLayout(new GridLayout(2, false));
+		globalContainer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
-		setControl(container);
-		generator.setLocationInit(new GamaPoint(50.0, 50.0, 0.0));
+		createPlayersList(globalContainer);
+		createPlayersAttributes(globalContainer);
+		propertiesEditor.createPropertiesComposite(globalContainer);
+		showProperties(false);
+	}
 
-		Group group = new Group(container, SWT.NONE);
-		group.setBounds(31, 130, 752, 36);
-		
-		Label lblX = new Label(group, SWT.NONE);
-		lblX.setBounds(206, 7, 21, 14);
-		lblX.setText("X:");
-		
-		Label lblY = new Label(group, SWT.NONE);
-		lblY.setBounds(317, 7, 21, 20);
-		lblY.setText("Y:");
-		
-		Label lblZ = new Label(group, SWT.NONE);
-		lblZ.setBounds(426, 7, 15, 14);
-		lblZ.setText("Z:");
-		
-		text = new Text(group, SWT.BORDER);
-		text.setBounds(230, 4, 64, 19);
-		
-		text_1 = new Text(group, SWT.BORDER);
-		text_1.setBounds(338, 4, 64, 19);
-		
-		text_2 = new Text(group, SWT.BORDER);
-		text_2.setBounds(447, 4, 64, 19);
-		
-		text.setText("" + generator.getLocationInit().x);
-		text_1.setText("" + generator.getLocationInit().y);
-		text_2.setText("" + generator.getLocationInit().z);
+	private void createPlayersAttributes(final Composite parent) {
+		grpAttributes = new Group(parent, SWT.NONE);
+		grpAttributes.setText("Attributes");
+		grpAttributes.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		grpAttributes.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
 
-		ModifyListener ml = e -> {
-			Double x = Double.valueOf(text.getText());
-			Double y = Double.valueOf(text_1.getText());
-			Double z = Double.valueOf(text_2.getText());
-			if (x != null && y != null && z != null) { generator.setLocationInit(new GamaPoint(x, y, z)); }
+		{
+			Label lblInitLocationOf = new Label(grpAttributes, SWT.NONE);
+			lblInitLocationOf.setText("Initial location");
+			lblInitLocationOf.setLayoutData(
+					GridDataFactory.fillDefaults().grab(false, false).align(SWT.BEGINNING, SWT.CENTER).create());
 
-		};
+			Composite grpCoord = new Composite(grpAttributes, SWT.NONE);
+			grpCoord.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
-		text.addModifyListener(ml);
-		text_1.addModifyListener(ml);
-		text_2.addModifyListener(ml);
+			label(grpCoord, "X:");
+			text_x = text(grpCoord, "50");
+			label(grpCoord, "Y:");
+			text_y = text(grpCoord, "50");
+			label(grpCoord, "Z:");
+			text_z = text(grpCoord, "0");
 
-		
-		Label lblInitLocationOf = new Label(group, SWT.NONE);
-		lblInitLocationOf.setBounds(10, 7, 149, 14);
-		lblInitLocationOf.setText("Init location of players");
-		
-		Group grpGamaDisplay = new Group(container, SWT.NONE);
-		grpGamaDisplay.setText("GAMA display");
-		grpGamaDisplay.setBounds(31, 266, 752, 228);
-		
-		Label lblNewLabel_1 = new Label(grpGamaDisplay, SWT.NONE);
-		lblNewLabel_1.setBounds(21, 10, 59, 14);
-		lblNewLabel_1.setText("Player size (Gama display)");
-		
-		txtPlayerColor = new Text(grpGamaDisplay, SWT.BORDER);
-		txtPlayerColor.setText("#red");
-		txtPlayerColor.setBounds(311, 7, 64, 19);
-		
-		txtPlayerColor.setText(generator.getPlayerColor());
-		txtPlayerColor.addModifyListener(e -> generator.setPlayerColor(txtPlayerColor.getText()));
+			ModifyListener ml = e -> {
+				Double x = Double.valueOf(text_x.getText());
+				Double y = Double.valueOf(text_y.getText());
+				Double z = Double.valueOf(text_z.getText());
+				if (x != null && y != null && z != null) {
+					generator.getPlayer(currentPlayer).location = new GamaPoint(x, y, z);
+				}
+			};
+			text_x.addModifyListener(ml);
+			text_y.addModifyListener(ml);
+			text_z.addModifyListener(ml);
+			GridLayoutFactory.fillDefaults().numColumns(6).generateLayout(grpCoord);
+		}
 
-		
-		Label lblPlayerColor = new Label(grpGamaDisplay, SWT.NONE);
-		lblPlayerColor.setBounds(224, 10, 76, 14);
-		lblPlayerColor.setText("Player color");
-		
-		text_7 = new Text(grpGamaDisplay, SWT.BORDER);
-		text_7.setBounds(111, 5, 64, 19);
-		text_7.setText(generator.getPlayerSize().toString());
-		text_7.addModifyListener(e -> {
-			Double ps = Double.valueOf(text_7.getText());
-			if (ps != null) { generator.setPlayerSize(ps); }
+		{
+			label(grpAttributes, "Size in GAMA");
+			text_size = text(grpAttributes, String.valueOf(generator.getDefaultPlayerSize()));
+			text_size.addModifyListener(
+					e -> { generator.getPlayer(currentPlayer).size = Double.valueOf(text_size.getText()); });
+		}
+
+		{
+			label(grpAttributes, "Color in GAMA");
+			cs_color = new ColorSelector(grpAttributes);
+			GamaColor c = generator.getDefaultPlayerColor();
+			RGB def = new RGB(c.red(), c.green(), c.blue());
+			cs_color.setColorValue(def);
+			cs_color.addListener(event -> {
+				RGB col = cs_color.getColorValue();
+				generator.getPlayer(currentPlayer).color = GamaColor.get(col.red, col.green, col.blue);
+			});
+			cs_color.getButton().setLayoutData(
+					GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER).create());
+		}
+
+		grpAttributes.setVisible(false);
+
+	}
+
+	private void createPlayersList(final Composite parent) {
+		Group grpPlayers = new Group(parent, SWT.NONE);
+		grpPlayers.setText("Players");
+		grpPlayers.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
+		grpPlayers.setLayoutData(
+				GridDataFactory.fillDefaults().grab(false, true).span(1, 2).hint(200, SWT.DEFAULT).create());
+		createNumberOfPlayers(grpPlayers);
+		playersList = new ListViewer(grpPlayers, SWT.BORDER | SWT.SINGLE);
+		playersList.getList().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		playersList.setContentProvider(ArrayContentProvider.getInstance());
+		playersList.setLabelProvider(new LabelProvider() {
+
+			@Override
+			public String getText(final Object element) {
+				return String.valueOf(element);
+			}
 		});
-		
-		Label lblNewLabel_2 = new Label(grpGamaDisplay, SWT.NONE);
-		lblNewLabel_2.setBounds(21, 44, 364, 14);
-		lblNewLabel_2.setText("Unity Properties used to represent the other players");
-		
-		
-		Label lblListOfDefined = new Label(grpGamaDisplay, SWT.NONE);
-		lblListOfDefined.setBounds(57, 64, 180, 14);
-		lblListOfDefined.setText("list of defined properties");
-		
-		Label lblListOfProperties = new Label(grpGamaDisplay, SWT.NONE);
-		lblListOfProperties.setText("list of properties used for players");
-		lblListOfProperties.setBounds(320, 64, 180, 14);
-		
-		
-		ListViewer listViewer = new ListViewer(grpGamaDisplay, SWT.BORDER | SWT.V_SCROLL);
-		list = listViewer.getList();
-		
-		list.setBounds(31, 84, 216, 82);
-		
-		ListViewer listViewer_1 = new ListViewer(grpGamaDisplay, SWT.BORDER | SWT.V_SCROLL);
-		list_1 = listViewer_1.getList();
-		list_1.setBounds(305, 84, 216, 80);
-		
-		Button btnRemove = new Button(grpGamaDisplay, SWT.NONE);
-		btnRemove.setBounds(444, 170, 76, 27);
-		btnRemove.setText("remove");
-		btnRemove.addListener(SWT.Selection, new Listener() {
-		      public void handleEvent(Event e) {
-		    	  if ((e.type ==  SWT.Selection) && (list_1.getSelectionIndex() >= 0)) {
-		    		  list_1.remove(list_1.getSelectionIndex());
-		    		  updatePlayerProperties();
-		          }
-		      } 
-		    });
-		
-		
-		Button btnDown = new Button(grpGamaDisplay, SWT.NONE);
-		btnDown.setText("down");
-		btnDown.setBounds(365, 170, 59, 27);
-		btnDown.addListener(SWT.Selection, new Listener() {
-		      public void handleEvent(Event e) {
-		    	  if ((e.type ==  SWT.Selection) && (list_1.getSelectionIndex() >= 0)) {
-		    		  int index = list_1.getSelectionIndex();
-		    		  if (index < (list_1.getItemCount() - 1)) {
-		    			  String v = list_1.getItem(index);
-		    			  String v2 = list_1.getItem(index+1);
-		    			  list_1.setItem(index+1, v);
-		    			  list_1.setItem(index, v2);
-		    			  list_1.setSelection(index+1);
-			    		  updatePlayerProperties();
-		    		  } 
-		          }
-		      } 
-		    });
-		
-		
-		Button btnUp = new Button(grpGamaDisplay, SWT.NONE);
-		btnUp.setText("up");
-		btnUp.setBounds(311, 170, 59, 27);
-		btnUp.addListener(SWT.Selection, new Listener() {
-		      public void handleEvent(Event e) {
-		    	  if ((e.type ==  SWT.Selection) && (list_1.getSelectionIndex() >= 0)) {
-		    		  int index = list_1.getSelectionIndex();
-		    		  if (index > 0) {
-		    			  String v = list_1.getItem(index);
-		    			  String v2 = list_1.getItem(index-1);
-		    			  list_1.setItem(index-1, v);
-		    			  list_1.setItem(index, v2);
+		playersList.addPostSelectionChangedListener(e -> {
+			Object o = playersList.getStructuredSelection().getFirstElement();
+			showProperties(o != null);
+			if (o != null) {
+				currentPlayer = o.toString();
+				updateControlsWithPlayer();
+			}
+		});
+		playersList.setInput(generator.players.keySet());
 
-		    			  list_1.setSelection(index-1);
+	}
 
-			    		  updatePlayerProperties();
-		    		  } 
-		          }
-		      } 
-		    });
-		
-		Button btnNewButton = new Button(grpGamaDisplay, SWT.NONE);
-		btnNewButton.setBounds(57, 172, 64, 27);
-		btnNewButton.setText("add");
-		btnNewButton.addListener(SWT.Selection, new Listener() {
-		      public void handleEvent(Event e) {
-		    	  if ((e.type ==  SWT.Selection) && (list.getSelectionIndex() >= 0)) {
-		    		 list_1.add(list.getItem(list.getSelectionIndex()));
+	private void updateControlsWithPlayer() {
+		Player p = generator.getPlayer(currentPlayer);
+		text_x.setText("" + p.location.x);
+		text_y.setText("" + p.location.y);
+		text_z.setText("" + p.location.z);
+		// text_distance.setText("" + p.minDistance);
+		// text_radius.setText("" + p.perceptionRadius);
+		text_size.setText("" + p.size);
+		GamaColor c = p.color;
+		cs_color.setColorValue(new RGB(c.red(), c.green(), c.blue()));
+		propertiesEditor.setSelection(p.property, true);
+	}
 
-		    		  updatePlayerProperties();
-		          }
-		      } 
-		    });
-		
-		Group grpNumberOfPlayers = new Group(container, SWT.NONE);
-		grpNumberOfPlayers.setText("Number of players");
-		grpNumberOfPlayers.setBounds(31, 10, 752, 113);
-		
-		Label lblMinNumberOf = new Label(grpNumberOfPlayers, SWT.NONE);
-		lblMinNumberOf.setBounds(23, 11, 137, 20);
-		lblMinNumberOf.setText("Min number of players");
-		
-		text_3 = new Text(grpNumberOfPlayers, SWT.BORDER);
-		//text_3.setText("0");
-		text_3.setBounds(230, 8, 64, 19);
-		text_3.setText(generator.getMin_num_player() + "");
-		text_3.addModifyListener(e -> {
-			Integer tami = Integer.valueOf(text_3.getText());
+	private void createNumberOfPlayers(final Composite parent) {
+		Composite grpNumberOfPlayers = new Composite(parent, SWT.NONE);
+		grpNumberOfPlayers.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		grpNumberOfPlayers.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).create());
+
+		label(grpNumberOfPlayers, "Min: ");
+		text_min = text(grpNumberOfPlayers, generator.getMin_num_player() + "");
+		text_min.addModifyListener(e -> {
+			Integer tami = Integer.valueOf(text_min.getText());
 			if (tami != null) { generator.setMin_num_player(tami); }
+			updatePlayers();
 		});
 
-		
-		Button btnHasAMax = new Button(grpNumberOfPlayers, SWT.CHECK);
-		btnHasAMax.setBounds(23, 37, 200, 16);
-		btnHasAMax.setText("Has a max number of players?");
+		Button btnHasAMax = check(grpNumberOfPlayers, "Max: ");
 		btnHasAMax.setSelection(true);
-		
 		btnHasAMax.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
-				Button btn = (Button) event.getSource();
-				generator.setHas_max_num_player(btn.getSelection());
-				if (btn.getSelection()) {
-					text_4.setEnabled(true);
-
-				} else {
-					text_4.setEnabled(false);
-				}
-
+				generator.setHas_max_num_player(btnHasAMax.getSelection());
+				text_max.setEnabled(btnHasAMax.getSelection());
+				updatePlayers();
 			}
 		});
 
-
-		Label lblMaxNumberOf = new Label(grpNumberOfPlayers, SWT.NONE);
-		lblMaxNumberOf.setBounds(51, 63, 137, 20);
-		lblMaxNumberOf.setText("Max number of players");
-		
-		text_4 = new Text(grpNumberOfPlayers, SWT.BORDER);
-		//text_4.setText("0");
-		text_4.setBounds(230, 60, 64, 19);
-		text_4.setText(generator.getMax_num_player() + "");
-		text_4.addModifyListener(e -> {
-			Integer tmaai = Integer.valueOf(text_4.getText());
+		text_max = text(grpNumberOfPlayers, generator.getMax_num_player() + "");
+		text_max.addModifyListener(e -> {
+			Integer tmaai = Integer.valueOf(text_max.getText());
 			if (tmaai != null) { generator.setMax_num_player(tmaai); }
+			updatePlayers();
 		});
-		
-		Group grpFilteringOfThe = new Group(container, SWT.NONE);
-		grpFilteringOfThe.setText("Filtering of the geometries sent to Unity");
-		grpFilteringOfThe.setBounds(31, 178, 752, 82);
-		
-		Label lblPerceptionRadiusOf = new Label(grpFilteringOfThe, SWT.NONE);
-		lblPerceptionRadiusOf.setBounds(23, 10, 214, 14);
-		lblPerceptionRadiusOf.setText("Perception radius of the player agent");
-		
-		Label lblNewLabel = new Label(grpFilteringOfThe, SWT.NONE);
-		lblNewLabel.setBounds(23, 38, 332, 14);
-		lblNewLabel.setText("Min distance between agents to send to be considered");
-		
-		text_5 = new Text(grpFilteringOfThe, SWT.BORDER);
-		text_5.setBounds(358, 5, 64, 19);
-		text_5.setText(generator.getPlayerAgentsPerceptionRadius().toString());
-		text_5.addModifyListener(e -> {
-			Double papr = Double.valueOf(text_5.getText());
-			if (papr != null) { generator.setPlayerAgentsPerceptionRadius(papr); }
-		});
-		
-		
-		text_6 = new Text(grpFilteringOfThe, SWT.BORDER);
-		text_6.setBounds(358, 35, 64, 19);
-		text_6.setText(generator.getPlayerAgentsPerceptionRadius().toString());
-		text_6.addModifyListener(e -> {
-			Double pamd = Double.valueOf(text_6.getText());
-			if (pamd != null) { generator.setPlayerAgentsMinDist(pamd); }
-		});
-		
-
 
 	}
-	
-	public void updatePlayerProperties() {
-		List<String> pp = new ArrayList<>();
-		for (String p: list_1.getItems()) {
-			pp.add(p);
+
+	private void updatePlayers() {
+		int number = Integer.parseInt(text_min.getText());
+		if (text_max.isEnabled()) { number = Math.max(number, Integer.parseInt(text_max.getText())); }
+		int size = generator.players.size();
+		if (number == 0) {
+			generator.players.clear();
+		} else if (number > size) {
+			for (int i = size; i < number; i++) { generator.addPlayer(i); }
+		} else {
+			for (int i = size - 1; i >= number; i--) { generator.removePlayer(i); }
 		}
-		generator.setPlayerProperties(pp);
+		playersList.refresh();
 	}
-	
-	
-	public void updateUnityProperties() {
-		list.removeAll();
-		for (String up : generator.getDefinedProperties().keySet())
-			list.add(up);
-		
+
+	@Override
+	protected void propertyChanged(final String item) {
+		if (currentPlayer != null) { generator.getPlayer(currentPlayer).property = item; }
+	}
+
+	@Override
+	protected String getPropertyNameHint() { return currentPlayer; }
+
+	void showProperties(final boolean b) {
+		grpAttributes.setVisible(b);
+		propertiesEditor.setVisible(b);
+		getControl().requestLayout();
+	}
+
+	@Override
+	public void pageChanged(final PageChangedEvent event) {
+		propertiesEditor.propertiesChanged();
 	}
 
 }

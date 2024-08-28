@@ -10,8 +10,6 @@
  ********************************************************************************************************/
 package gaml.extension.unity.commands;
 
-import java.io.File;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -38,10 +36,8 @@ public class GenerateVrModelHandler extends AbstractHandler {
 		final IModel model = editor.getDocument()
 				.readOnly(state -> GamlModelBuilder.getDefaultInstance().compile(state.getURI(), null));
 		if (model == null) return null;
-		File m = new File(model.getFilePath());
-		final File file = new File(model.getFilePath().replace(".gaml", "-VR.gaml"));
-		String path = m.getName();
-		createVRModel(path, model, file);
+
+		createVRModel(model);
 		return null;
 	}
 
@@ -55,9 +51,9 @@ public class GenerateVrModelHandler extends AbstractHandler {
 	 * @param file
 	 *            the file
 	 */
-	protected void createVRModel(final String path, final IModel model, final File file) {
+	protected void createVRModel(final IModel model) {
 		Shell shell = WorkbenchHelper.getShell();
-		ModelToVRWizard wizard = new ModelToVRWizard(path, model, file);
+		ModelToVRWizard wizard = new ModelToVRWizard(model);
 		WizardDialog dialog = new WizardDialog(shell, wizard);
 
 		dialog.open();
