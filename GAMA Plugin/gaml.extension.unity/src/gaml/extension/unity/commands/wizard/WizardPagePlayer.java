@@ -200,6 +200,8 @@ public class WizardPagePlayer extends UnityWizardPage {
 
 		Button btnHasAMax = check(grpNumberOfPlayers, "Max: ");
 		btnHasAMax.setSelection(true);
+		generator.setHas_max_num_player(btnHasAMax.getSelection());
+		
 		btnHasAMax.addSelectionListener(new SelectionAdapter() {
 
 			@Override
