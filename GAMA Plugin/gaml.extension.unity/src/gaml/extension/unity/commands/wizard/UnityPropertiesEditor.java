@@ -183,7 +183,7 @@ class UnityPropertiesEditor {
 			def = d.getValue();
 			propertiesList.add(def);
 			UnityProperties prop = wizardPage.generator.createUnityProperties(def);
-			prop.tag = def + "_tag";
+			prop.tag = "";
 			wizardPage.generator.notifyPropertiesChanged();
 			propertiesList.setSelection(new StructuredSelection(def), true);
 
