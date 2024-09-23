@@ -914,7 +914,7 @@ public class AbstractUnityLinker extends GamlAgent {
 	private Object doAction1Arg(final IScope scope, final String actionName, final String argName,
 			final Object ArgVal) {
 		Arguments args = new Arguments();
-		args.put(argName, ConstantExpressionDescription.create(ArgVal));
+		args.put(argName, ConstantExpressionDescription.createNoCache(ArgVal));
 		WithArgs act = getAgent().getSpecies().getAction(actionName);
 		act.setRuntimeArgs(scope, args);
 		return act.executeOn(scope);
@@ -940,8 +940,8 @@ public class AbstractUnityLinker extends GamlAgent {
 	private Object doAction2Arg(final IScope scope, final String actionName, final String argName1,
 			final Object ArgVal1, final String argName2, final Object ArgVal2) {
 		Arguments args = new Arguments();
-		args.put(argName1, ConstantExpressionDescription.create(ArgVal1));
-		args.put(argName2, ConstantExpressionDescription.create(ArgVal2));
+		args.put(argName1, ConstantExpressionDescription.createNoCache(ArgVal1));
+		args.put(argName2, ConstantExpressionDescription.createNoCache(ArgVal2));
 		WithArgs act = getAgent().getSpecies().getAction(actionName);
 		act.setRuntimeArgs(scope, args);
 		return act.executeOn(scope);
@@ -972,9 +972,9 @@ public class AbstractUnityLinker extends GamlAgent {
 			final Object ArgVal1, final String argName2, final Object ArgVal2, final String argName3,
 			final Object ArgVal3) {
 		Arguments args = new Arguments();
-		args.put(argName1, ConstantExpressionDescription.create(ArgVal1));
-		args.put(argName2, ConstantExpressionDescription.create(ArgVal2));
-		args.put(argName3, ConstantExpressionDescription.create(ArgVal3));
+		args.put(argName1, ConstantExpressionDescription.createNoCache(ArgVal1));
+		args.put(argName2, ConstantExpressionDescription.createNoCache(ArgVal2));
+		args.put(argName3, ConstantExpressionDescription.createNoCache(ArgVal3));
 		WithArgs act = getAgent().getSpecies().getAction(actionName);
 		act.setRuntimeArgs(scope, args);
 		return act.executeOn(scope);
@@ -983,10 +983,10 @@ public class AbstractUnityLinker extends GamlAgent {
 			final Object ArgVal1, final String argName2, final Object ArgVal2, final String argName3,
 			final Object ArgVal3, final String argName4, final Object ArgVal4) {
 		Arguments args = new Arguments();
-		args.put(argName1, ConstantExpressionDescription.create(ArgVal1));
-		args.put(argName2, ConstantExpressionDescription.create(ArgVal2));
-		args.put(argName3, ConstantExpressionDescription.create(ArgVal3));
-		args.put(argName4, ConstantExpressionDescription.create(ArgVal4));
+		args.put(argName1, ConstantExpressionDescription.createNoCache(ArgVal1));
+		args.put(argName2, ConstantExpressionDescription.createNoCache(ArgVal2));
+		args.put(argName3, ConstantExpressionDescription.createNoCache(ArgVal3));
+		args.put(argName4, ConstantExpressionDescription.createNoCache(ArgVal4));
 		WithArgs act = getAgent().getSpecies().getAction(actionName);
 		act.setRuntimeArgs(scope, args);
 		return act.executeOn(scope);
@@ -1072,7 +1072,7 @@ public class AbstractUnityLinker extends GamlAgent {
 			
 			mes = SerialisationOperators.toJson(scope, currentMessage, false);
 			
-			pa.sendMessage(scope, ConstantExpressionDescription.create(mes));
+			pa.sendMessage(scope, ConstantExpressionDescription.createNoCache(mes));
 		} else {
 			Iterator<IMap> it =
 					(Iterator<IMap>) ((IList<IMap>) currentMessage.get(CONTENTS)).iterable(scope).iterator();
@@ -1083,7 +1083,7 @@ public class AbstractUnityLinker extends GamlAgent {
 			}
 			if (!mes.isBlank() && !"{}".equals(mes)) {
 				try {
-					pa.sendMessage(scope, ConstantExpressionDescription.create(mes));
+					pa.sendMessage(scope, ConstantExpressionDescription.createNoCache(mes));
 				} catch (WebsocketNotConnectedException e) {
 					if (!getUseMiddleware(getAgent())) {
 						getPlayers(pa).get(0).dispose();
@@ -1170,7 +1170,7 @@ public class AbstractUnityLinker extends GamlAgent {
 
 		PlatformAgent pa = GAMA.getPlatformAgent();
 		String mesStr = SerialisationOperators.toJson(scope, message, false);
-		pa.sendMessage(scope, ConstantExpressionDescription.create(mesStr));
+		pa.sendMessage(scope, ConstantExpressionDescription.createNoCache(mesStr));
 
 	}
 	
@@ -1569,8 +1569,8 @@ public class AbstractUnityLinker extends GamlAgent {
 		IMap<String, Object> map = GamaMapFactory.create();
 		map.put("c", vals);
 		Arguments args = new Arguments();
-		args.put("map", ConstantExpressionDescription.create(map));
-		args.put("geom", ConstantExpressionDescription.create(geom));
+		args.put("map", ConstantExpressionDescription.createNoCache(map));
+		args.put("geom", ConstantExpressionDescription.createNoCache(geom));
 		WithArgs actATM = getAgent().getSpecies().getAction(ADD_TO_MAP);
 
 		actATM.setRuntimeArgs(scope, args);
@@ -1611,8 +1611,8 @@ public class AbstractUnityLinker extends GamlAgent {
 		map.put("c", vals);
 
 		Arguments args = new Arguments();
-		args.put("map", ConstantExpressionDescription.create(map));
-		args.put("geom", ConstantExpressionDescription.create(geom));
+		args.put("map", ConstantExpressionDescription.createNoCache(map));
+		args.put("geom", ConstantExpressionDescription.createNoCache(geom));
 		WithArgs actATM = getAgent().getSpecies().getAction(ADD_TO_MAP);
 
 		actATM.setRuntimeArgs(scope, args);
@@ -2406,7 +2406,7 @@ public class AbstractUnityLinker extends GamlAgent {
 		IAgent thePlayer = getPlayers(ag).get(scope.getStringArg("id"));
 		if (thePlayer == null) return;
 		PlatformAgent pa = GAMA.getPlatformAgent();
-		pa.sendMessage(scope, ConstantExpressionDescription.create("pong"));
+		pa.sendMessage(scope, ConstantExpressionDescription.createNoCache("pong"));
 	}
 
 	/**
