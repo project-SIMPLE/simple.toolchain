@@ -1,7 +1,7 @@
 /**
 * Name: SendStaticdata
 * Show how to send dynamic geometries/agents to Unity. It shows in particular how to send agents at different time step. 
-* Here, agents represented by a car will be sent at every cycle, and agents represented by their geometry at every 100 cycle. 
+* Here, agents represented by a car will be sent at every cycle with one attribute (type), and agents represented by their geometry at every 100 cycle. 
 * It works with the Scene "Assets/Scenes/Code Example/Receive Dynamic Data" from the Unity Template
 * Author: Patrick Taillandier
 * Tags: Unity, dynamic geometries/agents
@@ -35,6 +35,7 @@ species moving_agent skills: [moving] {
 }
 
 species dynamic_punctual_agent parent: moving_agent{
+	int type <- rnd(2);
 	aspect default {
 		draw circle(2) color: #red;
 	}
@@ -91,11 +92,21 @@ species unity_linker parent: abstract_unity_linker {
 		
 		// add the up_geom unity_property to the list of unity_properties
 		unity_properties << up_geom;
+		
+		
 	}
 	
 	reflex send_agents when: not empty(unity_player) {
-		//at every step, we send the dynamic_punctual_agent agents with the up_car properties
-		do add_geometries_to_send(dynamic_punctual_agent,up_car);	
+		
+		// add attributes to send to Unity. We send one attribute "type" for the dynamic_punctual_agent agents, 
+		// that will have for name "type" in uniy and which is an integer  (between 0 and 2 for each dynamic_punctual_agent).
+		// get the value of type for each agent.
+		list<int> type_agents <-  dynamic_punctual_agent collect each.type;
+		//put this list value in a map (several attributes can be send at the same time).
+		map<string,list<int>> atts <-  ["type":: type_agents];
+		
+		//at every step, we send the dynamic_punctual_agent agents with the up_car properties and the attributes "atts" 
+		do add_geometries_to_send(dynamic_punctual_agent,up_car,atts);	
 		
 		//we want to keep the dynamic_geometry_agent in their current state in Unity, so we add them in the geometries_to_keep list
 		do add_geometries_to_keep(dynamic_geometry_agent);	

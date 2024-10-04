@@ -111,7 +111,10 @@ import gaml.extension.unity.types.UnityPropertiesType;
 				name = AbstractUnityLinker.BACKGROUND_GEOMETRIES,
 				type = IType.MAP,
 				doc = { @doc ("Map of background geometries to sent to Unity with the unity properties to use.") }),
-
+		@variable (
+				name = AbstractUnityLinker.ATTRIBUTES_TO_SEND,
+				type = IType.MAP,
+				doc = { @doc ("List of attributes to sent to Unity") }),
 		@variable (
 				name = AbstractUnityLinker.GEOMETRIES_TO_SEND,
 				type = IType.MAP,
@@ -219,6 +222,9 @@ public class AbstractUnityLinker extends GamlAgent {
 	/** The Constant GEOMETRIES_TO_KEEP. */
 	public static final String GEOMETRIES_TO_KEEP = "geometries_to_keep";
 
+	/** The Constant ATTIBUTES_TO_SEND. */
+	public static final String ATTRIBUTES_TO_SEND = "attributes_to_send";
+	
 	/** The Constant GEOMETRIES_TO_SEND. */
 	public static final String GEOMETRIES_TO_SEND = "geometries_to_send";
 
@@ -526,6 +532,33 @@ public class AbstractUnityLinker extends GamlAgent {
 		agent.setAttribute(BACKGROUND_GEOMETRIES, val);
 	}
 
+	
+	/**
+	 * Gets the attributes to send.
+	 *
+	 * @param agent
+	 *            the agent
+	 * @return the attributes to send
+	 */
+	@getter (AbstractUnityLinker.ATTRIBUTES_TO_SEND)
+	public static IMap<IShape, IMap<String,Object>> getAttributesToSend(final IAgent agent) {
+		return (IMap<IShape, IMap<String,Object>>) agent.getAttribute(ATTRIBUTES_TO_SEND);
+	}
+
+	/**
+	 * Sets the attributes to send.
+	 *
+	 * @param agent
+	 *            the agent
+	 * @param val
+	 *            the val
+	 */
+	@setter (AbstractUnityLinker.ATTRIBUTES_TO_SEND)
+	public static void setAttributesToSend(final IAgent agent, final IMap<IShape, IMap<String,Object>> val) {
+		agent.setAttribute(ATTRIBUTES_TO_SEND, val);
+	}
+	
+	
 	/**
 	 * Gets the geometries to send.
 	 *
@@ -1297,6 +1330,8 @@ public class AbstractUnityLinker extends GamlAgent {
 			getGeometriesToSend(ag).clear();
 		if (getGeometriesToKeep(ag) != null)
 			getGeometriesToKeep(ag).clear();
+		if (getAttributesToSend(ag) != null)
+			getAttributesToSend(ag).clear();
 		
 	}
 	
@@ -1470,8 +1505,9 @@ public class AbstractUnityLinker extends GamlAgent {
 							doc = @doc ("send the geometries for the initialization?")),
 					@arg (
 							name = "geoms",
-							type = IType.LIST,
-							doc = @doc ("Map of geometry to send (geometry::unity_property)")) },
+							type = IType.MAP,
+							doc = @doc ("Map of geometry to send (geometry::unity_property)")) 
+		},
 			doc = { @doc (
 					value = "send the background geometries to the Unity client") })
 	public void primSentGeometries(final IScope scope) throws GamaRuntimeException {
@@ -1480,6 +1516,7 @@ public class AbstractUnityLinker extends GamlAgent {
 		Boolean isInit = scope.getBoolArg("is_init");
 		Boolean updatePos = scope.getBoolArg("update_position");
 		IMap<IShape, UnityProperties> geoms = (IMap<IShape, UnityProperties>) scope.getArg("geoms", IType.MAP);
+		
 		IMap<String, Object> toSend = GamaMapFactory.create();
 		IList<Integer> posT = GamaListFactory.create(Types.INT);
 		int precision = getPrecision(ag);
@@ -1492,7 +1529,11 @@ public class AbstractUnityLinker extends GamlAgent {
 		
 		List pointsLoc = new ArrayList<>();
 		List pointsGeom = new ArrayList<>();
-
+		
+		List<Map<String, Object>> atts = new ArrayList<>();
+		IMap<IShape, IMap<String,Object>> attributes = getAttributesToSend(ag);
+		System.out.println("primSentGeometries: attributes: " + attributes);
+		
 		for (IShape g : geoms.keySet()) {
 			UnityProperties up = geoms.get(g);
 			String name = getName(g, up);
@@ -1503,6 +1544,8 @@ public class AbstractUnityLinker extends GamlAgent {
 			}
 				
 			names.add(name);
+			IMap<String,Object> obj = attributes.get(g);
+			atts.add(obj == null ? GamaMapFactory.create(): obj);
 			
 			propertyID.add(up.getId());
 			boolean hp = up.getAspect().isPrefabAspect();
@@ -1522,6 +1565,8 @@ public class AbstractUnityLinker extends GamlAgent {
 		
 		toSend.put("propertyID", propertyID);
 		toSend.put("pointsGeom", pointsGeom);
+		
+		toSend.put("attributes", atts);
 		if (updatePos) {
 			List<Integer> pos = new ArrayList<>(getNewPlayerPosition(ag).get(player.getName()));
 			
@@ -2037,7 +2082,12 @@ public class AbstractUnityLinker extends GamlAgent {
 					@arg (
 							name = "property",
 							type = UnityPropertiesType.UNITYPROPERTIESTYPE_ID,
-							doc = @doc ("the unity properties to attach this list of geometries")) },
+							doc = @doc ("the unity properties to attach this list of geometries")) ,
+			@arg (
+					name = "attributes",
+					optional = true,
+					type = IType.MAP,
+					doc = @doc ("the attributes to send with the geometry - list of map")) },
 
 			doc = { @doc (
 					value = "Action allows to define the list of geometries to send to Unity") })
@@ -2045,10 +2095,22 @@ public class AbstractUnityLinker extends GamlAgent {
 		IList<IShape> geometries = Cast.asList(scope, scope.getListArg("geometries"));
 		IAgent ag = getAgent();
 		Map gts = getGeometriesToSend(ag);
+		Map gas = getAttributesToSend(ag);
+		Map<String, IList> attributes = scope.hasArg("attributes") ? Cast.asMap(scope, scope.getArg("attributes", IType.MAP), false): null;
 		UnityProperties property = (UnityProperties) scope.getArg("property", UnityPropertiesType.UNITYPROPERTIESTYPE_ID);
 		if (geometriesToFollow == null) { geometriesToFollow = GamaMapFactory.create(); }
+		int cpt = 0;
 		for (IShape s : geometries) {
 			gts.put(s, property);
+			if (attributes != null && !attributes.isEmpty()) {
+				IMap<String, Object> vals = GamaMapFactory.create();
+				for (String att : attributes.keySet()) {
+					vals.put(att, attributes.get(att).get(cpt));
+					cpt++;	
+				}
+				gas.put(s, vals);
+				
+			}
 			String name = s instanceof IAgent ? ((IAgent) s).getName() : (String) s.getAttribute("name");
 			if (!geometriesToFollow.containsKey(name)) { geometriesToFollow.put(name, s); }
 		}

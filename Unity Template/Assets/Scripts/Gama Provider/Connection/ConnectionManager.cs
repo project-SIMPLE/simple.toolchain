@@ -101,7 +101,6 @@ public class ConnectionManager : WebSocketConnector
         if (e.IsText)
         {
            
-            //Debug.Log("e.Data: " + e.Data);
             JObject jsonObj = JObject.Parse(e.Data);
             string type = (string)jsonObj["type"];
            

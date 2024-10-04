@@ -12,6 +12,8 @@ public class WorldJSONInfo
     public List<string> propertyID;
     public List<GAMAPoint> pointsLoc;
 
+    public List<Attributes> attributes;
+
 
     public List<int> offsetYGeom;
 
@@ -25,7 +27,12 @@ public class WorldJSONInfo
     public static WorldJSONInfo CreateFromJSON(string jsonString)
     {
         return JsonUtility.FromJson<WorldJSONInfo>(jsonString);
-    } 
+    }
+
+    public object getAttributeValue(string name, string attribute)
+    {
+        return attributes[names.IndexOf(name)];
+    }
 
 } 
 

@@ -106,7 +106,6 @@ public class PolyExtruder : MonoBehaviour
     private MeshRenderer surroundMeshRenderer;
     private Material material;
 
-    private bool isVisible = true;
 
     #endregion
 

@@ -481,10 +481,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Manager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -9060036263621306705, guid: 96b9dda0b8a7d45348f13f667549f193, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5434300668364997236, guid: 96b9dda0b8a7d45348f13f667549f193, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1626047657}
   m_SourcePrefab: {fileID: 100100000, guid: 96b9dda0b8a7d45348f13f667549f193, type: 3}
 --- !u!4 &653474308 stripped
 Transform:
@@ -496,6 +500,32 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8482490166955143304, guid: e0cf0d2188a1b4564821ed155d0b74f5, type: 3}
   m_PrefabInstance: {fileID: 209291051}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1626047656 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5434300668364997236, guid: 96b9dda0b8a7d45348f13f667549f193, type: 3}
+  m_PrefabInstance: {fileID: 653474307}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1626047657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626047656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a56a3962f2924b73a901d02b8605a65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  primaryRightHandButton: {fileID: 0}
+  TryReconnectButton: {fileID: 0}
+  player: {fileID: 1984075082}
+  Ground: {fileID: 936896327}
+  GamaCRSCoefX: 1
+  GamaCRSCoefY: 1
+  GamaCRSOffsetX: 0
+  GamaCRSOffsetY: 0
+  GamaCRSOffsetZ: 0
 --- !u!1 &1867838819 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 618805680813392074, guid: 2c59fa02513994303ad959d140b545eb, type: 3}

@@ -12,12 +12,13 @@ public static class StaticInformation
             string hostName = Dns.GetHostName(); // Retrive the Name of HOST
            try
             {
-                string myIP = Dns.GetHostByName(hostName).AddressList[0].MapToIPv4().ToString();
+                
+               string myIP = Dns.GetHostByName(hostName).AddressList[0].MapToIPv4().ToString();
 
 
                 string lastIP = myIP.Contains(".") ? myIP.Split(".")[3] : "0";
                 connectionId = "Player_" + lastIP;// + lastIP;
-            } catch(Exception e)
+            } catch
             {
                 connectionId = hostName;
             }

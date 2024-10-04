@@ -142,7 +142,7 @@ public class GAMAGeometryExport : ConnectionWithGama
             {
 
                 Boolean inGame = (Boolean)jsonObj["in_game"];
-                if (inGame != null && inGame)
+                if ( inGame)
                 {
                     Dictionary<string, string> args = new Dictionary<string, string> {
                          {"id", "geomexporter" }
