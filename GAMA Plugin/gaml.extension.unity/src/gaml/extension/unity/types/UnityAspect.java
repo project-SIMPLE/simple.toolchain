@@ -75,7 +75,7 @@ public class UnityAspect implements IValue {
 	private double y_offset;
 	
 	private double height;
-	private GamaColor color;
+	private GamaColor color = null;
 	
 	private boolean prefabAspect;
 	
@@ -97,6 +97,15 @@ public class UnityAspect implements IValue {
 		this.height = height;
 		this.material = material;
 		this.color = color;
+		this.prefabAspect = false;
+	}
+	
+	public UnityAspect(double height, String material, int precision) {
+		super();
+		this.precision =  precision;
+		this.height = height;
+		this.material = material;
+		this.color = null;
 		this.prefabAspect = false;
 	}
 
@@ -173,9 +182,15 @@ public class UnityAspect implements IValue {
 		} else {
 			map.put("height", (int) (height * precision)); 
 			map.put("is3D", height != 0.0); 
-			map.put("red", color.red());
-			map.put("green", color.green());
-			map.put("blue", color.blue());
+			if (color != null) {
+				map.put("red", color.red());
+				map.put("green", color.green());
+				map.put("blue", color.blue());
+			} else {
+				map.put("red", -1);
+				map.put("green", -1);
+				map.put("blue", -1);
+			}
 			map.put("alpha", color.alpha());
 			map.put("material", material);
 		}

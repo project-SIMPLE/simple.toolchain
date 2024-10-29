@@ -62,8 +62,19 @@ public class PolygonGenerator
             {
                 mat = Resources.Load<Material>(prop.material);
             }
-            col = new Color32(BitConverter.GetBytes(prop.red)[0], BitConverter.GetBytes(prop.green)[0],
-                    BitConverter.GetBytes(prop.blue)[0], BitConverter.GetBytes(prop.alpha)[0]);
+
+            if (prop.red != -1 )
+            {
+                col = new Color32(BitConverter.GetBytes(prop.red)[0], BitConverter.GetBytes(prop.green)[0],
+                   BitConverter.GetBytes(prop.blue)[0], BitConverter.GetBytes(prop.alpha)[0]);
+            } else
+            {
+               if (mat != null)
+                {
+                    col = mat.color;
+                }
+            } 
+           
         }
         GameObject obj = GeneratePolygon(editMode, name, MeshDataPoints, ((float)prop.height) / precision, mat, col);
         
