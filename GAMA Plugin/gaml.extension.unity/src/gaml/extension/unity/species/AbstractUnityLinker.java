@@ -1532,7 +1532,6 @@ public class AbstractUnityLinker extends GamlAgent {
 		
 		List<Map<String, Object>> atts = new ArrayList<>();
 		IMap<IShape, IMap<String,Object>> attributes = getAttributesToSend(ag);
-		System.out.println("primSentGeometries: attributes: " + attributes);
 		
 		for (IShape g : geoms.keySet()) {
 			UnityProperties up = geoms.get(g);
