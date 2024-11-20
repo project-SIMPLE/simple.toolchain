@@ -95,6 +95,9 @@ public class SimulationManager : MonoBehaviour
     protected EnableMoveInfo enableMove;
 
 
+    protected float TimeSendInit = 0.5f;
+    protected float TimerSendInit ;
+
     // ############################################ UNITY FUNCTIONS ############################################
     void Awake()
     {
@@ -180,6 +183,10 @@ public class SimulationManager : MonoBehaviour
             UpdateGameState(GameState.GAME);
 
         }
+        if (infoWorld != null && !infoWorld.isInit && IsGameState(GameState.LOADING_DATA))
+        {
+            infoWorld = null;
+        }
         if (converter != null && data != null)
         {
             manageUpdateTerrain();
@@ -206,6 +213,20 @@ public class SimulationManager : MonoBehaviour
         {
             updateAnimation();
             infoAnimation = null;
+        }
+
+        if(IsGameState(GameState.LOADING_DATA) && ConnectionManager.Instance.getUseMiddleware())
+        {
+            if (TimerSendInit > 0)
+                TimerSendInit -= Time.deltaTime;
+            if (TimerSendInit <= 0)
+            {
+                TimerSendInit = TimeSendInit;
+                Dictionary<string, string> args = new Dictionary<string, string> {
+                             {"id", ConnectionManager.Instance.GetConnectionId() }
+                        };
+                ConnectionManager.Instance.SendExecutableAsk("send_init_data", args);
+            }
         }
 
         if (IsGameState(GameState.GAME))
@@ -256,7 +277,6 @@ public class SimulationManager : MonoBehaviour
 
     private void updateAnimation()
     {
-        Debug.Log("updateAnimation");
 
         foreach (String n in infoAnimation.names) {
             if (!geometryMap.ContainsKey(n)) continue;            
@@ -284,7 +304,6 @@ public class SimulationManager : MonoBehaviour
                 }
                 foreach (String t in infoAnimation.triggers)
                 {
-                    Debug.Log("t: " + t);
                     m_animator.SetTrigger(t);
 
                 }
@@ -674,10 +693,18 @@ public class SimulationManager : MonoBehaviour
                     };
                     ConnectionManager.Instance.SendExecutableAsk("send_init_data", args);
                 }
+                TimerSendInit = TimeSendInit;
                 break;
 
             case GameState.GAME:
                 Debug.Log("SimulationManager: UpdateGameState -> GAME");
+                if (ConnectionManager.Instance.getUseMiddleware())
+                {
+                    Dictionary<string, string> args = new Dictionary<string, string> {
+                         {"id", ConnectionManager.Instance.GetConnectionId() }
+                    };
+                    ConnectionManager.Instance.SendExecutableAsk("player_ready_to_receive_geometries", args);
+                }
                 break;
 
             case GameState.END:

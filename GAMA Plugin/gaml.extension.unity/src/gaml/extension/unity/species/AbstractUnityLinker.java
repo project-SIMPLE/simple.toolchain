@@ -78,6 +78,11 @@ import gaml.extension.unity.types.UnityPropertiesType;
 				type = IType.LIST,
 				init = "[]",
 				doc = { @doc ("list of players that are readdy to have their position updated from Unity") }),
+		@variable (
+				name = AbstractUnityLinker.READY_TO_SEND_GEOMETRIES,
+				type = IType.LIST,
+				init = "[]",
+				doc = { @doc ("list of players that are readdy to send geometries to Unity") }),
 
 		@variable (
 				name = AbstractUnityLinker.MIN_NUMBER_PLAYERS,
@@ -275,7 +280,10 @@ public class AbstractUnityLinker extends GamlAgent {
 
 	/** The Constant READY_TO_MOVE_PLAYER. */
 	public static final String READY_TO_MOVE_PLAYER = "ready_to_move_player";
-
+	
+	/** The Constant READY_TO_SEND_GEOMETRIES. */
+	public static final String READY_TO_SEND_GEOMETRIES = "ready_to_send_geometries";
+	
 	/** The Constant HEADING. */
 	public static final String HEADING = "heading";
 
@@ -847,6 +855,32 @@ public class AbstractUnityLinker extends GamlAgent {
 	public static void setReadyToMovePlayers(final IAgent agent, final IList val) {
 		agent.setAttribute(READY_TO_MOVE_PLAYER, val);
 	}
+	
+
+	/**
+	 * Gets the ready to move players.
+	 *
+	 * @param agent
+	 *            the agent
+	 * @return the ready to move players
+	 */
+	@getter (AbstractUnityLinker.READY_TO_SEND_GEOMETRIES)
+	public static IList<IAgent> getReadyToSendGeometries(final IAgent agent) {
+		return (IList<IAgent>) agent.getAttribute(READY_TO_SEND_GEOMETRIES);
+	}
+
+	/**
+	 * Sets the ready to move players.
+	 *
+	 * @param agent
+	 *            the agent
+	 * @param val
+	 *            the val
+	 */
+	@setter (AbstractUnityLinker.READY_TO_SEND_GEOMETRIES)
+	public static void setReadyToSendGeometries(final IAgent agent, final IList val) {
+		agent.setAttribute(READY_TO_SEND_GEOMETRIES, val);
+	}
 
 	/**
 	 * Gets the players.
@@ -1099,6 +1133,9 @@ public class AbstractUnityLinker extends GamlAgent {
 	 *            the scope
 	 */
 	private void sendCurrentMessage(final IScope scope) {
+		if(currentMessage == null) {
+			return;
+		}
 		PlatformAgent pa = GAMA.getPlatformAgent();
 		String mes = "";
 		if (getUseMiddleware(getAgent())) {
@@ -1481,6 +1518,7 @@ public class AbstractUnityLinker extends GamlAgent {
 		}
 		return name;
 	}
+	
 	/**
 	 * Prim sent geometries.
 	 *
@@ -1514,13 +1552,14 @@ public class AbstractUnityLinker extends GamlAgent {
 		IAgent ag = getAgent();
 		IAgent player = (IAgent) scope.getArg("player", IType.AGENT);
 		Boolean isInit = scope.getBoolArg("is_init");
+		if (!getReadyToSendGeometries(ag).contains(player) && !isInit ) return;
 		Boolean updatePos = scope.getBoolArg("update_position");
 		IMap<IShape, UnityProperties> geoms = (IMap<IShape, UnityProperties>) scope.getArg("geoms", IType.MAP);
 		
 		IMap<String, Object> toSend = GamaMapFactory.create();
 		IList<Integer> posT = GamaListFactory.create(Types.INT);
 		int precision = getPrecision(ag);
-
+		
 		List<String> names = new ArrayList<>();
 		List<String> namesToKeep = new ArrayList<>();
 		
@@ -1577,7 +1616,6 @@ public class AbstractUnityLinker extends GamlAgent {
 		addToCurrentMessage(scope, buildPlayerListfor1Player(scope, player), toSend);
 
 		doAction1Arg(scope, "after_sending_geometries", "player", player);
-
 	}
 
 	/**
@@ -1865,6 +1903,29 @@ public class AbstractUnityLinker extends GamlAgent {
 		if (currentMessage != null && !currentMessage.isEmpty()) { sendCurrentMessage(scope); }
 
 	}
+	
+	
+	@action (
+			name = "player_ready_to_receive_geometries",
+			args = { @arg (
+					name = "id",
+					type = IType.STRING,
+					doc = @doc ("id of the player ready to receive geometries ")) },
+			doc = { @doc (
+					value = "enable to receive geometries") })
+	public void primReadyPlayerGeometrues(final IScope scope) throws GamaRuntimeException {
+		
+		IAgent ag = getAgent();
+		String playerId = scope.getStringArg("id");
+		IAgent player = getPlayers(ag).get(playerId);
+		if (player == null) return;
+		getReadyToSendGeometries(ag).add(player);
+	
+	}
+		
+		
+	
+	
 
 
 	/**
@@ -1880,7 +1941,7 @@ public class AbstractUnityLinker extends GamlAgent {
 			args = { @arg (
 					name = "id",
 					type = IType.STRING,
-					doc = @doc ("if of the player to send the geometries to")) },
+					doc = @doc ("id of the player to send the geometries to")) },
 			doc = { @doc (
 					value = "Wait for the connection of a unity client and send the paramters to the client") })
 	public void primSentInitData(final IScope scope) throws GamaRuntimeException {
@@ -1889,6 +1950,7 @@ public class AbstractUnityLinker extends GamlAgent {
 		String playerId = scope.getStringArg("id");
 		IAgent player = getPlayers(ag).get(playerId);
 		if (player == null) return;
+		getReadyToSendGeometries(ag).remove(player);
 		
 		doAction1Arg(scope, "send_parameters", "player", player);
 
@@ -1900,6 +1962,7 @@ public class AbstractUnityLinker extends GamlAgent {
 				"update_position", true, "is_init", true);
 
 		//doActionNoArg(scope, "send_world");
+		
 		
 		if (currentMessage != null && !currentMessage.isEmpty()) { 
 			
