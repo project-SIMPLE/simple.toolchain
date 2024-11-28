@@ -11,18 +11,15 @@ public class SimulationManagerSolo : SimulationManager
 {
     protected bool isNight = false;
 
-    
+    public GameObject light;
 
     protected override void TriggerMainButton()
     {
         isNight = !isNight;
-        Light[] lights = FindObjectsOfType(typeof(Light)) as Light[];
-        foreach (Light light in lights)
-        {
-            light.intensity = isNight ? 0 : 1.0f;
-        }
-    }
 
+        light.SetActive(!isNight);
+    }
+     
     protected override void AdditionalInitAfterGeomLoading()
     {
         if (parameters.hotspots != null && parameters.hotspots.Count > 0)

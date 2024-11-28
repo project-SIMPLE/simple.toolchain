@@ -4,7 +4,7 @@ using WebSocketSharp;
 using System;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using UnityEngine.XR.Interaction.Toolkit;
+
 
 using Newtonsoft.Json;
 using System.Linq;
@@ -144,10 +144,10 @@ public class GAMAGeometryLoader: ConnectionWithGama
 
         if (prop.isInteractable)
         {
-            XRBaseInteractable interaction = null;
+            UnityEngine.XR.Interaction.Toolkit.Interactables.XRBaseInteractable interaction = null;
             if (prop.isGrabable)
             {
-                interaction = obj.AddComponent<XRGrabInteractable>();
+                interaction = obj.AddComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
                 Rigidbody rb = obj.GetComponent<Rigidbody>();
                 if (prop.constraints != null && prop.constraints.Count == 6)
                 {
@@ -170,10 +170,10 @@ public class GAMAGeometryLoader: ConnectionWithGama
             else 
             {
 
-                interaction = obj.AddComponent<XRSimpleInteractable>();
+                interaction = obj.AddComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
 
 
-            }
+            } 
             if (interaction.colliders.Count == 0)
             {
                 Collider[] cs = obj.GetComponentsInChildren<Collider>();

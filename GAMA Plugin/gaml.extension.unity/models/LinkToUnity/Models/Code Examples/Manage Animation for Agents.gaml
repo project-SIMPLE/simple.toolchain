@@ -206,6 +206,13 @@ experiment vr_xp parent:main autorun: false type: unity {
 		//In addition to the layers in the map display, display the unity_player and let the possibility to the user to move the boy agent by clicking on the display, 
 		//and triggering several animation using the keyboard (key: 'p', 'w', 'h').
 		display displayVR parent: map  {
+			graphics "information" {
+				draw "'p': Pickup animation" color: #black font: font(14) at: {10,10};
+				draw "'w': Win animation" color: #black font: font(14) at: {10,13};
+				draw "'h: Wave animation" color: #black font: font(14) at: {10,16};
+				draw "'mouse_down': make the boy move" color: #black font: font(14) at: {10,19};
+				
+			}
 			species unity_player;
 			event "p" {
 				t_ref <- gama.machine_time;

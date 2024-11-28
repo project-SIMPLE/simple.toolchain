@@ -129,7 +129,7 @@ species unity_linker parent: abstract_unity_linker {
 	bool do_send_world <- false;
 	
 	//initial location of the player - center of the world
-	list<point> init_locations <- [world.location];
+	list<point> init_locations <- [world.location + {0,0,50}];
 	 
 	 
 	 	
@@ -144,7 +144,7 @@ species unity_linker parent: abstract_unity_linker {
 	//action that defines the different unity properties
 	action define_properties {
 		//define a unity_aspect called water_aspect that will display in Unity the agents from its geometry, with a height of 1m, the material "Water Material", the white color, and the default precision
-		unity_aspect water_aspect <- geometry_aspect(1.0, "Materials/Water/Water Material",#white, precision);
+		unity_aspect water_aspect <- geometry_aspect(1.0, "Materials/Water/WaterMaterial", #blue, precision);
 		
 		//define the up_water unity property, with the name "water", no specific layer, the water_aspect unity aspect, no interaction, and the agent location is not sent back 
 		//to GAMA. 

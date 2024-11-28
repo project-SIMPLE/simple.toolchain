@@ -125,6 +125,7 @@ public class PolyExtruder : MonoBehaviour
     /// <param name="isUsingBottomMeshIn3D">Set to<c>true</c> if the bottom mesh component should be attached, or <c>false</c> if not.</param>
     public void createPrism(bool editModeA, string prismName, float height, Vector2[] vertices, Color32 color, Material mat, bool is3D, bool isUsingBottomMeshIn3D)
     {
+      
         // set data
         this.editMode = editModeA;
         this.prismName = prismName;
@@ -229,6 +230,7 @@ public class PolyExtruder : MonoBehaviour
     /// </summary>
     private void initPrism()
     {
+      
         // The prism consists of 3 meshes:
         // 1. bottom mesh with y = 0
         // 2. top mesh with y = dynamically assigned 
@@ -250,7 +252,6 @@ public class PolyExtruder : MonoBehaviour
         if(this.isUsingColliders) goB.AddComponent<MeshCollider>();
         bottomMeshRenderer = goB.AddComponent<MeshRenderer>();
         bottomMeshRenderer.sharedMaterial = material == null ? new Material(Shader.Find(shader)) : material;
-
         Mesh mesh = new Mesh();
         mfB.mesh = mesh;
         // keep reference to bottom mesh
@@ -319,7 +320,8 @@ public class PolyExtruder : MonoBehaviour
 			
 			// create top GameObject with required components
 			GameObject goT = new GameObject();
-			goT.transform.parent = this.transform;
+          
+            goT.transform.parent = this.transform;
 			goT.name = "top_" + this.prismName;
 			MeshFilter mfT = goT.AddComponent<MeshFilter>();
 
@@ -375,7 +377,8 @@ public class PolyExtruder : MonoBehaviour
 			
 			// create surrounding GameObject with required components
 			GameObject goS = new GameObject();
-			goS.transform.parent = this.transform;
+           
+            goS.transform.parent = this.transform;
 			goS.name = "surround_" + this.prismName;
 			MeshFilter mfS = goS.AddComponent<MeshFilter>();
 			surroundMeshRenderer = goS.AddComponent<MeshRenderer>();

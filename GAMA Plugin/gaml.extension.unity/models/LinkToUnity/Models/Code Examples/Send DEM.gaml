@@ -202,6 +202,10 @@ experiment vr_xp parent:main autorun: false type: unity {
 	output { 
 		//In addition to the layers in the map display, display the unity_player .
 		display displayVR parent: map  {
+			graphics "information" {
+				draw "'r': increase the height" color: #black font: font(24) at: {25,25,60};
+				draw "'t': decrease the height" color: #black font: font(24) at: {25,35,60};
+			}
 			species unity_player;
 			
 			//increase the height of a cell when cliking on "R"

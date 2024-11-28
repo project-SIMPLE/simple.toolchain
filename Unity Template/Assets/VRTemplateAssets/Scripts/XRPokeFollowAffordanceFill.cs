@@ -140,8 +140,10 @@ namespace Unity.VRTemplate
 
         IPokeStateDataProvider m_PokeDataProvider;
 
+#pragma warning disable CS0618 // Type or member is obsolete
         readonly Vector3TweenableVariable m_TransformTweenableVariable = new Vector3TweenableVariable();
         readonly FloatTweenableVariable m_PokeStrengthTweenableVariable = new FloatTweenableVariable();
+#pragma warning restore CS0618 // Type or member is obsolete
         readonly BindingsGroup m_BindingsGroup = new BindingsGroup();
         Vector3 m_InitialPosition;
         bool m_IsFirstFrame;

@@ -27,10 +27,10 @@ public class ConnectionManager : WebSocketConnector
     public static ConnectionManager Instance = null;
 
     //use to seperate messages in the case where the middleware is not used
-    public String MessageSeparator = "|||";
+    protected String MessageSeparator  = "|||";
 
-    private String AgentToSendInfo = "simulation[0].unity_linker[0]";
-
+private String AgentToSendInfo = "simulation[0].unity_linker[0]";
+     
     
     // ############################################# UNITY FUNCTIONS #############################################
     void Awake() {
@@ -49,7 +49,11 @@ public class ConnectionManager : WebSocketConnector
 
     }
 
-    
+    public string GetMessageSeparator()
+    {
+        return MessageSeparator;
+    }
+
     // ############################################# CONNECTION HANDLER #############################################
     public void UpdateConnectionState(ConnectionState newState) {
         

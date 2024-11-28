@@ -46,7 +46,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	
 	//initial location of the player - here any_location of free_area with a offset along the z axis
-	list<point> init_locations <- [any_location_in(free_area) + {0,0,1}];
+	list<point> init_locations <- [any_location_in(free_area) + {0,0,0.5}];
 	
 }
 

@@ -43,8 +43,9 @@ public class PolygonGenerator
 
     public GameObject GeneratePolygons(bool editMode, String name, List<int> points, PropertiesGAMA prop, int precision)
     {
-   
-        List<Vector2> pts = new List<Vector2>();
+
+    
+        List <Vector2> pts = new List<Vector2>();
         for (int i = 0; i < points.Count - 1; i = i+2)
         {
             Vector2 p = converter.fromGAMACRS2D(points[i], points[i + 1]);
@@ -99,6 +100,7 @@ public class PolygonGenerator
     // Start is called before the first frame update
     GameObject GeneratePolygon(bool editMode, String name, Vector2[] MeshDataPoints, float extrusionHeight, Material mat, Color32 color)
     {
+      
         bool isUsingBottomMeshIn3D = false;
         bool isOutlineRendered = true;
         bool is3D = extrusionHeight != 0.0;
@@ -120,6 +122,7 @@ public class PolygonGenerator
         Vector3 pos = polyExtruderGO.transform.position;
         pos.y += offsetYBackgroundGeom;
         polyExtruderGO.transform.position = pos;
+
         polyExtruder.createPrism(editMode, name, extrusionHeight, MeshDataPoints, color, mat, is3D, isUsingBottomMeshIn3D);
         surroundMesh = polyExtruder.surroundMesh;
         bottomMesh = polyExtruder.bottomMesh;

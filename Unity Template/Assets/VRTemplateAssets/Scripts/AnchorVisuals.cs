@@ -26,7 +26,9 @@ namespace Unity.VRTemplate
         AnimationCurve m_AnimationCurve;
 
         Coroutine m_ArrowCoroutine;
+#pragma warning disable CS0618 // Type or member is obsolete
         Vector3TweenableVariable m_ArrowHeight;
+#pragma warning restore CS0618 // Type or member is obsolete
         Vector3 m_InitialArrowScale;
 
         void Start()
@@ -38,7 +40,9 @@ namespace Unity.VRTemplate
                 fadeAnim[clipName].normalizedTime = 1f;
             }
 
+#pragma warning disable CS0618 // Type or member is obsolete
             m_ArrowHeight = new Vector3TweenableVariable();
+#pragma warning restore CS0618 // Type or member is obsolete
             m_ArrowHeight.animationCurve = m_AnimationCurve;
             m_InitialArrowScale = m_Arrow.localScale;
         }

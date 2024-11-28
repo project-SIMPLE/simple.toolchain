@@ -9,8 +9,7 @@ using UnityEngine.InputSystem;
 public class SimulationManager : MonoBehaviour
 {
     [SerializeField] protected InputActionReference primaryRightHandButton = null;
-    [SerializeField] protected InputActionReference TryReconnectButton = null;
-
+  
     [Header("Base GameObjects")]
     [SerializeField] protected GameObject player;
     [SerializeField] protected GameObject Ground;
@@ -18,10 +17,10 @@ public class SimulationManager : MonoBehaviour
 
     // optional: define a scale between GAMA and Unity for the location given
     [Header("Coordinate conversion parameters")]
-    [SerializeField] protected float GamaCRSCoefX = 1.0f;
-    [SerializeField] protected float GamaCRSCoefY = 1.0f;
-    [SerializeField] protected float GamaCRSOffsetX = 0.0f;
-    [SerializeField] protected float GamaCRSOffsetY = 0.0f;
+    protected float GamaCRSCoefX = 1.0f;
+    protected float GamaCRSCoefY = 1.0f;
+     protected float GamaCRSOffsetX = 0.0f;
+    protected float GamaCRSOffsetY = 0.0f;
 
 
     protected Transform XROrigin;
@@ -108,8 +107,8 @@ public class SimulationManager : MonoBehaviour
        locomotion = new List<GameObject>(GameObject.FindGameObjectsWithTag("locomotion"));
         mh = player.GetComponentInChildren<MoveHorizontal>();
         mv = player.GetComponentInChildren<MoveVertical>();
-
-        XROrigin = player.transform.Find("XR Origin (XR Rig)");
+         
+        XROrigin = player.transform;
         playerMovement(false);
         toFollow = new List<GameObject>();
 
@@ -150,7 +149,6 @@ public class SimulationManager : MonoBehaviour
         handleGeometriesRequested = false;
         // handlePlayerParametersRequested = false;
         handleGroundParametersRequested = false;
-        interactionManager = player.GetComponentInChildren<XRInteractionManager>();
         OnEnable();
     }
 
@@ -173,14 +171,17 @@ public class SimulationManager : MonoBehaviour
             InitGroundParameters();
             handleGroundParametersRequested = false;
 
+            Debug.Log("handleGroundParametersRequested: " + handleGroundParametersRequested);
+
         }
-        if (handleGeometriesRequested && infoWorld != null && infoWorld.isInit && propertyMap != null)
+        if (handleGeometriesRequested && infoWorld != null && infoWorld.isInit)// && propertyMap != null)
         {
 
             sendMessageToReactivatePositionSent = true;
             GenerateGeometries(true, new List<string>());
             handleGeometriesRequested = false;
             UpdateGameState(GameState.GAME);
+         
 
         }
         if (infoWorld != null && !infoWorld.isInit && IsGameState(GameState.LOADING_DATA))
@@ -263,11 +264,11 @@ public class SimulationManager : MonoBehaviour
         {
             TriggerMainButton();
         }
-        if (TryReconnectButton != null && TryReconnectButton.action.triggered)
+      /*  if (TryReconnectButton != null && TryReconnectButton.action.triggered)
         {
             Debug.Log("TryReconnectButton activated");
             TryReconnect();
-        }
+        }*/
 
         OtherUpdate();
     }
@@ -319,13 +320,13 @@ public class SimulationManager : MonoBehaviour
             polyGen = PolygonGenerator.GetInstance();
             polyGen.Init(converter);
         }
-        TeleportationArea ta = null;
+        UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationArea ta = null;
         GameObject[] objs = GameObject.FindGameObjectsWithTag("Teleportation");
         foreach (GameObject o in objs)
         {
             if (o.name.Equals(dataTeleport.teleportId))
             {
-                ta = o.GetComponent<TeleportationArea>();
+                ta = o.GetComponent<UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationArea>();
                 if (ta != null)
                 {
                     foreach(Collider col in ta.colliders)
@@ -343,7 +344,7 @@ public class SimulationManager : MonoBehaviour
             GameObject prefabObj = Resources.Load("Prefabs/Player/TeleportAreaRaw") as GameObject;
             GameObject obj = Instantiate(prefabObj);
            
-            ta = obj.GetComponent<TeleportationArea>();
+            ta = obj.GetComponent<UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationArea>();
             obj.name = dataTeleport.teleportId;
             obj.tag = "Teleportation";
         }
@@ -548,13 +549,16 @@ public class SimulationManager : MonoBehaviour
         int cptGeom = 0;
         foreach (string n in infoWorld.keepNames) 
             toRemove.Remove(n);
+   //     Debug.Log("GenerateGeometries : initGame: " + initGame);
+
         for (int i = 0; i < infoWorld.names.Count; i++)
         {
             string name = infoWorld.names[i];
             string propId = infoWorld.propertyID[i];
-
+           
             PropertiesGAMA prop = propertyMap[propId];
             GameObject obj = null;
+         //   Debug.Log("name: " + name + " propId: " + propId + " prop:" + prop);
 
             if (prop.hasPrefab)
             {
@@ -597,14 +601,16 @@ public class SimulationManager : MonoBehaviour
             }
             else
             {
+
                 if (polyGen == null)
                 {
                     polyGen = PolygonGenerator.GetInstance();
                     polyGen.Init(converter);
                 }
                 List<int> pt = infoWorld.pointsGeom[cptGeom].c;
+              //  Debug.Log("GENERATE POLYGON : " + pt.Count + " polyGen:" + polyGen);
 
-                
+
                 float YoffSet = (0.0f + infoWorld.offsetYGeom[cptGeom]) / (0.0f + parameters.precision);
                 
                 obj = polyGen.GeneratePolygons(false, name, pt, prop, parameters.precision);
@@ -761,7 +767,7 @@ public class SimulationManager : MonoBehaviour
 
             String names = "";
             String points = "";
-            string sep = ConnectionManager.Instance.MessageSeparator;
+            string sep = ConnectionManager.Instance.GetMessageSeparator();
 
             foreach (GameObject obj in toFollow)
             {
@@ -830,10 +836,14 @@ public class SimulationManager : MonoBehaviour
 
         if (prop.isInteractable)
         {
-            XRBaseInteractable interaction = null;
+            if (interactionManager == null)
+                interactionManager = GameObject.FindFirstObjectByType<XRInteractionManager>();
+          
+            UnityEngine.XR.Interaction.Toolkit.Interactables.XRBaseInteractable interaction = null;
             if (prop.isGrabable)
             {
-                interaction = obj.AddComponent<XRGrabInteractable>();
+              
+                interaction = obj.AddComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
                 Rigidbody rb = obj.GetComponent<Rigidbody>();
                 if (prop.constraints != null && prop.constraints.Count == 6)
                 {
@@ -850,13 +860,14 @@ public class SimulationManager : MonoBehaviour
                     if (prop.constraints[5])
                         rb.constraints = rb.constraints | RigidbodyConstraints.FreezeRotationZ;
                 }
+                
 
 
             }
             else
             {
 
-                interaction = obj.AddComponent<XRSimpleInteractable>();
+                interaction = obj.AddComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
 
 
             }
@@ -868,10 +879,11 @@ public class SimulationManager : MonoBehaviour
                     foreach (Collider c in cs)
                     {
                         interaction.colliders.Add(c);
-                    }
+                    } 
                 }
             }
             interaction.interactionManager = interactionManager;
+            interaction.ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase.Dynamic);
             interaction.selectEntered.AddListener(SelectInteraction);
             interaction.firstHoverEntered.AddListener(HoverEnterInteraction);
             interaction.hoverExited.AddListener(HoverExitInteraction);

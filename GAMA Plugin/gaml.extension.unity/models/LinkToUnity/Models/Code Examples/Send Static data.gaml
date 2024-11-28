@@ -16,7 +16,7 @@ global {
 	
 	
  	init {
- 		geometry free_place <- shape buffer (-10.0);
+ 		geometry free_place <- shape buffer (-10.0) - (location buffer 20);
  		create static_geometry_agent number: 5 {
  			shape <- square(10);
  			location <- any_location_in(free_place);

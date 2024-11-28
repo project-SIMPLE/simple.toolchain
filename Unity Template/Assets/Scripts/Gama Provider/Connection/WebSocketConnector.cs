@@ -6,22 +6,24 @@ using WebSocketSharp;
 public abstract class WebSocketConnector : MonoBehaviour
 {
 
-     protected string host ;
+    protected string DefaultIP = "10.236.10.11";
+    protected string DefaultPort = "8080";
+
+
+    protected string host ;
      protected string port;
 
     protected bool UseMiddleware; 
 
-    private WebSocket socket;
+    private WebSocket socket; 
 
-    
-    public bool UseHeartbeat = true; //only for middleware mode
-    public bool DesktopMode = false;
-    public bool fixedProperties = false;
-    public string DefaultIP = "localhost";
-    public string DefaultPort = "8080";
-    public bool UseMiddlewareDM = true; 
 
-    public int numErrorsBeforeDeconnection = 10;
+    protected bool UseHeartbeat = true; //only for middleware mode
+    protected bool DesktopMode = false;
+    protected bool fixedProperties = true;
+   protected bool UseMiddlewareDM = true;
+
+    protected int numErrorsBeforeDeconnection = 10;
     protected int numErrors = 0;
 
     void OnEnable() {

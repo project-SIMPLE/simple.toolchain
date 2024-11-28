@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8083655434036491301, guid: e0cf0d2188a1b4564821ed155d0b74f5, type: 3}
+      propertyPath: m_Name
+      value: TeleportAreaRaw
+      objectReference: {fileID: 0}
     - target: {fileID: 8446599146483226448, guid: e0cf0d2188a1b4564821ed155d0b74f5, type: 3}
       propertyPath: m_Name
       value: TeleportAreaRaw Variant
@@ -68,9 +72,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8616808000686868594, guid: e0cf0d2188a1b4564821ed155d0b74f5, type: 3}
+      propertyPath: 'm_Colliders.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8482490166955143304, guid: e0cf0d2188a1b4564821ed155d0b74f5, type: 3}
+    - {fileID: 8498900312356318229, guid: e0cf0d2188a1b4564821ed155d0b74f5, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0cf0d2188a1b4564821ed155d0b74f5, type: 3}
