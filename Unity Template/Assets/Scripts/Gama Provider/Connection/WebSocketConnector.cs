@@ -20,7 +20,7 @@ public abstract class WebSocketConnector : MonoBehaviour
 
     protected bool UseHeartbeat = true; //only for middleware mode
     protected bool DesktopMode = false;
-    protected bool fixedProperties = true;
+    public bool fixedProperties = true;
    protected bool UseMiddlewareDM = true;
 
     protected int numErrorsBeforeDeconnection = 10;
@@ -28,8 +28,9 @@ public abstract class WebSocketConnector : MonoBehaviour
 
     void OnEnable() {
        
-        port = PlayerPrefs.GetString("PORT"); 
+       // port = PlayerPrefs.GetString("PORT"); 
         host = PlayerPrefs.GetString("IP");
+        port = DefaultPort;
 
         if (DesktopMode)
         {
@@ -51,6 +52,13 @@ public abstract class WebSocketConnector : MonoBehaviour
             host = DefaultIP;
             port = DefaultPort;
             
+        } else
+        {
+            if (host == null && host.Length == 0)
+            {
+                host = DefaultIP;
+                
+            }
         }
         Debug.Log("WebSocketConnector host: " + host + " PORT: " + port + " MIDDLEWARE:" + UseMiddleware);
 

@@ -955,11 +955,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3482036030872247450, guid: 2c59fa02513994303ad959d140b545eb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3482036030872247450, guid: 2c59fa02513994303ad959d140b545eb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -9.01
       objectReference: {fileID: 0}
     - target: {fileID: 3482036030872247450, guid: 2c59fa02513994303ad959d140b545eb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -992,6 +992,10 @@ PrefabInstance:
     - target: {fileID: 4704493267458558271, guid: 2c59fa02513994303ad959d140b545eb, type: 3}
       propertyPath: m_Name
       value: FPSPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 5291858798952642335, guid: 2c59fa02513994303ad959d140b545eb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
