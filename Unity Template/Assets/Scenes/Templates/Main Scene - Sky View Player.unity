@@ -366,7 +366,7 @@ PrefabInstance:
     - target: {fileID: -9060036263621306705, guid: 96b9dda0b8a7d45348f13f667549f193, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 900127045}
     - target: {fileID: -9060036263621306705, guid: 96b9dda0b8a7d45348f13f667549f193, type: 3}
       propertyPath: primaryRightHandButton
       value: 
@@ -618,6 +618,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e3ce66bb2aa64b2db5572814f6c946c, type: 3}
+--- !u!1 &900127045 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4279443577246521354, guid: 2e3ce66bb2aa64b2db5572814f6c946c, type: 3}
+  m_PrefabInstance: {fileID: 900127044}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

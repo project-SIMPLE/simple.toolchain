@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Menu/End of Game Menu.unity
     guid: 931173f81a7164b55a0e2f094ac25ae8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Single Player Game/Main Scene.unity
     guid: b80659548ae4545198000fdeab10c3f2
   - enabled: 0
@@ -35,7 +35,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Code Examples/Receive DEM Data.unity
     guid: 9433219460e264438b7e8d3664e95fdd
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Code Examples/Receive Dynamic Data.unity
     guid: 896a72ba35f84470f880a64848371576
   - enabled: 0

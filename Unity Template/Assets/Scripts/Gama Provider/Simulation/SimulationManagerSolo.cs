@@ -11,14 +11,14 @@ public class SimulationManagerSolo : SimulationManager
 {
     protected bool isNight = false;
 
-    public GameObject light;
+    public GameObject lightObject;
 
     protected override void TriggerMainButton()
     {
         isNight = !isNight;
 
-        light.SetActive(!isNight);
-    }
+        lightObject.SetActive(!isNight);
+    } 
      
     protected override void AdditionalInitAfterGeomLoading()
     {

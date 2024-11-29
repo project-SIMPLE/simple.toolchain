@@ -26,7 +26,7 @@ public class SimulationManager : MonoBehaviour
     protected Transform XROrigin;
    
     // Z offset and scale
-    [SerializeField] protected float GamaCRSOffsetZ = 0.0f;
+     protected float GamaCRSOffsetZ = 0.0f;
 
     protected List<GameObject> toFollow;
 

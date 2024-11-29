@@ -345,8 +345,7 @@ MonoBehaviour:
   primaryRightHandButton: {fileID: -6885188074247442836, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   player: {fileID: 1452873197}
   Ground: {fileID: 746741302}
-  GamaCRSOffsetZ: 0
-  light: {fileID: 74457057}
+  lightObject: {fileID: 74457057}
 --- !u!1 &356120260 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3293911808307972064, guid: 2c59fa02513994303ad959d140b545eb, type: 3}
