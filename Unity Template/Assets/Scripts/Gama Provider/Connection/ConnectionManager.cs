@@ -88,7 +88,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
             var jsonId = new Dictionary<string, string> {
                 {"type", "connection"},
                 { "id", StaticInformation.getId() },
-                { "set_heartbeat", UseHeartbeat ? "true": "false" }
+                { "set_heartbeat", ""+ HeartbeatInMs}
             }; 
             string jsonStringId = JsonConvert.SerializeObject(jsonId);
             SendMessageToServer(jsonStringId, new Action<bool>((success) => {

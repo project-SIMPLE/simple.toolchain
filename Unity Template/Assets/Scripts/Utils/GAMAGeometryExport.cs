@@ -76,7 +76,7 @@ public class GAMAGeometryExport : ConnectionWithGama
         var jsonId = new Dictionary<string, string> {
                 {"type", "connection"},
                 { "id", "geomexporter" },
-                { "set_heartbeat", "true" }
+                { "set_heartbeat", "5000"}
             };
         string jsonStringId = JsonConvert.SerializeObject(jsonId);
         SendMessageToServer(jsonStringId, new Action<bool>((success) => {

@@ -18,7 +18,7 @@ public abstract class WebSocketConnector : MonoBehaviour
     private WebSocket socket; 
 
 
-    protected bool UseHeartbeat = true; //only for middleware mode
+    protected int HeartbeatInMs = 5000; //only for middleware mode
     protected bool DesktopMode = false;
     public bool fixedProperties = true;
    protected bool UseMiddlewareDM = true;

@@ -85,7 +85,7 @@ public class GAMAGeometryLoader: ConnectionWithGama
             var jsonId = new Dictionary<string, string> {
                 {"type", "connection"},
                 { "id", "geomloader" },
-                { "set_heartbeat", "true" }
+                { "set_heartbeat", "5000" }
             };
             string jsonStringId = JsonConvert.SerializeObject(jsonId);
             SendMessageToServer(jsonStringId, new Action<bool>((success) => {
