@@ -52,9 +52,11 @@ public class GAMAGeometryLoader: ConnectionWithGama
         socket.OnMessage += HandleReceivedMessage;
         socket.OnOpen += HandleConnectionOpen;
         socket.OnClose += HandleConnectionClosed;
-       
-
-
+        
+        // Enable the Per-message Compression extension.
+        // Saved some bandwidth
+        socket.Compression = CompressionMethod.Deflate;
+        
         socket.Connect();
 
         DateTime dt = DateTime.Now;

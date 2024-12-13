@@ -50,10 +50,13 @@ public class GAMAGeometryExport : ConnectionWithGama
         socket.OnOpen += HandleConnectionOpen;
         socket.OnMessage += HandleReceivedMessage;
         socket.OnClose += HandleConnectionClosed;
+        
+        // Enable the Per-message Compression extension.
+        // Saved some bandwidth
+        socket.Compression = CompressionMethod.Deflate;
 
         socket.Connect();
-
-
+        
         while (continueProcess)
         {
             if (parameters != null)

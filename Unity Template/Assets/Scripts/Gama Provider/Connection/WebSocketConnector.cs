@@ -66,6 +66,10 @@ public abstract class WebSocketConnector : MonoBehaviour
         socket.OnOpen += HandleConnectionOpen;
         socket.OnMessage += HandleReceivedMessage;
         socket.OnClose += HandleConnectionClosed;
+        
+        // Enable the Per-message Compression extension.
+        // Saved some bandwidth
+        socket.Compression = CompressionMethod.Deflate;
     }
 
    void OnDestroy() {
