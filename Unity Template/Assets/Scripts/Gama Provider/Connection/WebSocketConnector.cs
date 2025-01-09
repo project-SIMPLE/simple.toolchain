@@ -63,13 +63,16 @@ public abstract class WebSocketConnector : MonoBehaviour
         Debug.Log("WebSocketConnector host: " + host + " PORT: " + port + " MIDDLEWARE:" + UseMiddleware);
 
         socket = new WebSocket("ws://" + host + ":" + port + "/");
+        
+        // Enable the Per-message Compression extension.
+        // Saved some bandwidth
+        // Doesn't work on our specific installation : https://github.com/sta/websocket-sharp/issues/580
+        socket.Compression = CompressionMethod.None;//Deflate;
+        
         socket.OnOpen += HandleConnectionOpen;
         socket.OnMessage += HandleReceivedMessage;
         socket.OnClose += HandleConnectionClosed;
         
-        // Enable the Per-message Compression extension.
-        // Saved some bandwidth
-        socket.Compression = CompressionMethod.Deflate;
     }
 
    void OnDestroy() {
