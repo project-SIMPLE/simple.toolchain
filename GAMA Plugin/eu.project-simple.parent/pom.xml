@@ -26,9 +26,10 @@
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <eclipse-version>2024-06</eclipse-version>
+    <gama.p2.version>2024-06</gama.p2.version>
     
     <jdk.version>21</jdk.version>
-    <gama.version>2024.3.0</gama.version>
+    <gama.version>[2024.6.0,)</gama.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <wagon.version>3.5.3</wagon.version>
 
@@ -52,7 +53,7 @@
     <repository>
       <id>p2Repo</id>
       <name>p2Repo</name>
-      <url>https://updates.gama-platform.org/0.0.0</url>
+      <url>https://updates.gama-platform.org/${gama.p2.version}</url>
       <layout>p2</layout>
       <snapshots>
         <enabled>true</enabled>
@@ -66,7 +67,7 @@
     <repository>
       <id>gamaRepo</id>
       <name>gamaRepo</name>
-      <url>https://updates.gama-platform.org/0.0.0</url>
+      <url>https://updates.gama-platform.org/${gama.p2.version}</url>
       <layout>default</layout>
       <snapshots>
         <enabled>true</enabled>
