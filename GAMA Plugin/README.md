@@ -16,7 +16,7 @@ In addition, the plugin integrates a tool accessible from the UnityVR menu that 
 
 Finally, the plugin includes several templates illustrating how to use the plugin (Single player and Multi-player Demos) or how to send or receive geometries from GAMA to Unity or from Unity to GAMA.
 
-A description of the use of the plugin with a tutorial can be found [here](https://github.com/project-SIMPLE/simple.toolchain/wiki/Tutorial-%E2%80%90-From-GAMA-model-to-Virtual-Universe-%E2%80%90-case-of-a-traffic-model).
+A description of the use of the plugin with a tutorial can be found [here](https://github.com/project-SIMPLE/simple.toolchain/wiki/02-Tutorial-%E2%80%90-From-GAMA-model-to-Virtual-Universe-%E2%80%90-case-of-a-traffic-model).
 
 # Installation
 
