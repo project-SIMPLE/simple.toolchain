@@ -14,6 +14,9 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -49,6 +52,8 @@ public class VRModelGenerator {
 	private final String modelName;
 
 	private final String newModelPath;
+	
+	private final String projectPath;
 
 	private String experimentName;
 	/** The minimum cycle duration. */
@@ -72,6 +77,12 @@ public class VRModelGenerator {
 		this.existingModelFileName = new File(model.getFilePath()).getName();
 		this.modelName = model.getName() + "_VR";
 		this.newModelPath = model.getFilePath().replace(".gaml", "-VR.gaml");
+		
+		
+
+		this.projectPath = model.getProjectPath();
+
+		
 	}
 
 	public class Player {
@@ -189,6 +200,28 @@ public class VRModelGenerator {
 
 		try (FileWriter fw = new FileWriter(newModelPath)) {
 			fw.write(modelVR.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		Path directoryP = Paths.get(projectPath);
+		Path file = Paths.get(newModelPath);
+		
+		Path relativeP = directoryP.relativize(file);
+		
+		
+		StringBuilder settings = new StringBuilder("{\n").append("\"type\": \"json_settings\",\n");
+		settings.append("\"name\": \"" ).append(modelName).append("\",\n");
+		settings.append("\"splashscreen\": \"./models/snapshots/snapshot.png\"\n");
+		settings.append("\"model_file_path\": \"./" ).append(relativeP.toString()).append("\",\n");
+		settings.append("\"experiment_name\": \"vr_xp\",\n");
+		settings.append("\"minimal_players\": \"" ).append(minNumberPlayer).append("\",\n");
+		settings.append("\"maximal_players\": \"" ).append(maxNumPlayer).append("\",\n");
+		settings.append("\"selected_monitoring\": \"gama_screen\"\n}");
+		
+		try (FileWriter fw = new FileWriter(projectPath + "/settings.json")) {
+			fw.write(settings.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
