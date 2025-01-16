@@ -55,7 +55,7 @@ public class GAMAGeometryLoader: ConnectionWithGama
         
         // Enable the Per-message Compression extension.
         // Saved some bandwidth
-        socket.Compression = CompressionMethod.Deflate;
+        socket.Compression = CompressionMethod.None;//Deflate;
         
         socket.Connect();
 
