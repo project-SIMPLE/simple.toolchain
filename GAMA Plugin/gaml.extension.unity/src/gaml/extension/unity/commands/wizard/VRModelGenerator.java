@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -409,11 +408,23 @@ public class VRModelGenerator {
 			if (speciesToSendStatic != null && !speciesToSendStatic.isEmpty()) {
 				for (String sp : speciesToSendStatic.keySet()) {
 					Species data = speciesToSendStatic.get(sp);
-					modelUnityLinker.append("\n\t\t");
 					Double buffer = properties.get(data.property).buffer;
-					String geom =
-							sp + (buffer != null && buffer != 0.0 ? " collect (each.shape + " + buffer + ")" : "");
-					modelUnityLinker.append("do add_background_geometries(" + geom + ",up_" + data.property + ");");
+					String geom = sp;
+					
+					if (buffer != null && buffer != 0 ) {
+						
+						String idG = "g_" + sp;
+						geom = idG;
+						
+						modelUnityLinker.append("\n\t\tlist<geometry> " + idG+ " <- "+ sp +" collect (each.shape + " + buffer+ ");");
+						
+						modelUnityLinker.append("\n\t\tloop i from: 0 to: length(" + sp+ ") - 1 {");
+						modelUnityLinker.append("\n\t\t\t"+ idG+ "[i].attributes[\"name\"] <- " + sp +"[i].name"); 
+						modelUnityLinker.append("\n\t\t}");
+					}
+						 
+					
+					modelUnityLinker.append("\t\tdo add_background_geometries(" + geom + ",up_" + data.property + ");");
 				}
 			}
 
