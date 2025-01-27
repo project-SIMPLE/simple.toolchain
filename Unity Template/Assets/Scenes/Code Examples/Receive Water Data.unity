@@ -257,6 +257,14 @@ PrefabInstance:
       propertyPath: minY
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 2790079055818029794, guid: 2e3ce66bb2aa64b2db5572814f6c946c, type: 3}
+      propertyPath: m_RequiresDepthTextureOption
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2790079055818029794, guid: 2e3ce66bb2aa64b2db5572814f6c946c, type: 3}
+      propertyPath: m_RequiresOpaqueTextureOption
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4279443577246521354, guid: 2e3ce66bb2aa64b2db5572814f6c946c, type: 3}
       propertyPath: m_Name
       value: SkyViewPlayer

@@ -186,12 +186,15 @@ public class UnityAspect implements IValue {
 				map.put("red", color.red());
 				map.put("green", color.green());
 				map.put("blue", color.blue());
+				map.put("alpha", color.alpha());
+				
 			} else {
 				map.put("red", -1);
 				map.put("green", -1);
 				map.put("blue", -1);
+				map.put("alpha", 0.0);
+				
 			}
-			map.put("alpha", color.alpha());
 			map.put("material", material);
 		}
 		return map;

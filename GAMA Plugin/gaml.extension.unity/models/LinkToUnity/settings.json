@@ -1,0 +1,10 @@
+{
+  "type": "json_settings",
+  "name": "Water",
+  "splashscreen": "./includes/splashscreen/screen.png",
+  "model_file_path": "./models/Send Water data.gaml",
+  "experiment_name": "vr_xp", 
+  "minimal_players": "0", 
+  "maximal_players": "1", 
+  "selected_monitoring": "gama_screen"
+}

@@ -212,7 +212,7 @@ public class VRModelGenerator {
 		
 		StringBuilder settings = new StringBuilder("{\n").append("\"type\": \"json_settings\",\n");
 		settings.append("\"name\": \"" ).append(modelName).append("\",\n");
-		settings.append("\"splashscreen\": \"./models/snapshots/snapshot.png\"\n");
+		settings.append("\"splashscreen\": \"./models/snapshots/snapshot.png\",\n");
 		settings.append("\"model_file_path\": \"./" ).append(relativeP.toString()).append("\",\n");
 		settings.append("\"experiment_name\": \"vr_xp\",\n");
 		settings.append("\"minimal_players\": \"" ).append(minNumberPlayer).append("\",\n");

@@ -14,11 +14,11 @@ model SendWater
 global {
 	
 	//the dem used for this model
-	grid_file dem_grid_file <- grid_file("../../includes/dem_water_level.asc");
+	grid_file dem_grid_file <- grid_file("../includes/dem_water_level.asc");
 
-	grid_file dem_altitude_grid_file <- grid_file("../../includes/altitude_water_level.asc");
+	grid_file dem_altitude_grid_file <- grid_file("../includes/altitude_water_level.asc");
 
-	field dem <- field(grid_file("../../includes/dem_river.asc"));
+	field dem <- field(grid_file("../includes/dem_river.asc"));
 
 
 	geometry shape <- envelope(dem_grid_file);
@@ -143,8 +143,8 @@ species unity_linker parent: abstract_unity_linker {
 	
 	//action that defines the different unity properties
 	action define_properties {
-		//define a unity_aspect called water_aspect that will display in Unity the agents from its geometry, with a height of 1m, the material "Water Material", the white color, and the default precision
-		unity_aspect water_aspect <- geometry_aspect(1.0, "Materials/Water/WaterMaterial", #blue, precision);
+		//define a unity_aspect called water_aspect that will display in Unity the agents from its geometry, with a height of 1m, the material "Water Material", and the default precision
+		unity_aspect water_aspect <- geometry_aspect(1.0, "Materials/Water/Water Material",precision);
 		
 		//define the up_water unity property, with the name "water", no specific layer, the water_aspect unity aspect, no interaction, and the agent location is not sent back 
 		//to GAMA. 
@@ -194,7 +194,7 @@ species unity_player parent: abstract_unity_player {
 	}
 }
 experiment main type: gui {
-		float minimum_cycle_duration <- 0.01;
+	float minimum_cycle_duration <- 0.01;
 	
 	output synchronized: true{
 		display map type: 2d {
