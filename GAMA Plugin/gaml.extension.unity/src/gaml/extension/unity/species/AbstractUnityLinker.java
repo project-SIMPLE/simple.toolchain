@@ -2168,8 +2168,8 @@ public class AbstractUnityLinker extends GamlAgent {
 				IMap<String, Object> vals = GamaMapFactory.create();
 				for (String att : attributes.keySet()) {
 					vals.put(att, attributes.get(att).get(cpt));
-					cpt++;	
 				}
+				cpt++;	
 				gas.put(s, vals);
 				
 			}
