@@ -1,10 +1,106 @@
+
 {
   "type": "json_settings",
-  "name": "Water",
+  "name": "Static data management",
+  "splashscreen": "./includes/splashscreen/screen.png",
+  "model_file_path": "./models/Send Static data.gaml",
+  "experiment_name": "vr_xp", 
+  "minimal_players": "0", 
+  "maximal_players": "1", 
+  "selected_monitoring": "gama_screen"
+}
+
+
+{
+  "type": "json_settings",
+  "name": "Dynamic data management",
+  "splashscreen": "./includes/splashscreen/screen.png",
+  "model_file_path": "./models/Send Dynamic data.gaml",
+  "experiment_name": "vr_xp", 
+  "minimal_players": "0", 
+  "maximal_players": "1", 
+  "selected_monitoring": "gama_screen"
+}
+
+{
+  "type": "json_settings",
+  "name": "DEM management",
+  "splashscreen": "./includes/splashscreen/screen.png",
+  "model_file_path": "./models/Send DEM.gaml",
+  "experiment_name": "vr_xp", 
+  "minimal_players": "0", 
+  "maximal_players": "1", 
+  "selected_monitoring": "gama_screen"
+}
+
+
+{
+  "type": "json_settings",
+  "name": "Water management",
   "splashscreen": "./includes/splashscreen/screen.png",
   "model_file_path": "./models/Send Water data.gaml",
   "experiment_name": "vr_xp", 
   "minimal_players": "0", 
   "maximal_players": "1", 
+  "selected_monitoring": "gama_screen"
+}
+
+
+{
+  "type": "json_settings",
+  "name": "Message management",
+  "splashscreen": "./includes/splashscreen/screen.png",
+  "model_file_path": "./models/Send Receive Messages.gaml",
+  "experiment_name": "vr_xp", 
+  "minimal_players": "0", 
+  "maximal_players": "1", 
+  "selected_monitoring": "gama_screen"
+}
+
+
+{
+  "type": "json_settings",
+  "name": "User interaction management",
+  "splashscreen": "./includes/splashscreen/screen.png",
+  "model_file_path": "./models/Send Water data.gaml.gaml",
+  "experiment_name": "vr_xp", 
+  "minimal_players": "0", 
+  "maximal_players": "1", 
+  "selected_monitoring": "gama_screen"
+}
+
+
+{
+  "type": "json_settings",
+  "name": "Player movement management",
+  "splashscreen": "./includes/splashscreen/screen.png",
+  "model_file_path": "./models/Limit Player Movement.gaml",
+  "experiment_name": "vr_xp", 
+  "minimal_players": "0", 
+  "maximal_players": "1", 
+  "selected_monitoring": "gama_screen"
+}
+
+
+{
+  "type": "json_settings",
+  "name": "Agent animation management",
+  "splashscreen": "./includes/splashscreen/screen.png",
+  "model_file_path": "./models/Manage Animation for Agents.gaml",
+  "experiment_name": "vr_xp", 
+  "minimal_players": "0", 
+  "maximal_players": "1", 
+  "selected_monitoring": "gama_screen"
+}
+
+
+{
+  "type": "json_settings",
+  "name": "Multi-player game management",
+  "splashscreen": "./includes/splashscreen/screen.png",
+  "model_file_path": "./models/Mutli player game.gaml",
+  "experiment_name": "vr_xp", 
+  "minimal_players": "2", 
+  "maximal_players": "4", 
   "selected_monitoring": "gama_screen"
 }
