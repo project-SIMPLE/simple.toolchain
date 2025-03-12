@@ -14,11 +14,11 @@ model SendWater
 global {
 	
 	//the dem used for this model
-	grid_file dem_grid_file <- grid_file("../includes/dem_water_level.asc");
+	grid_file dem_grid_file <- grid_file("../../includes/dem_water_level.asc");
 
-	grid_file dem_altitude_grid_file <- grid_file("../includes/altitude_water_level.asc");
+	grid_file dem_altitude_grid_file <- grid_file("../../includes/altitude_water_level.asc");
 
-	field dem <- field(grid_file("../includes/dem_river.asc"));
+	field dem <- field(grid_file("../../includes/dem_river.asc"));
 
 
 	geometry shape <- envelope(dem_grid_file);
