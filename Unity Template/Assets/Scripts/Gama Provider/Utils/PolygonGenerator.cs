@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
-
 
 public class PolygonGenerator
 {
@@ -41,12 +39,12 @@ public class PolygonGenerator
 
 
 
-    public GameObject GeneratePolygons(bool editMode, String name, List<int> points, PropertiesGAMA prop, int precision)
+    public GameObject GeneratePolygons(bool editMode, String name, int[] points, PropertiesGAMA prop, int precision)
     {
 
     
         List <Vector2> pts = new List<Vector2>();
-        for (int i = 0; i < points.Count - 1; i = i+2)
+        for (int i = 0; i < points.Length - 1; i = i+2)
         {
             Vector2 p = converter.fromGAMACRS2D(points[i], points[i + 1]);
             pts.Add(p);
@@ -98,40 +96,54 @@ public class PolygonGenerator
 
 
     // Start is called before the first frame update
-    GameObject GeneratePolygon(bool editMode, String name, Vector2[] MeshDataPoints, float extrusionHeight, Material mat, Color32 color)
+    GameObject GeneratePolygon(bool editMode, String name, Vector2[] meshDataPoints, float extrusionHeight, Material mat, Color32 color)
     {
       
-        bool isUsingBottomMeshIn3D = false;
-        bool isOutlineRendered = true;
-        bool is3D = extrusionHeight != 0.0;
+        GameObject polyExtruderGO = new GameObject(name);
 
-       
-        // create new GameObject (as a child)
-        GameObject polyExtruderGO = new GameObject();
-       
-
-        // reference to setup example poly extruder 
-        PolyExtruder polyExtruder;
-
-        
-        // add PolyExtruder script to newly created GameObject and keep track of its reference
-        polyExtruder = polyExtruderGO.AddComponent<PolyExtruder>();
-       
-        // global PolyExtruder configurations
-        polyExtruder.isOutlineRendered = isOutlineRendered;
+        // Optionally offset the Y position
         Vector3 pos = polyExtruderGO.transform.position;
         pos.y += offsetYBackgroundGeom;
         polyExtruderGO.transform.position = pos;
 
-        polyExtruder.createPrism(editMode, name, extrusionHeight, MeshDataPoints, color, mat, is3D, isUsingBottomMeshIn3D);
-        surroundMesh = polyExtruder.surroundMesh;
-        bottomMesh = polyExtruder.bottomMesh;
-        topMesh = polyExtruder.topMesh;
-        polyExtruderGO.name = name;
+        // Add PolyExtruderLight and call createPrism
+        PolyExtruderLight polyExtruderLight = polyExtruderGO.AddComponent<PolyExtruderLight>();
+        // The final parameter is the material, which can be null
+        polyExtruderLight.createPrism(
+            name,
+            extrusionHeight,
+            meshDataPoints,
+            color,
+            mat
+        );
+
         return polyExtruderGO;
     }
 
-  
+
+    /// <summary>
+    /// Update the mesh of a polygon GameObject with PolyExtruderLight.
+    /// </summary>
+    public void UpdatePolygon(GameObject obj, int[] points)
+    {
+        PolyExtruderLight polyExtruderGO = obj.GetComponent<PolyExtruderLight>();
+        MeshFilter meshFilter = obj.GetComponent<MeshFilter>();
+
+        int pointCount = points.Length;
+        Vector2[] pts = new Vector2[pointCount / 2]; // Allocate array with required size
+
+        for (int i = 0; i < pointCount - 1; i += 2)
+        {
+            pts[i / 2] = converter.fromGAMACRS2D(points[i], points[i + 1]);
+        }
+
+        if (polyExtruderGO != null)
+        {
+            polyExtruderGO.updatePrism(meshFilter, pts);
+        }
+    }
+
+
 }
 
 

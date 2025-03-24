@@ -230,12 +230,12 @@ public class GAMAGeometryLoader: ConnectionWithGama
                 if (polyGen == null)
                 {
                     polyGen = PolygonGenerator.GetInstance();
-                    polyGen.Init(converter);
+                    polyGen.Init(converter); 
                 }
                 List<int> pt = infoWorld.pointsGeom[cptGeom].c;
                 float YoffSet = (0.0f + infoWorld.offsetYGeom[cptGeom]) / (0.0f + parameters.precision);
                 
-                obj = polyGen.GeneratePolygons(true, name, pt, prop, parameters.precision);
+                obj = polyGen.GeneratePolygons(true, name, pt.ToArray(), prop, parameters.precision);
                 obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y + YoffSet, obj.transform.position.z);
                 if (prop.hasCollider)
                 {

@@ -358,7 +358,7 @@ public class SimulationManager : MonoBehaviour
             PropertiesGAMA prop = new PropertiesGAMA();
             prop.id = dataTeleport.teleportId + "_"+ i;
             prop.hasCollider = true;
-            prop.isInteractable = false;
+            prop.isInteractable = false; 
             prop.isGrabable = false;
             prop.hasPrefab = false;
             prop.visible = true;
@@ -366,7 +366,7 @@ public class SimulationManager : MonoBehaviour
             prop.height = dataTeleport.height;
             prop.toFollow = false;
 
-            GameObject obj = polyGen.GeneratePolygons(false, prop.id, pt, prop, parameters.precision);
+            GameObject obj = polyGen.GeneratePolygons(false, prop.id, pt.ToArray(), prop, parameters.precision);
 
             obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y + YoffSet, obj.transform.position.z);
             MeshCollider mc = obj.AddComponent<MeshCollider>();
@@ -419,7 +419,7 @@ public class SimulationManager : MonoBehaviour
             prop.is3D = true;
             prop.toFollow = false;
 
-           GameObject obj = polyGen.GeneratePolygons(false, dataWall.wallId, pt, prop, parameters.precision);
+           GameObject obj = polyGen.GeneratePolygons(false, dataWall.wallId, pt.ToArray(), prop, parameters.precision);
         
             obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y + YoffSet, obj.transform.position.z);
             obj.transform.parent = wallObj.transform;
@@ -607,57 +607,53 @@ public class SimulationManager : MonoBehaviour
                     polyGen = PolygonGenerator.GetInstance();
                     polyGen.Init(converter);
                 }
-                List<int> pt = infoWorld.pointsGeom[cptGeom].c;
-              //  Debug.Log("GENERATE POLYGON : " + pt.Count + " polyGen:" + polyGen);
 
+                int[] pt = infoWorld.pointsGeom[cptGeom].c.ToArray();
+                float yOffset = (0.0f + infoWorld.offsetYGeom[cptGeom]) / (0.0f + parameters.precision);
 
-                float YoffSet = (0.0f + infoWorld.offsetYGeom[cptGeom]) / (0.0f + parameters.precision);
-                
-                obj = polyGen.GeneratePolygons(false, name, pt, prop, parameters.precision);
-                obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y + YoffSet, obj.transform.position.z);
+                if (initGame || !geometryMap.ContainsKey(name))
+                {
+                    obj = polyGen.GeneratePolygons(false, name, pt, prop, parameters.precision);
+                    instantiateGO(obj, name, prop);
+                    List<object> pL = new List<object>(2);
+                    //object[] pL = new object[2];
+                    //pL[0] = obj;
+                    // pL[1] = prop;
+                    pL.Add(obj);
+                    pL.Add(prop);
+                    if (!initGame) geometryMap.Add(name, pL);
+                }
+                else
+                {
+                    object[] o = geometryMap[name].ToArray();
+                    GameObject obj2 = (GameObject)o[0];
+                    PropertiesGAMA p = (PropertiesGAMA)o[1];
+                    if (p == prop)
+                    {
+                        obj = obj2;
+                    }
+                    else
+                    {
+                        Debug.Log("not found obj");
+                    }
+                    polyGen.UpdatePolygon(obj, pt);
+                }
 
-
+                obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y + yOffset,
+                    obj.transform.position.z);
 
                 if (prop.hasCollider)
                 {
-
-                    MeshCollider mc = obj.AddComponent<MeshCollider>();
-                    if (prop.isGrabable)
+                    if (!obj.TryGetComponent<MeshCollider>(out MeshCollider mc))
                     {
-                        mc.convex = true;
+                        mc = obj.AddComponent<MeshCollider>();
+                        if (prop.isGrabable) mc.convex = true;
                     }
-                    mc.sharedMesh = polyGen.surroundMesh;
-                    // mc.isTrigger = prop.isTrigger;
+                    mc.sharedMesh = obj.GetComponent<MeshFilter>().sharedMesh;
                 }
-
-                instantiateGO(obj, name, prop);
-                // polyGen.surroundMesh = null;
-
-                if (geometryMap.ContainsKey(name))
-                {
-
-                    GameObject objOld = (GameObject)geometryMap[name][0];
-                    // objOld.transform.position = new Vector3(0, -100, 0);
-                    geometryMap.Remove(name);
-                    if (toFollow.Contains(objOld))
-                        toFollow.Remove(objOld);
-                    GameObject.Destroy(objOld);
-                }
-                List<object> pL = new List<object>();
-                pL.Add(obj); pL.Add(prop);
-                toRemove.Remove(name);
-
-                if (!initGame)
-                {
-
-                    geometryMap.Add(name, pL);
-                }
-
-                //obj.SetActive(true);
+                if (toRemove != null) toRemove.Remove(name);
                 cptGeom++;
-
             }
-
 
 
         }
