@@ -10,7 +10,7 @@
 
 model SendStaticdata
 
-global {
+global { 
 	//unity properties that will be used for sending geometries/agents to Unity
 	unity_property up_car ;
 	unity_property up_geom;

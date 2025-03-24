@@ -28,7 +28,7 @@ public class ConnectionWithGama : MonoBehaviour
             {"action", action},
             {"args", argsJSON},
             {"agent", AgentToSendInfo }
-        };
+        }; 
 
         string jsonStringExpression = JsonConvert.SerializeObject(jsonExpression);
 

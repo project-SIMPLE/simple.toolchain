@@ -39,19 +39,16 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
         Debug.Log("ConnectionManager Awake host: " + PlayerPrefs.GetString("IP") + " PORT: " + PlayerPrefs.GetString("PORT") + " UseMiddleware: "+ UseMiddleware);
 
         Instance = this;
-    }
 
-    void Start() {
-        
         Debug.Log("START");
         UpdateConnectionState(ConnectionState.DISCONNECTED);
-        connectionRequested = false;
-
     }
+
+   
 
     public string GetMessageSeparator()
     {
-        return MessageSeparator;
+        return MessageSeparator; 
     }
 
     // ############################################# CONNECTION HANDLER #############################################
@@ -69,7 +66,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
                 break;
             case ConnectionState.DISCONNECTED:
                 Debug.Log("ConnectionManager: UpdateConnectionState -> DISCONNECTED");
-                TryConnectionToServer();
+              //  TryConnectionToServer();
                 break;
             default:
                 break;
@@ -81,7 +78,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
 
     // ############################################# HANDLERS #############################################
 
-    protected override void HandleConnectionOpen(object sender, System.EventArgs e)
+    protected override void HandleConnectionOpen()
     {
         if (UseMiddleware)
         {
@@ -91,21 +88,17 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
                 { "heartbeat", ""+ HeartbeatInMs}
             }; 
             string jsonStringId = JsonConvert.SerializeObject(jsonId);
-            SendMessageToServer(jsonStringId, new Action<bool>((success) => {
-                if (success) { }
-            }));
+            SendMessageToServer(jsonStringId);
             Debug.Log("ConnectionManager: Connection opened");
         }
        
     }
 
-    protected override void HandleReceivedMessage(object sender, MessageEventArgs e)
+    protected override void ManageMessage(string message)
     {
-        
-        if (e.IsText)
-        {
-           
-            JObject jsonObj = JObject.Parse(e.Data);
+
+            
+            JObject jsonObj = JObject.Parse(message);
             string type = (string)jsonObj["type"];
            
         
@@ -116,9 +109,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
                     case "ping":
                         var jsonId = new Dictionary<string, string> {{"type", "pong"}};
                         string jsonStringId = JsonConvert.SerializeObject(jsonId);
-                        SendMessageToServer(jsonStringId, new Action<bool>((success) => {
-                            if (success) { }
-                        }));
+                        SendMessageToServer(jsonStringId);
                         break;
                     case "json_state":
                         OnConnectionStateReceived?.Invoke(jsonObj);
@@ -148,7 +139,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
                                 Debug.LogWarning("ConnectionManager: Already connected, waiting for authentication...");
                             }
 
-                        } 
+                        }  
                         break;  
 
                     case "json_output":
@@ -171,17 +162,17 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
                         OnServerMessageReceived?.Invoke(null, mes);
                 }
             }
-        }
+        
     }
 
-    protected override void HandleConnectionClosed(object sender, CloseEventArgs e) {
+    protected override void HandleConnectionClosed() {
         // checks if the connection was closed just after a connection request
         Debug.Log("ConnectionManager: HandleConnectionClosed");
         if (connectionRequested) {
             connectionRequested = false;
             OnConnectionAttempted?.Invoke(false);
             Debug.Log("ConnectionManager: Failed to connect to server");
-        }
+        } 
         UpdateConnectionState(ConnectionState.DISCONNECTED);
     }
 
@@ -235,7 +226,9 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
         };
 
         string jsonStringExpression = JsonConvert.SerializeObject(jsonExpression);
-        SendMessageToServer(jsonStringExpression, new Action<bool>((success) => {
+        SendMessageToServer(jsonStringExpression);
+
+        /*, new Action<bool>((success) => {
             if (!success) {
                 numErrors++;
                 Debug.LogError("ConnectionManager: Failed to send executable expression");
@@ -249,7 +242,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
             {
                 numErrors = 0;
             }
-        }));
+        }));*/
     }
 
     public void SendExecutableAsk(string action, Dictionary<string,string> arguments)
@@ -265,7 +258,9 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
 
         string jsonStringExpression = JsonConvert.SerializeObject(jsonExpression);
 
-        SendMessageToServer(jsonStringExpression, new Action<bool>((success) => {
+        SendMessageToServer(jsonStringExpression);
+
+        /*, new Action<bool>((success) => {
             if (!success)
             {
                 numErrors++;
@@ -280,7 +275,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
             {
                 numErrors = 0;
             }
-    }));
+    }));*/
     }
 
     public void DisconnectProperly() {
@@ -288,14 +283,8 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
             {"type", "disconnect_properly"}
         };
         string jsonStringExpression = JsonConvert.SerializeObject(jsonExpression);
-        SendMessageToServer(jsonStringExpression, new Action<bool>((success) => {
-            if (!success) {
-                Debug.LogError("ConnectionManager: Failed to send disconnect message");
-            }
-            else {
-                DisconnectFromServer();
-            }
-        }));
+        SendMessageToServer(jsonStringExpression);
+        DisconnectFromServer();
     }
 
     public string GetConnectionId() {

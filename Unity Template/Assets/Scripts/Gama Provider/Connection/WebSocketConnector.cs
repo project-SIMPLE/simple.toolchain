@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
-using WebSocketSharp;
 
+using System.Text;
 
+using NativeWebSocket;
 public abstract class WebSocketConnector : MonoBehaviour
 {
 
@@ -13,9 +14,11 @@ public abstract class WebSocketConnector : MonoBehaviour
     protected string host ;
      protected string port;
 
-    protected bool UseMiddleware; 
+    protected bool UseMiddleware;
 
-    private WebSocket socket; 
+
+    private WebSocket socket;
+
 
 
     protected int HeartbeatInMs = 5000; //only for middleware mode
@@ -26,9 +29,9 @@ public abstract class WebSocketConnector : MonoBehaviour
     protected int numErrorsBeforeDeconnection = 10;
     protected int numErrors = 0;
 
-    void OnEnable() {
-       
-       // port = PlayerPrefs.GetString("PORT"); 
+    async void Start()
+    {
+        // port = PlayerPrefs.GetString("PORT"); 
         host = PlayerPrefs.GetString("IP");
         port = DefaultPort;
 
@@ -37,7 +40,7 @@ public abstract class WebSocketConnector : MonoBehaviour
             UseMiddleware = UseMiddlewareDM;
             host = "localhost";
 
-            if (UseMiddleware)
+            if (UseMiddleware)  
             {
                 port = "8080";
             }
@@ -63,34 +66,86 @@ public abstract class WebSocketConnector : MonoBehaviour
         Debug.Log("WebSocketConnector host: " + host + " PORT: " + port + " MIDDLEWARE:" + UseMiddleware);
 
         socket = new WebSocket("ws://" + host + ":" + port + "/");
-        
+
         // Enable the Per-message Compression extension.
         // Saved some bandwidth
         // Doesn't work on our specific installation : https://github.com/sta/websocket-sharp/issues/580
-        socket.Compression = CompressionMethod.None;//Deflate;
-        
-        socket.OnOpen += HandleConnectionOpen;
-        socket.OnMessage += HandleReceivedMessage;
-        socket.OnClose += HandleConnectionClosed;
-        
+        /*  socket.Compression = CompressionMethod.None;//Deflate;
+
+          socket.OnOpen += HandleConnectionOpen;
+          socket.OnMessage += HandleReceivedMessage;
+          socket.OnClose += HandleConnectionClosed;*/
+        socket.OnOpen += () =>
+        {
+            Debug.Log("WS connected!");
+            HandleConnectionOpen();
+        };
+
+        // Add OnMessage event listener
+        socket.OnMessage += (byte[] msg) =>
+        {
+            string mes = Encoding.UTF8.GetString(msg);
+            // Debug.Log("WS received message: " + mes);
+            ManageMessage(mes);
+        };
+
+        // Add OnError event listener
+        socket.OnError += (string errMsg) =>
+        {
+            Debug.Log("WS error: " + errMsg);
+        };
+
+        // Add OnClose event listener
+        socket.OnClose += (WebSocketCloseCode code) =>
+        {
+            HandleConnectionClosed();
+            Debug.Log("WS closed with code: " + code.ToString());
+        };
+
+        // Connect to the server 
+        await socket.Connect();
+
     }
 
-   void OnDestroy() {
-        socket.Close();
+    protected virtual void HandleConnectionClosed()
+    {
+
+    }
+    protected virtual void ManageMessage(string message)
+    {
+
+    }
+
+    protected virtual void HandleConnectionOpen()
+    {
+
+    }
+
+    private async void OnApplicationQuit()
+    {
+        await socket.Close();
+    }
+
+    async void OnDestroy() {
+        await socket.Close();
     }
 
     // ############################## HANDLERS ##############################
 
-    protected abstract void HandleConnectionOpen(object sender, System.EventArgs e);
-
-    protected abstract void HandleReceivedMessage(object sender, MessageEventArgs e);
-
-    protected abstract void HandleConnectionClosed(object sender, CloseEventArgs e);
-
     // #######################################################################
 
-    protected void SendMessageToServer(string message, Action<bool> successCallback) {
-       socket.SendAsync(message, successCallback);
+    void Update()
+    {
+    #if !UNITY_WEBGL || UNITY_EDITOR
+            socket.DispatchMessageQueue();
+    #endif
+    }
+
+
+    async protected void SendMessageToServer(string message)
+    {
+        //        Debug.Log("SEND MESSAGE: " + message);
+        await socket.SendText(message);
     }
 
     protected WebSocket GetSocket() {
