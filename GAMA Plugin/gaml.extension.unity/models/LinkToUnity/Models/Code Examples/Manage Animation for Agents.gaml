@@ -99,7 +99,7 @@ species unity_linker parent: abstract_unity_linker {
 		
 		//define the up_boy unity property, with the name "boy", no specific layer, the boy_aspect unity aspect, a collider, and the agents location are not sent back 
 		//to GAMA. 
-		up_boy<- geometry_properties("boy", nil, boy_aspect, #collider, false);
+		up_boy<- geometry_properties("boy", string(nil), boy_aspect, #collider, false);
 		
 		// add the up_boy unity_property to the list of unity_properties
 		unity_properties << up_boy;

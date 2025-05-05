@@ -591,7 +591,7 @@ public class SimulationManager : MonoBehaviour
                 }
                 List<int> pt = infoWorld.pointsLoc[cptPrefab].c;
                 Vector3 pos = converter.fromGAMACRS(pt[0], pt[1], pt[2]);
-                pos.y += pos.y + prop.yOffsetF;
+                pos.y += prop.yOffsetF;
                 float rot = prop.rotationCoeffF * ((0.0f + pt[3]) / parameters.precision) + prop.rotationOffsetF;
                 obj.transform.SetPositionAndRotation(pos, Quaternion.AngleAxis(rot, Vector3.up));
                 //obj.SetActive(true);

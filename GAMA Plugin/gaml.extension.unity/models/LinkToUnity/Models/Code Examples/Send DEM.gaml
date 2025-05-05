@@ -102,7 +102,7 @@ species unity_linker parent: abstract_unity_linker {
 		
 		//define the up_sphere unity property, with the name "sphere_ag", no specific layer, the sphere_aspect unity aspect, grabable, and the agent location is sent back 
 		//to GAMA. 
-		up_sphere<- geometry_properties("sphere_ag", nil, sphere_aspect, #grabable, true);
+		up_sphere<- geometry_properties("sphere_ag", string(nil), sphere_aspect, #grabable, true);
 		
 		// add the up_sphere unity_property to the list of unity_properties
 		unity_properties << up_sphere;

@@ -101,7 +101,7 @@ species unity_linker parent: abstract_unity_linker {
 		
 		//define the up_no_interaction unity property, with the name "no interaction", no specific layer, the gray_square_aspect aspect, no interaction, and the agents location are not sent back 
 		//to GAMA. 
-		up_no_interaction <- geometry_properties("no interaction", nil, gray_square_aspect, #no_interaction, false);
+		up_no_interaction <- geometry_properties("no interaction", string(nil), gray_square_aspect, #no_interaction, false);
 		
 		// add the up_geom up_no_interaction to the list of unity_properties
 		unity_properties << up_no_interaction;
@@ -115,7 +115,7 @@ species unity_linker parent: abstract_unity_linker {
 		
 		//define the up_collider unity property, with the name "collider", no specific layer, the yellow_square_aspect aspect, a collider interaction, and the agents location are not sent back 
 		//to GAMA. 
-		up_collider <- geometry_properties("collider", nil, yellow_square_aspect, #collider, false);
+		up_collider <- geometry_properties("collider", string(nil), yellow_square_aspect, #collider, false);
 		
 		// add the up_geom up_collider to the list of unity_properties
 		unity_properties << up_collider;
@@ -140,7 +140,7 @@ species unity_linker parent: abstract_unity_linker {
 		
 		//define the up_grab_interaction unity property, with the name "grab interaction", no specific layer, the pink_square_aspect aspect, the possibility to grab the object, and the agents location are sent back 
 		//to GAMA. 
-		up_grab_interaction <- geometry_properties("grab interaction", nil, pink_square_aspect, #grabable, true);
+		up_grab_interaction <- geometry_properties("grab interaction", string(nil), pink_square_aspect, #grabable, true);
 		
 		// add the up_geom up_grab_interaction to the list of unity_properties
 		unity_properties << up_grab_interaction;

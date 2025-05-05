@@ -76,8 +76,8 @@ species unity_linker parent: abstract_unity_linker {
 		unity_aspect car_aspect <- prefab_aspect("Prefabs/Visual Prefabs/City/Vehicles/Car",30,0.2,1.0,-90.0, precision);
 		
 		//define the up_car unity property, with the name "car", no specific layer, the car_aspect unity aspect, no interaction, and the agents location are not sent back 
-		//to GAMA. 
-		up_car<- geometry_properties("car", nil, car_aspect, #no_interaction, false);
+		//to GAMA.  
+		up_car<- geometry_properties("car", string(nil), car_aspect, #no_interaction, false);
 		
 		// add the up_tree unity_property to the list of unity_properties
 		unity_properties << up_car;
@@ -88,7 +88,7 @@ species unity_linker parent: abstract_unity_linker {
 		
 		//define the up_geom unity property, with the name "circle", no specific layer, no interaction, and the agents location are not sent back 
 		//to GAMA. 
-		up_geom <- geometry_properties("circle", nil, geom_aspect, #no_interaction, false);
+		up_geom <- geometry_properties("circle", string(nil), geom_aspect, #no_interaction, false);
 		
 		// add the up_geom unity_property to the list of unity_properties
 		unity_properties << up_geom;
