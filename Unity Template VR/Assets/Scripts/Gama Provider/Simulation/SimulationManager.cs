@@ -1100,10 +1100,13 @@ public class SimulationManager : MonoBehaviour
                     if (parameters.strafe != null) p.enableStrafe = parameters.strafe;
 
 
-
                 }
                 handleGroundParametersRequested = true;
                 handleGeometriesRequested = true;
+
+                if (parameters.cameraclippingfar != null && parameters.cameraclippingfar != -1) Camera.main.farClipPlane = Convert.ToSingle(parameters.cameraclippingfar);
+
+                if (parameters.cameraclippingnear != null && parameters.cameraclippingnear != -1) Camera.main.nearClipPlane = Convert.ToSingle(parameters.cameraclippingnear);
 
 
                 break;
