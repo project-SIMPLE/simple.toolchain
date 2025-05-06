@@ -2665,6 +2665,14 @@ public class AbstractUnityLinker extends GamlAgent {
 		worldT.add((int) (scope.getSimulation().getGeometricEnvelope().getHeight() * precision));
 		
 		toSend.put("world", worldT);
+		toSend.put("speedx", player.getAttribute(AbstractUnityPlayer.X_MOVEMENT_SPEED));
+		toSend.put("speedy", player.getAttribute(AbstractUnityPlayer.Y_MOVEMENT_SPEED));
+		toSend.put("speedrotation", player.getAttribute(AbstractUnityPlayer.ROTATION_SPEED));
+		toSend.put("miny", player.getAttribute(AbstractUnityPlayer.MOVEMENT_MIN_Y));
+		toSend.put("maxy", player.getAttribute(AbstractUnityPlayer.MOVEMENT_MAX_Y));
+		toSend.put("cameraclippingnear", player.getAttribute(AbstractUnityPlayer.CAMERA_CLIPPING_PLANES_NEAR));
+		toSend.put("cameraclippingfar", player.getAttribute(AbstractUnityPlayer.CAMERA_CLIPPING_PLANES_FAR));
+		
 		toSend.put("minPlayerUpdateDuration", getMinPlayerPoisitionUpdateDuration(ag) * precision);
 		doAction2Arg(scope, "add_to_send_parameter", "player", player, "map_to_send", toSend);
 		addToCurrentMessage(scope, buildPlayerListfor1Player(scope, player), toSend);

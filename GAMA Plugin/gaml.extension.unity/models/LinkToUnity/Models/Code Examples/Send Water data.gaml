@@ -148,7 +148,7 @@ species unity_linker parent: abstract_unity_linker {
 		
 		//define the up_water unity property, with the name "water", no specific layer, the water_aspect unity aspect, no interaction, and the agent location is not sent back 
 		//to GAMA. 
-		up_water<- geometry_properties("water", nil, water_aspect, #no_interaction,false);
+		up_water<- geometry_properties("water", string(nil), water_aspect, #no_interaction,false);
 		
 		// add the up_water unity_property to the list of unity_properties
 		unity_properties << up_water;

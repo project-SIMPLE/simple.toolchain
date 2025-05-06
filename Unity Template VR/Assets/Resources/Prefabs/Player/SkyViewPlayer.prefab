@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3863860364787503611}
   - component: {fileID: 2183910030003629073}
   m_Layer: 2
-  m_Name: Locomation
+  m_Name: Locomotion
   m_TagString: locomotion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

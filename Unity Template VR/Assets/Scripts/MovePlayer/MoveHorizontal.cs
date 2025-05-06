@@ -8,9 +8,9 @@ using UnityEngine.InputSystem;
 public class MoveHorizontal : InputData
 {
     
-    [SerializeField] private float speed = 2.0f;
-    [SerializeField] private float speedRotation = 10.0f;
-    [SerializeField] private bool Strafe = false;
+    [SerializeField] public float speed = 2.0f;
+    [SerializeField] public float speedRotation = 10.0f;
+    [SerializeField] public bool Strafe = false;
     [SerializeField] private InputActionReference Stick;
      
     // ############################################################

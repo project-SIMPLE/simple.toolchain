@@ -13,6 +13,7 @@ TagManager:
   - tree
   - moto
   - car
+  - move
   layers:
   - Default
   - TransparentFX

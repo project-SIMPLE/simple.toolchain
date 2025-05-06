@@ -47,6 +47,24 @@ import gama.gaml.types.IType;
 	@variable(name = AbstractUnityPlayer.ZOFFSET, type = IType.FLOAT,init = "2.0",
 	doc = { @doc ("offset along the z-axis for the the display of the agent in GAMA")}),
 
+	
+	@variable(name = AbstractUnityPlayer.X_MOVEMENT_SPEED, type = IType.FLOAT,init = "-1.0",
+	doc = { @doc ("Movement speed along the x-axis in Unity")}),
+	@variable(name = AbstractUnityPlayer.Y_MOVEMENT_SPEED, type = IType.FLOAT,init = "-1.0",
+	doc = { @doc ("Movement speed along the y-axis in Unity")}),
+	@variable(name = AbstractUnityPlayer.ROTATION_SPEED, type = IType.FLOAT,init = "-1.0",
+	doc = { @doc ("Rotation speed along the y-axis")}),
+	@variable(name = AbstractUnityPlayer.MOVEMENT_MIN_Y, type = IType.FLOAT,init = "-1.0",
+	doc = { @doc ("minimal y-value")}),
+	@variable(name = AbstractUnityPlayer.MOVEMENT_MAX_Y, type = IType.FLOAT,init = "-1.0",
+	doc = { @doc ("maximal y-value")}),
+	@variable(name = AbstractUnityPlayer.CAMERA_CLIPPING_PLANES_NEAR, type = IType.FLOAT,init = "-1.0",
+	doc = { @doc ("distance for the camera clipping (near)")}),
+	@variable(name = AbstractUnityPlayer.CAMERA_CLIPPING_PLANES_FAR, type = IType.FLOAT,init = "-1.0",
+	doc = { @doc ("distance for the camera clipping (far)")}),
+	@variable(name = AbstractUnityPlayer.X_MOVEMENT_STRAFE, type = IType.BOOL,init = "false",
+	doc = { @doc ("Use Strafe for movement along x-axis")}),
+
 	@variable(name = AbstractUnityPlayer.CONE_DISTANCE, type = IType.FLOAT,
 			doc = { @doc ("distance of the cone for the display of the agent in GAMA")}),
 	@variable(name = AbstractUnityPlayer.CONE_AMPLITUDE, type = IType.FLOAT,
@@ -61,7 +79,7 @@ import gama.gaml.types.IType;
 			doc = { @doc ("Allow to not send to Unity agents that are to close (i.e. overlapping) ")})})
 public class AbstractUnityPlayer extends GamlAgent{ 
 	
-	public static final String ACTION_CONE = "player_perception_cone";
+	public static final String ACTION_CONE = "player_perception_cone";  
 	
 	public static final String TO_DISPLAY = "to_display";
 	public static final String SELECTED = "selected";
@@ -73,10 +91,100 @@ public class AbstractUnityPlayer extends GamlAgent{
 	public static final String PLAYER_ROTATION = "player_rotation";
 	public static final String ZOFFSET = "z_offset"; 
 	
+	public static final String X_MOVEMENT_SPEED = "x_movement_speed"; 
+	public static final String X_MOVEMENT_STRAFE = "x_movement_strafe"; 
+	
+	public static final String Y_MOVEMENT_SPEED = "y_movement_speed"; 
+	public static final String ROTATION_SPEED = "rotation_speed"; 
+	public static final String MOVEMENT_MIN_Y = "movement_min_y"; 
+	public static final String MOVEMENT_MAX_Y = "movement_max_y"; 
+	public static final String CAMERA_CLIPPING_PLANES_NEAR = "camera_clipping_planes_near";
+	public static final String CAMERA_CLIPPING_PLANES_FAR = "camera_clipping_planes_far"; 
+	
 	
 	public AbstractUnityPlayer(IPopulation<? extends IAgent> s, int index) {
 		super(s, index);
 	} 
+	
+	
+	@getter (X_MOVEMENT_SPEED)
+	public static Double getXMovementSpeed(final IAgent agent) {
+		return (Double) agent.getAttribute(X_MOVEMENT_SPEED);
+	}
+	@setter(X_MOVEMENT_SPEED)
+	public static void setXMovementSpeed(final IAgent agent, final Double val) {
+		agent.setAttribute(X_MOVEMENT_SPEED, val);
+	}
+
+	@getter (X_MOVEMENT_STRAFE)
+	public static Double getXMovementStrafe(final IAgent agent) {
+		return (Double) agent.getAttribute(X_MOVEMENT_STRAFE);
+	}
+	@setter(X_MOVEMENT_STRAFE)
+	public static void setXMovementStrafe(final IAgent agent, final Double val) {
+		agent.setAttribute(X_MOVEMENT_STRAFE, val);
+	}
+	
+	@getter (Y_MOVEMENT_SPEED)
+	public static Double getYMovementSpeed(final IAgent agent) {
+		return (Double) agent.getAttribute(Y_MOVEMENT_SPEED);
+	}
+	@setter(Y_MOVEMENT_SPEED)
+	public static void setYMovementSpeed(final IAgent agent, final Double val) {
+		agent.setAttribute(Y_MOVEMENT_SPEED, val);
+	}
+
+	
+	@getter (ROTATION_SPEED)
+	public static Double getOrientationSpeed(final IAgent agent) {
+		return (Double) agent.getAttribute(ROTATION_SPEED);
+	}
+	@setter(ROTATION_SPEED)
+	public static void setOrientationSpeed(final IAgent agent, final Double val) {
+		agent.setAttribute(ROTATION_SPEED, val);
+	}
+
+	
+	@getter (MOVEMENT_MIN_Y)
+	public static Double getMovementMinY(final IAgent agent) {
+		return (Double) agent.getAttribute(MOVEMENT_MIN_Y);
+	}
+	@setter(MOVEMENT_MIN_Y)
+	public static void setMovementMinY(final IAgent agent, final Double val) {
+		agent.setAttribute(MOVEMENT_MIN_Y, val);
+	}
+
+	
+	
+	@getter (MOVEMENT_MAX_Y)
+	public static Double getMovementMaxY(final IAgent agent) {
+		return (Double) agent.getAttribute(MOVEMENT_MAX_Y);
+	}
+	@setter(MOVEMENT_MAX_Y)
+	public static void setMovementMaxY(final IAgent agent, final Double val) {
+		agent.setAttribute(MOVEMENT_MAX_Y, val);
+	}
+
+	
+	@getter (CAMERA_CLIPPING_PLANES_NEAR)
+	public static Double getCameraClippingPlanesNear(final IAgent agent) {
+		return (Double) agent.getAttribute(CAMERA_CLIPPING_PLANES_NEAR);
+	}
+	@setter(CAMERA_CLIPPING_PLANES_NEAR)
+	public static void setCameraClippingPlanesNear(final IAgent agent, final Double val) {
+		agent.setAttribute(CAMERA_CLIPPING_PLANES_NEAR, val);
+	}
+
+	
+	
+	@getter (CAMERA_CLIPPING_PLANES_FAR)
+	public static Double setCameraClippingPlanesNear(final IAgent agent) {
+		return (Double) agent.getAttribute(CAMERA_CLIPPING_PLANES_FAR);
+	}
+	@setter(CAMERA_CLIPPING_PLANES_FAR)
+	public static void getCameraClippingPlanesNear(final IAgent agent, final Double val) {
+		agent.setAttribute(CAMERA_CLIPPING_PLANES_FAR, val);
+	}
 	
 	@getter (SELECTED)
 	public static Boolean getSelected(final IAgent agent) {

@@ -1074,14 +1074,41 @@ public class SimulationManager : MonoBehaviour
         {
             // handle general informations about the simulation
             case "precision":
-
                 parameters = ConnectionParameter.CreateFromJSON(content);
                 converter = new CoordinateConverter(parameters.precision, GamaCRSCoefX, GamaCRSCoefY, GamaCRSCoefY, GamaCRSOffsetX, GamaCRSOffsetY, GamaCRSOffsetZ);
                 TimeSendPosition = (0.0f + parameters.minPlayerUpdateDuration) / (parameters.precision + 0.0f);
-                // Init ground and player
-                // await Task.Run(() => InitGroundParameters());
-                // await Task.Run(() => InitPlayerParameters()); 
-                // handlePlayerParametersRequested = true;   
+
+                GameObject loc = GameObject.FindGameObjectWithTag("locomotion");
+                if (loc != null)
+                {
+                    MoveHorizontal h = loc.GetComponent<MoveHorizontal>();
+                    MoveVertical v = loc.GetComponent<MoveVertical>();
+
+                    if (h != null)
+                    {
+                        if (parameters.speedx != null && parameters.speedx != -1) h.speed = Convert.ToSingle(parameters.speedx);
+                        if (parameters.speedrotation != null && parameters.speedrotation != -1) h.speedRotation = Convert.ToSingle(parameters.speedrotation);
+                        if (parameters.strafe != null) h.Strafe = parameters.strafe;
+                    }
+                    if (v != null)
+                    {
+                        if (parameters.miny != null && parameters.miny != -1) v.minY = Convert.ToSingle(parameters.miny);
+                        if (parameters.maxy != null && parameters.maxy != -1) v.maxY = Convert.ToSingle(parameters.maxy);
+                        if (parameters.speedy != null && parameters.speedy != -1) v.Speed = Convert.ToSingle(parameters.speedy);
+
+                    } 
+                }
+
+                GameObject moveObj = GameObject.FindGameObjectWithTag("move");
+                if (moveObj != null)
+                {
+                    UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets.DynamicMoveProvider p = moveObj.GetComponent<UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets.DynamicMoveProvider>();
+                    if (parameters.speedx != null && parameters.speedx != -1) p.moveSpeed = Convert.ToSingle(parameters.speedx);
+                    if (parameters.strafe != null) p.enableStrafe = parameters.strafe;
+
+
+
+                }
                 handleGroundParametersRequested = true;
                 handleGeometriesRequested = true;
 
