@@ -97,6 +97,10 @@ public class SimulationManager : MonoBehaviour
     protected float TimeSendInit = 0.5f;
     protected float TimerSendInit ;
 
+    //Cache
+    Dictionary<string, string> connectionID;
+    HashSet<string> toRemove = new HashSet<string>();
+
     // ############################################ UNITY FUNCTIONS ############################################
     void Awake()
     {
@@ -112,6 +116,13 @@ public class SimulationManager : MonoBehaviour
         playerMovement(false);
         toFollow = new List<GameObject>();
 
+        connectionID = new Dictionary<string, string>
+        {
+            {"id", ConnectionManager.Instance.getUseMiddleware()
+                    ? ConnectionManager.Instance.GetConnectionId()
+                    : ("\"" + ConnectionManager.Instance.GetConnectionId() + "\"")
+            }
+        };
     }
 
 
@@ -158,14 +169,10 @@ public class SimulationManager : MonoBehaviour
 
         if (sendMessageToReactivatePositionSent)
         {
-
-            Dictionary<string, string> args = new Dictionary<string, string> {
-            {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") }};
-
-            ConnectionManager.Instance.SendExecutableAsk("player_position_updated", args);
+            ConnectionManager.Instance.SendExecutableAsk("player_position_updated", connectionID);
             sendMessageToReactivatePositionSent = false;
-
         }
+
         if (handleGroundParametersRequested)
         {
             InitGroundParameters();
@@ -174,11 +181,12 @@ public class SimulationManager : MonoBehaviour
             Debug.Log("handleGroundParametersRequested: " + handleGroundParametersRequested);
 
         }
+
         if (handleGeometriesRequested && infoWorld != null && infoWorld.isInit)// && propertyMap != null)
         {
 
             sendMessageToReactivatePositionSent = true;
-            GenerateGeometries(true, new List<string>());
+            GenerateGeometries(true, null);
             handleGeometriesRequested = false;
             UpdateGameState(GameState.GAME);
          
@@ -216,17 +224,14 @@ public class SimulationManager : MonoBehaviour
             infoAnimation = null;
         }
 
-        if(IsGameState(GameState.LOADING_DATA) && ConnectionManager.Instance.getUseMiddleware())
+        if (IsGameState(GameState.LOADING_DATA) && ConnectionManager.Instance.getUseMiddleware())
         {
             if (TimerSendInit > 0)
                 TimerSendInit -= Time.deltaTime;
             if (TimerSendInit <= 0)
             {
                 TimerSendInit = TimeSendInit;
-                Dictionary<string, string> args = new Dictionary<string, string> {
-                             {"id", ConnectionManager.Instance.GetConnectionId() }
-                        };
-                ConnectionManager.Instance.SendExecutableAsk("send_init_data", args);
+                ConnectionManager.Instance.SendExecutableAsk("send_init_data", connectionID);
             }
         }
 
@@ -532,7 +537,7 @@ public class SimulationManager : MonoBehaviour
     }
 
 
-    void GenerateGeometries(bool initGame, List<string> toRemove)
+    void GenerateGeometries(bool initGame, HashSet<string> toRemove)
     {
 
         if (infoWorld.position != null && infoWorld.position.Count > 1 && (initGame || !sendMessageToReactivatePositionSent))
@@ -545,10 +550,11 @@ public class SimulationManager : MonoBehaviour
 
             playerMovement(true);
         }
+
+        if(toRemove != null) foreach (string n in infoWorld.keepNames) toRemove.Remove(n);
+
         int cptPrefab = 0;
         int cptGeom = 0;
-        foreach (string n in infoWorld.keepNames) 
-            toRemove.Remove(n);
    //     Debug.Log("GenerateGeometries : initGame: " + initGame);
 
         for (int i = 0; i < infoWorld.names.Count; i++)
@@ -595,7 +601,7 @@ public class SimulationManager : MonoBehaviour
                 float rot = prop.rotationCoeffF * ((0.0f + pt[3]) / parameters.precision) + prop.rotationOffsetF;
                 obj.transform.SetPositionAndRotation(pos, Quaternion.AngleAxis(rot, Vector3.up));
                 //obj.SetActive(true);
-                toRemove.Remove(name);
+                if(toRemove != null) toRemove.Remove(name);
                 cptPrefab++;
 
             }
@@ -611,47 +617,33 @@ public class SimulationManager : MonoBehaviour
                 int[] pt = infoWorld.pointsGeom[cptGeom].c.ToArray();
                 float yOffset = (0.0f + infoWorld.offsetYGeom[cptGeom]) / (0.0f + parameters.precision);
 
-                if (initGame || !geometryMap.ContainsKey(name))
+                if(initGame || !geometryMap.ContainsKey(name))
                 {
                     obj = polyGen.GeneratePolygons(false, name, pt, prop, parameters.precision);
+                    obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y + yOffset, obj.transform.position.z);
                     instantiateGO(obj, name, prop);
-                    List<object> pL = new List<object>(2);
-                    //object[] pL = new object[2];
-                    //pL[0] = obj;
-                    // pL[1] = prop;
-                    pL.Add(obj);
-                    pL.Add(prop);
-                    if (!initGame) geometryMap.Add(name, pL);
+                    if(!initGame) geometryMap.Add(name, new List<object> { obj, prop });
+                    if(prop.hasCollider)
+                    {
+                        MeshCollider mc = obj.AddComponent<MeshCollider>();
+                        mc.sharedMesh = obj.GetComponent<MeshFilter>().sharedMesh;
+                        if (prop.isGrabable) mc.convex = true;
+                    }
                 }
                 else
                 {
-                    object[] o = geometryMap[name].ToArray();
+                    List<object> o = geometryMap[name];
                     GameObject obj2 = (GameObject)o[0];
                     PropertiesGAMA p = (PropertiesGAMA)o[1];
                     if (p == prop)
                     {
                         obj = obj2;
+                        polyGen.UpdatePolygon(obj, pt);
+                        if(prop.hasCollider) obj.GetComponent<MeshCollider>().sharedMesh = obj.GetComponent<MeshFilter>().sharedMesh;
                     }
-                    else
-                    {
-                        Debug.Log("not found obj");
-                    }
-                    polyGen.UpdatePolygon(obj, pt);
                 }
-
-                obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y + yOffset,
-                    obj.transform.position.z);
-
-                if (prop.hasCollider)
-                {
-                    if (!obj.TryGetComponent<MeshCollider>(out MeshCollider mc))
-                    {
-                        mc = obj.AddComponent<MeshCollider>();
-                        if (prop.isGrabable) mc.convex = true;
-                    }
-                    mc.sharedMesh = obj.GetComponent<MeshFilter>().sharedMesh;
-                }
-                if (toRemove != null) toRemove.Remove(name);
+                
+                if(toRemove != null) toRemove.Remove(name);
                 cptGeom++;
             }
 
@@ -943,7 +935,8 @@ public class SimulationManager : MonoBehaviour
 
 
         ManageOtherInformation();
-        List<string> toRemove = new List<string>(geometryMap.Keys);
+        toRemove.Clear();
+        toRemove.UnionWith(geometryMap.Keys);
 
         // foreach (List<object> obj in geometryMap.Values) {
         //((GameObject) obj[0]).SetActive(false);
@@ -1181,10 +1174,7 @@ public class SimulationManager : MonoBehaviour
 
     private void TryReconnect()
     {
-        Dictionary<string, string> args = new Dictionary<string, string> {
-            {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") }};
-
-        ConnectionManager.Instance.SendExecutableAsk("ping_GAMA", args);
+        ConnectionManager.Instance.SendExecutableAsk("ping_GAMA", connectionID);
 
         currentTimePing = maxTimePing;
         Debug.Log("Sent Ping test");
