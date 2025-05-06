@@ -1,5 +1,6 @@
 using System;
-using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 
 public class PolygonGenerator
@@ -37,78 +38,101 @@ public class PolygonGenerator
         instance = null;
     }
 
-
-
-    public GameObject GeneratePolygons(bool editMode, String name, int[] points, PropertiesGAMA prop, int precision)
+    public GameObject GeneratePolygons(bool editMode, string name, int[] points, PropertiesGAMA prop, int precision)
     {
+        int pointCount = points.Length;
+        int vectorCount = pointCount / 2;
 
-    
-        List <Vector2> pts = new List<Vector2>();
-        for (int i = 0; i < points.Length - 1; i = i+2)
+        // Copy the managed array into a NativeArray for Burst processing
+        NativeArray<int> nativePoints = new NativeArray<int>(points, Allocator.TempJob);
+        NativeArray<Vector2> nativeResults = new NativeArray<Vector2>(vectorCount, Allocator.TempJob);
+
+        // Schedule the Burst-compiled job to convert points in parallel using full conversion logic.
+        var job = new CoordinateConversionJob
         {
-            Vector2 p = converter.fromGAMACRS2D(points[i], points[i + 1]);
-            pts.Add(p);
-        }
-        Vector2[] MeshDataPoints = pts.ToArray();
-        //Color32 col = new Color32(BitConverter.GetBytes(prop.color[0])[0], BitConverter.GetBytes(prop.color[1])[0],
-        //          BitConverter.GetBytes(prop.color[2])[0], BitConverter.GetBytes(prop.color[3])[0]);
+            points = nativePoints,
+            results = nativeResults,
+            coefX = converter.GamaCRSCoefX,
+            coefY = converter.GamaCRSCoefY,
+            offsetX = converter.GamaCRSOffsetX,
+            offsetY = converter.GamaCRSOffsetY,
+            precision = converter.precision
+        };
 
-       Color32 col = Color.black;
-       Material mat = null;
-        if (prop.visible)
-        {
-            if (prop.material != null && prop.material != "")
-            {
-                mat = Resources.Load<Material>(prop.material);
-            }
+        JobHandle handle = job.Schedule(vectorCount, 64);
+        handle.Complete();
 
-            if (prop.red != -1 )
-            {
-                col = new Color32(BitConverter.GetBytes(prop.red)[0], BitConverter.GetBytes(prop.green)[0],
-                   BitConverter.GetBytes(prop.blue)[0], BitConverter.GetBytes(prop.alpha)[0]);
-            } else
-            {
-               if (mat != null)
-                {
-                    col = mat.color;
-                }
-            } 
-           
-        }
-        GameObject obj = GeneratePolygon(editMode, name, MeshDataPoints, ((float)prop.height) / precision, mat, col);
-        
-        if (!prop.visible)
-        {
-            MeshRenderer r =  obj.GetComponent<MeshRenderer>();
-            if (r != null) r.enabled = false;
-            foreach (MeshRenderer rr in obj.GetComponentsInChildren<MeshRenderer>())
-            {
-                if (rr != null) rr.enabled = false;
+        // Copy results back to a managed array.
+        Vector2[] pts = nativeResults.ToArray();
 
-            }
-            LineRenderer lr = obj.GetComponent<LineRenderer>();
-            if (lr != null)
-                lr.enabled = false;
-        }
-        return obj;
+        // Dispose of the NativeArrays.
+        nativePoints.Dispose();
+        nativeResults.Dispose();
 
+        return GeneratePolygons(editMode, name, pts, prop, precision);
     }
 
-
-    // Start is called before the first frame update
-    GameObject GeneratePolygon(bool editMode, String name, Vector2[] meshDataPoints, float extrusionHeight, Material mat, Color32 color)
+    /// <summary>
+    /// Generate polygons from an array of Vector2 coordinates.
+    /// </summary>
+    public GameObject GeneratePolygons(bool editMode, string name, Vector2[] meshDataPoints, PropertiesGAMA prop, int precision)
     {
-      
+        // Prepare color from GAMA properties.
+        Color32 col = Color.black;
+        if (prop.visible)
+        {
+            col = new Color32(
+                BitConverter.GetBytes(prop.red)[0],
+                BitConverter.GetBytes(prop.green)[0],
+                BitConverter.GetBytes(prop.blue)[0],
+                BitConverter.GetBytes(prop.alpha)[0]);
+        }
+
+        // Load a custom material if specified.
+        Material mat = null;
+        if (prop.visible && !string.IsNullOrEmpty(prop.material))
+        {
+            // e.g. "Assets/Materials/MyMaterial" (without extension) if placed in the Resources folder.
+            mat = Resources.Load<Material>(prop.material);
+        }
+
+        // Calculate the extrusion height.
+        float extrHeight = (float)prop.height / precision;
+
+        // Create the extruded polygon object.
+        GameObject obj = GeneratePolygon(name, meshDataPoints, extrHeight, col, mat);
+
+        // Hide mesh if not visible.
+        if (!prop.visible)
+        {
+            MeshRenderer r = obj.GetComponent<MeshRenderer>();
+            if (r != null)
+                r.enabled = false;
+            foreach (MeshRenderer rr in obj.GetComponentsInChildren<MeshRenderer>())
+            {
+                if (rr != null)
+                    rr.enabled = false;
+            }
+        }
+
+        return obj;
+    }
+
+    /// <summary>
+    /// Internal helper that creates the GameObject with PolyExtruderLight.
+    /// </summary>
+    private GameObject GeneratePolygon(string name, Vector2[] meshDataPoints, float extrusionHeight, Color32 color, Material mat)
+    {
+        // Create a new GameObject with the given name.
         GameObject polyExtruderGO = new GameObject(name);
 
-        // Optionally offset the Y position
+        // Optionally offset the Y position.
         Vector3 pos = polyExtruderGO.transform.position;
         pos.y += offsetYBackgroundGeom;
         polyExtruderGO.transform.position = pos;
 
-        // Add PolyExtruderLight and call createPrism
+        // Add PolyExtruderLight and call createPrism.
         PolyExtruderLight polyExtruderLight = polyExtruderGO.AddComponent<PolyExtruderLight>();
-        // The final parameter is the material, which can be null
         polyExtruderLight.createPrism(
             name,
             extrusionHeight,
@@ -120,7 +144,6 @@ public class PolygonGenerator
         return polyExtruderGO;
     }
 
-
     /// <summary>
     /// Update the mesh of a polygon GameObject with PolyExtruderLight.
     /// </summary>
@@ -130,19 +153,35 @@ public class PolygonGenerator
         MeshFilter meshFilter = obj.GetComponent<MeshFilter>();
 
         int pointCount = points.Length;
-        Vector2[] pts = new Vector2[pointCount / 2]; // Allocate array with required size
+        int vectorCount = pointCount / 2;
 
-        for (int i = 0; i < pointCount - 1; i += 2)
+        NativeArray<int> nativePoints = new NativeArray<int>(points, Allocator.TempJob);
+        NativeArray<Vector2> nativeResults = new NativeArray<Vector2>(vectorCount, Allocator.TempJob);
+
+        var job = new CoordinateConversionJob
         {
-            pts[i / 2] = converter.fromGAMACRS2D(points[i], points[i + 1]);
-        }
+            points = nativePoints,
+            results = nativeResults,
+            coefX = converter.GamaCRSCoefX,
+            coefY = converter.GamaCRSCoefY,
+            offsetX = converter.GamaCRSOffsetX,
+            offsetY = converter.GamaCRSOffsetY,
+            precision = converter.precision
+        };
+
+        JobHandle handle = job.Schedule(vectorCount, 64);
+        handle.Complete();
+
+        Vector2[] pts = nativeResults.ToArray();
+
+        nativePoints.Dispose();
+        nativeResults.Dispose();
 
         if (polyExtruderGO != null)
         {
             polyExtruderGO.updatePrism(meshFilter, pts);
         }
     }
-
 
 }
 
