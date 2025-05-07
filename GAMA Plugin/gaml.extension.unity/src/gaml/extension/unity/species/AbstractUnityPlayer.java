@@ -117,11 +117,11 @@ public class AbstractUnityPlayer extends GamlAgent{
 	}
 
 	@getter (X_MOVEMENT_STRAFE)
-	public static Double getXMovementStrafe(final IAgent agent) {
-		return (Double) agent.getAttribute(X_MOVEMENT_STRAFE);
+	public static Boolean getXMovementStrafe(final IAgent agent) {
+		return (Boolean) agent.getAttribute(X_MOVEMENT_STRAFE);
 	}
 	@setter(X_MOVEMENT_STRAFE)
-	public static void setXMovementStrafe(final IAgent agent, final Double val) {
+	public static void setXMovementStrafe(final IAgent agent, final Boolean val) {
 		agent.setAttribute(X_MOVEMENT_STRAFE, val);
 	}
 	

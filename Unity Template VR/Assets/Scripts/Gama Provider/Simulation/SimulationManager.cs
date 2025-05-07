@@ -104,6 +104,7 @@ public class SimulationManager : MonoBehaviour
     // ############################################ UNITY FUNCTIONS ############################################
     void Awake()
     {
+        Debug.Log("Simulation Manager");
         Instance = this;
         SelectedObjects = new List<GameObject>();
         // toDelete = new List<GameObject>();
@@ -1070,15 +1071,15 @@ public class SimulationManager : MonoBehaviour
                 parameters = ConnectionParameter.CreateFromJSON(content);
                 converter = new CoordinateConverter(parameters.precision, GamaCRSCoefX, GamaCRSCoefY, GamaCRSCoefY, GamaCRSOffsetX, GamaCRSOffsetY, GamaCRSOffsetZ);
                 TimeSendPosition = (0.0f + parameters.minPlayerUpdateDuration) / (parameters.precision + 0.0f);
-
-                GameObject loc = GameObject.FindGameObjectWithTag("locomotion");
+                GameObject loc = (locomotion != null && locomotion.Count > 0) ? locomotion[0] : null;
                 if (loc != null)
                 {
                     MoveHorizontal h = loc.GetComponent<MoveHorizontal>();
                     MoveVertical v = loc.GetComponent<MoveVertical>();
-
+                   
                     if (h != null)
                     {
+                   
                         if (parameters.speedx != null && parameters.speedx != -1) h.speed = Convert.ToSingle(parameters.speedx);
                         if (parameters.speedrotation != null && parameters.speedrotation != -1) h.speedRotation = Convert.ToSingle(parameters.speedrotation);
                         if (parameters.strafe != null) h.Strafe = parameters.strafe;

@@ -78,7 +78,7 @@ species unity_linker parent: abstract_unity_linker {
 		
 		// add the up_tree unity_property to the list of unity_properties
 		unity_properties << up_road;
-		
+		 
 		
 		unity_aspect building_aspect <- geometry_aspect(10.0, #gray, precision);
 		
