@@ -29,22 +29,22 @@ global {
 			}
 			loop times: nb_blocks {
 				if free_place = nil {break;}
-				create block {
+				create block_ag { 
 					shape <- square(block_size);
 					location <- any_location_in(free_place);
 					free_place <- free_place - (shape + 2.0);
 				}
-			} 
+			}  
 			
 		}
-		ask block {
+		ask block_ag {
 			bounds <- (shape + distance_hostspot) inter free_place;
 		}
 		
 		list<geometry> generated_lines <- generate_pedestrian_network([],[free_place],true,false,5,0.001,true,0.01,0.01,0.0,0.0);
 		
 		create pedestrian_path from: generated_lines  {
-			do initialize bounds:[free_place] distance: min(10.0,(block closest_to self) distance_to self) masked_by: [block] distance_extremity: 1.0;
+			do initialize bounds:[free_place] distance: min(10.0,(block_ag closest_to self) distance_to self) masked_by: [block_ag] distance_extremity: 1.0;
 		}
 		
 		
@@ -69,7 +69,7 @@ species pedestrian_path skills: [pedestrian_road]{
 	}	
 }
 
-species block {
+species block_ag {
 	rgb color <- #black;
 	rgb color_hotspot <- #red;
 	rgb color_hotspot_dist <- rgb(255,0,0.0,0.5);
@@ -84,7 +84,7 @@ species block {
 		}
 	}
 	action update_hotspots {
-		list<block> hotspots <- block where each.is_hotspot;
+		list<block_ag> hotspots <- block_ag where each.is_hotspot;
 		if (empty(hotspots)) {
 			ask simple_agentA + simple_agentB {
 				my_hot_spot <- nil;
@@ -120,7 +120,7 @@ species block {
 
 species simple_agentA  skills: [pedestrian ] {
 	rgb color <- #blue;
-	block my_hot_spot;
+	block_ag my_hot_spot;
 	geometry bounds;
 	point target;
 	path my_path;
@@ -135,7 +135,7 @@ species simple_agentA  skills: [pedestrian ] {
 		use_geometry_waypoint <- true;
 		tolerance_waypoint<- 0.1;
 		pedestrian_species <- [simple_agentA, simple_agentB];
-		obstacle_species<-[block];
+		obstacle_species<-[block_ag];
 			
 		pedestrian_model <- "simple";
 		A_pedestrians_SFM <- 1.5;
@@ -204,7 +204,7 @@ experiment simple_simulation type: gui autorun: true{
 			species simple_agentA;
 			species simple_agentB;
 			species static_object;
-			species block;
+			species block_ag;
 		}
 	}
 }

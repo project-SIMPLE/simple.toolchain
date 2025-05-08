@@ -34,7 +34,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	init {
 		do define_properties;
-		do add_background_geometries(block,up_geom);
+		do add_background_geometries(block_ag,up_geom);
 		do add_background_geometries(static_object,up_tree);
 	}
 	
@@ -64,7 +64,7 @@ species unity_linker parent: abstract_unity_linker {
 	}
 
 	action add_to_send_parameter(agent player, map map_to_send) {
-		map_to_send["hotspots"] <- (block where (each.is_hotspot)) collect string(int(each));
+		map_to_send["hotspots"] <- (block_ag where (each.is_hotspot)) collect string(int(each));
 	}
 	
 	
@@ -78,7 +78,7 @@ species unity_linker parent: abstract_unity_linker {
 		}
 	}
 	action update_hotspot(string id) {
-		block b <- block first_with (each.name = id);
+		block_ag b <- block_ag first_with (each.name = id);
 		
 		if (b != nil) {
 			ask b {

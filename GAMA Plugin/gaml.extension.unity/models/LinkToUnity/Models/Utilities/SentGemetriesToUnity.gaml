@@ -74,7 +74,7 @@ species unity_linker parent: abstract_unity_linker {
 		
 		//define the up_tree unity property, with the name "tree", no specific layer, no interaction, and the agents location are not sent back 
 		//to GAMA. 
-		up_road<- geometry_properties("road", nil, road_aspect, #collider, false);
+		up_road<- geometry_properties("road", string(nil), road_aspect, #collider, false);
 		
 		// add the up_tree unity_property to the list of unity_properties
 		unity_properties << up_road;
@@ -84,7 +84,7 @@ species unity_linker parent: abstract_unity_linker {
 		
 		//define the up_geom unity property, with the name "polygon", no specific layer, no interaction, and the agents location are not sent back 
 		//to GAMA. 
-		up_building <- geometry_properties("building", nil, building_aspect, #collider, false);
+		up_building <- geometry_properties("building", string(nil), building_aspect, #collider, false);
 		
 		// add the up_geom unity_property to the list of unity_properties
 		unity_properties << up_building;
