@@ -541,6 +541,7 @@ public class SimulationManager : MonoBehaviour
     void GenerateGeometries(bool initGame, HashSet<string> toRemove)
     {
 
+
         if (infoWorld.position != null && infoWorld.position.Count > 1 && (initGame || !sendMessageToReactivatePositionSent))
         {
             Vector3 pos = converter.fromGAMACRS(infoWorld.position[0], infoWorld.position[1], infoWorld.position[2]);
@@ -556,7 +557,7 @@ public class SimulationManager : MonoBehaviour
 
         int cptPrefab = 0;
         int cptGeom = 0;
-   //     Debug.Log("GenerateGeometries : initGame: " + initGame);
+       Debug.Log("GenerateGeometries : initGame: " + initGame);
 
         for (int i = 0; i < infoWorld.names.Count; i++)
         {
@@ -564,14 +565,17 @@ public class SimulationManager : MonoBehaviour
             string propId = infoWorld.propertyID[i];
            
             PropertiesGAMA prop = propertyMap[propId];
+
             GameObject obj = null;
-         //   Debug.Log("name: " + name + " propId: " + propId + " prop:" + prop);
+            Debug.Log("name: " + name + " propId: " + propId + " prop:" + prop);
 
             if (prop.hasPrefab)
             {
                 if (initGame || !geometryMap.ContainsKey(name))
                 {
                     obj = instantiatePrefab(name, prop, initGame);
+                    Debug.Log("initGame: " + name);
+
                 }
                 else
                 {
@@ -662,8 +666,8 @@ public class SimulationManager : MonoBehaviour
         infoWorld = null;
     }
 
-   
 
+    bool loadedAlready = false;
 
     // ############################################ GAMESTATE UPDATER ############################################
     public void UpdateGameState(GameState newState)
@@ -671,6 +675,7 @@ public class SimulationManager : MonoBehaviour
 
         switch (newState)
         {
+
             case GameState.MENU:
                 Debug.Log("SimulationManager: UpdateGameState -> MENU");
                 break;
@@ -680,19 +685,24 @@ public class SimulationManager : MonoBehaviour
                 break;
 
             case GameState.LOADING_DATA:
-                Debug.Log("SimulationManager: UpdateGameState -> LOADING_DATA");
-                if (ConnectionManager.Instance.getUseMiddleware())
+                if (!loadedAlready)
                 {
-                    Dictionary<string, string> args = new Dictionary<string, string> {
-                         {"id", ConnectionManager.Instance.GetConnectionId() }
-                    };
-                    ConnectionManager.Instance.SendExecutableAsk("send_init_data", args);
+                    Debug.Log("SimulationManager: UpdateGameState -> LOADING_DATA");
+                    if (ConnectionManager.Instance.getUseMiddleware())
+                    {
+                        Dictionary<string, string> args = new Dictionary<string, string> {
+                             {"id", ConnectionManager.Instance.GetConnectionId() }
+                        };
+                        ConnectionManager.Instance.SendExecutableAsk("send_init_data", args);
+                    }
+                    TimerSendInit = TimeSendInit;
+                    loadedAlready = true;
                 }
-                TimerSendInit = TimeSendInit;
                 break;
 
             case GameState.GAME:
                 Debug.Log("SimulationManager: UpdateGameState -> GAME");
+                loadedAlready = false;
                 if (ConnectionManager.Instance.getUseMiddleware())
                 {
                     Dictionary<string, string> args = new Dictionary<string, string> {
