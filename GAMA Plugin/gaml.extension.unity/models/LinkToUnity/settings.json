@@ -1,13 +1,10 @@
-    
 {
 "type": "json_settings",
-                "name": "Dynamic data management",
-                "splashscreen": "./includes/splashscreen/screen.png",
-                "model_file_path": "./Models/Code Examples/Send Dynamic data.gaml",
-                "experiment_name": "vr_xp",
-                "minimal_players": "0",
-                "maximal_players": "1",
-                "selected_monitoring": "gama_screen"
+"name": "Dynamic data management",
+"splashscreen": "./includes/splashscreen/screen.png",
+"model_file_path": "/Users/patricktaillandier/Documents/GitHub/simple.toolchain/GAMA Plugin/gaml.extension.unity/models/LinkToUnity/Models/Code Examples/Send Dynamic data.gaml",
+"experiment_name": "vr_xp",
+"minimal_players": "0",
+"maximal_players": "1",
+"selected_monitoring": "gama_screen"
 }
-
-

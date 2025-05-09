@@ -21,7 +21,6 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;
@@ -64,7 +63,7 @@ public class PolyExtruderLight : MonoBehaviour
     {
         [ReadOnly] public NativeArray<Vector2> vertices;
         // results[0] = doubleArea, results[1] = centroidX, results[2] = centroidY
-        public NativeArray<float> results; 
+        public NativeArray<float> results;
 
         public void Execute()
         {
@@ -344,6 +343,7 @@ public class PolyExtruderLight : MonoBehaviour
             pointsB.Add(originalPolygonVertices[i] - polygonCentroid);
 
         List<List<Vector2>> holesB = new List<List<Vector2>>();
+
         Triangulation.triangulate(pointsB, holesB, DEFAULT_BOTTOM_Y,
                                   out List<int> indicesB, out List<Vector3> verticesB);
         redrawMesh(bottomMesh, verticesB, indicesB);

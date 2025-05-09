@@ -1080,15 +1080,15 @@ public class SimulationManager : MonoBehaviour
                     if (h != null)
                     {
                    
-                        if (parameters.speedx != null && parameters.speedx != -1) h.speed = Convert.ToSingle(parameters.speedx);
-                        if (parameters.speedrotation != null && parameters.speedrotation != -1) h.speedRotation = Convert.ToSingle(parameters.speedrotation);
-                        if (parameters.strafe != null) h.Strafe = parameters.strafe;
+                        if (parameters.speedx != -1) h.speed = Convert.ToSingle(parameters.speedx);
+                        if (parameters.speedrotation != -1) h.speedRotation = Convert.ToSingle(parameters.speedrotation);
+                        h.Strafe = parameters.strafe;
                     }
                     if (v != null)
                     {
-                        if (parameters.miny != null && parameters.miny != -1) v.minY = Convert.ToSingle(parameters.miny);
-                        if (parameters.maxy != null && parameters.maxy != -1) v.maxY = Convert.ToSingle(parameters.maxy);
-                        if (parameters.speedy != null && parameters.speedy != -1) v.Speed = Convert.ToSingle(parameters.speedy);
+                        if ( parameters.miny != -1) v.minY = Convert.ToSingle(parameters.miny);
+                        if ( parameters.maxy != -1) v.maxY = Convert.ToSingle(parameters.maxy);
+                        if (parameters.speedy != -1) v.Speed = Convert.ToSingle(parameters.speedy);
 
                     } 
                 }
@@ -1097,17 +1097,17 @@ public class SimulationManager : MonoBehaviour
                 if (moveObj != null)
                 {
                     UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets.DynamicMoveProvider p = moveObj.GetComponent<UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets.DynamicMoveProvider>();
-                    if (parameters.speedx != null && parameters.speedx != -1) p.moveSpeed = Convert.ToSingle(parameters.speedx);
-                    if (parameters.strafe != null) p.enableStrafe = parameters.strafe;
+                    if (parameters.speedx != -1) p.moveSpeed = Convert.ToSingle(parameters.speedx);
+                    p.enableStrafe = parameters.strafe;
 
 
                 }
                 handleGroundParametersRequested = true;
                 handleGeometriesRequested = true;
 
-                if (parameters.cameraclippingfar != null && parameters.cameraclippingfar != -1) Camera.main.farClipPlane = Convert.ToSingle(parameters.cameraclippingfar);
+                if ( parameters.cameraclippingfar != -1) Camera.main.farClipPlane = Convert.ToSingle(parameters.cameraclippingfar);
 
-                if (parameters.cameraclippingnear != null && parameters.cameraclippingnear != -1) Camera.main.nearClipPlane = Convert.ToSingle(parameters.cameraclippingnear);
+                if (parameters.cameraclippingnear != -1) Camera.main.nearClipPlane = Convert.ToSingle(parameters.cameraclippingnear);
 
 
                 break;
