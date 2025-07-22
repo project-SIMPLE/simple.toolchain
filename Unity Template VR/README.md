@@ -8,7 +8,7 @@ A description of the use of the template with a tutorial can be found [here](htt
 ## Installation
 
 > [!WARNING]
-> The project is being developped using **Unity Editor 6000.0.28f1**. It should work with newer versions also, as is doesn't use any version-specific features (for now), it is strongly recommanded to use exactly the same Editor version.
+> The project is being developped using **Unity Editor 6000.0.28f1**. It should work with newer versions also, as it doesn't use any version-specific features (for now), it is strongly recommanded to use exactly the same Editor version.
 
 ### Prerequisites
 
