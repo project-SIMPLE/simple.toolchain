@@ -57,10 +57,9 @@ public abstract class WebSocketConnector : MonoBehaviour
             
         } else
         {
-            if (host == null && host.Length == 0)
+            if ((host == null || host == "") && host.Length == 0)
             {
                 host = DefaultIP;
-                
             }
         }
         Debug.Log("WebSocketConnector host: " + host + " PORT: " + port + " MIDDLEWARE:" + UseMiddleware);
