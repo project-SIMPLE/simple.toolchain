@@ -8,7 +8,7 @@ A description of the use of the template with a tutorial can be found [here](htt
 ## Installation
 
 > [!WARNING]
-> The project is being developped using **Unity Editor 6000.0.28f1**. It should work with newer versions also, as it doesn't use any version-specific features (for now), it is strongly recommanded to use exactly the same Editor version.
+> The project is being developped using **Unity Editor 6000.2.14f1**. It should work with newer versions also, as it doesn't use any version-specific features (for now), it is strongly recommanded to use exactly the same Editor version.
 
 ### Prerequisites
 
@@ -57,7 +57,7 @@ Composed of two types of elements:
 ### Quick Start
 
 1. Download the silmple.template.project ([here](https://github.com/project-SIMPLE/simple.toolchain/archive/refs/heads/2024-06.zip))
-2. Import it as a Unity project. **Make sure to use the right Editor version (Unity Editor 2022.3.5f1)**.
+2. Import it as a Unity project. **Make sure to use the right Editor version (Unity Editor Unity 6.2)**.
 ![qs-1](https://github.com/user-attachments/assets/58dfd971-b89a-44aa-aaf6-77767784a596)
 3. In the Menu "File" select "Build Settings..."
 <img width="1027" alt="Build-setting_menu" src="https://github.com/user-attachments/assets/f8e5583d-c3f6-4e22-826b-c36cea979e52" />
