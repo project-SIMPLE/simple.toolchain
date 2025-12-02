@@ -138,7 +138,9 @@ public class VRModelGenerator {
 
 	private Collection<String> buildInitialListOfSpecies() {
 		Map<String, ISpecies> modelSpecies = model.getAllSpecies();
+		
 		Collection<String> result = new ArrayList<>(modelSpecies.keySet());
+		result.removeIf(a -> model.getSpecies(a).getDescription().isBuiltIn());
 		result.remove(model.getName());
 		for (String s : result) { species.put(s, new Species()); }
 		return result;
