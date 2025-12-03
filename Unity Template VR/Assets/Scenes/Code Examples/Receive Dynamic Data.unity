@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: babed66f44e8b5445b185fac4e02e130, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: 477e019ce62c14c7a9faafea0db1502a, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: f892ee88a6f7044dd9b2d954a483a619, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -229,17 +229,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_RenderingLayers: 1
   m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_ShadowRenderingLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &409981439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -445,7 +451,6 @@ MonoBehaviour:
   primaryRightHandButton: {fileID: 0}
   player: {fileID: 1717954560995467894}
   Ground: {fileID: 8708985967891482712}
-  GamaCRSOffsetZ: 0
 --- !u!1001 &546656062986481356
 PrefabInstance:
   m_ObjectHideFlags: 0
