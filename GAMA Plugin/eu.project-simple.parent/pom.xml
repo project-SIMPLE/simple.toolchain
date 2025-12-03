@@ -25,8 +25,8 @@
     <tycho-extras-version>${tycho-version}</tycho-extras-version>
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <eclipse-version>2024-06</eclipse-version>
-    <gama.p2.version>2024-06</gama.p2.version>
+    <eclipse-version>2025-03</eclipse-version>
+    <gama.p2.version>2025-06</gama.p2.version>
     
     <jdk.version>21</jdk.version>
     <gama.version>[2024.6.0,)</gama.version>
