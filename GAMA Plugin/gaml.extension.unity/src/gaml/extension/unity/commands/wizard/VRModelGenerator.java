@@ -235,7 +235,7 @@ public class VRModelGenerator {
 		env.append("WEB_APPLICATION_HOST=localhost\n");
 		env.append("WEB_APPLICATION_PORT=8000\n");
 		env.append("VERBOSE=false\n");
-		env.append("EXTRA_LEARNING_PACKAGE_PATH=\" + projectPath+ \"\n");
+		env.append("EXTRA_LEARNING_PACKAGE_PATH=\"" + projectPath+ "\"\n");
 		
 		
 		try (FileWriter fw2 = new FileWriter(projectPath + "/.env")) {
