@@ -227,6 +227,26 @@ public class VRModelGenerator {
 			e.printStackTrace();
 		}
 
+		StringBuilder env = new StringBuilder("GAMA_WS_PORT=1000\n");
+		env.append("GAMA_WS_PORT=1000\n");
+		env.append("GAMA_IP_ADDRESS=localhost\n");
+		env.append("HEADSET_WS_PORT=8080\n");
+		env.append("MONITOR_WS_PORT=8001\n");
+		env.append("WEB_APPLICATION_HOST=localhost\n");
+		env.append("WEB_APPLICATION_PORT=8000\n");
+		env.append("VERBOSE=false\n");
+		env.append("EXTRA_LEARNING_PACKAGE_PATH=\" + projectPath+ \"\n");
+		
+		
+		try (FileWriter fw2 = new FileWriter(projectPath + "/.env")) {
+			fw2.write(env.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		
+		
+
 	}
 
 	/**
@@ -421,12 +441,12 @@ public class VRModelGenerator {
 						modelUnityLinker.append("\n\t\tlist<geometry> " + idG+ " <- "+ sp +" collect (each.shape + " + buffer+ ");");
 						
 						modelUnityLinker.append("\n\t\tloop i from: 0 to: length(" + sp+ ") - 1 {");
-						modelUnityLinker.append("\n\t\t\t"+ idG+ "[i].attributes[\"name\"] <- " + sp +"[i].name"); 
+						modelUnityLinker.append("\n\t\t\t"+ idG+ "[i].attributes[\"name\"] <- " + sp +"[i].name;"); 
 						modelUnityLinker.append("\n\t\t}");
 					}
 						 
 					
-					modelUnityLinker.append("\t\tdo add_background_geometries(" + geom + ",up_" + data.property + ");");
+					modelUnityLinker.append("\n\t\tdo add_background_geometries(" + geom + ",up_" + data.property + ");");
 				}
 			}
 
