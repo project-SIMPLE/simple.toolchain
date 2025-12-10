@@ -51,6 +51,20 @@
     </repository>
 
     <repository>
+      <id>p2Repo</id>
+      <name>p2Repo</name>
+      <url>https://updates.gama-platform.org/${gama.p2.version}</url>
+      <layout>p2</layout>
+      <snapshots>
+        <enabled>true</enabled>
+        <checksumPolicy>ignore</checksumPolicy>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+        <checksumPolicy>ignore</checksumPolicy>
+      </releases>
+    </repository>
+    <repository>
       <id>gamaRepo</id>
       <name>gamaRepo</name>
       <url>https://updates.gama-platform.org/${gama.p2.version}</url>
