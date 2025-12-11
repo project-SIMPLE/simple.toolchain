@@ -98,7 +98,7 @@
                             "type": "json_settings",
                             "name": "User interaction",
                             "splashscreen": "./includes/splashscreen/screen.png",
-                            "model_file_path": "./Models/Code Examples/Send Water data.gaml",
+                            "model_file_path": "./Models/Code Examples/User Interaction.gaml",
                             "experiment_name": "vr_xp",
                             "minimal_players": "0",
                             "maximal_players": "1",

@@ -208,7 +208,6 @@ public class VRModelGenerator {
 		
 		Path directoryP = Paths.get(projectPath);
 		Path file = Paths.get(newModelPath);
-		
 		Path relativeP = directoryP.relativize(file);
 		
 		
@@ -235,7 +234,7 @@ public class VRModelGenerator {
 		env.append("WEB_APPLICATION_HOST=localhost\n");
 		env.append("WEB_APPLICATION_PORT=8000\n");
 		env.append("VERBOSE=false\n");
-		env.append("EXTRA_LEARNING_PACKAGE_PATH=\"" + projectPath+ "\"\n");
+		env.append("EXTRA_LEARNING_PACKAGE_PATH=\"" + directoryP.getParent()+ "\"\n");
 		
 		
 		try (FileWriter fw2 = new FileWriter(projectPath + "/.env")) {
@@ -256,7 +255,7 @@ public class VRModelGenerator {
 	 */
 	public String experimentStr() {
 		StringBuilder modelExp =
-				new StringBuilder("experiment vr_xp ").append(experimentName != null ? "parent:" + experimentName : "")
+				new StringBuilder("experiment vr_xp ").append(experimentName != null ? "parent:\"" + experimentName : "\"")
 						.append(" autorun: false type: unity {\n");
 		modelExp.append("\tfloat minimum_cycle_duration <- ").append(minimumCycleDuration).append(";\n");
 		modelExp.append("\tstring unity_linker_species <- string(unity_linker);\n");
