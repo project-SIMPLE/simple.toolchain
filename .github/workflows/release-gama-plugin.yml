@@ -28,5 +28,5 @@ jobs:
 
     - name: Build with Maven
       run: |
-        mvn deploy -Prelease-composite -Dgithub-update-repo=https://x-access-token:${{ secrets.ACTIONS_TOKEN }}@github.com/project-SIMPLE/simple.toolchain
+        mvn deploy -Prelease-composite -Dgithub-update-repo=https://x-access-token:${{ secrets.SIMPLE_ORGA_TOKEN }}@github.com/project-SIMPLE/simple.toolchain
       working-directory: "GAMA Plugin/eu.project-simple.parent"
