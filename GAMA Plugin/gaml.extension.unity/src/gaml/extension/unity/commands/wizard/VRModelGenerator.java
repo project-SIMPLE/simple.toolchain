@@ -233,9 +233,23 @@ public class VRModelGenerator {
 		env.append("MONITOR_WS_PORT=8001\n");
 		env.append("WEB_APPLICATION_HOST=localhost\n");
 		env.append("WEB_APPLICATION_PORT=8000\n");
+		
+		env.append("# Allow reaching webplatform with any mDNS hostname\n");
+		env.append("# http://<WEB_HOSTNAME>.local:<WEB_APPLICATION_PORT>\n");
+		env.append("# => Default to http://simple.local:5173\n");
+		env.append("#WEB_HOSTNAME=simple\n");
+		
 		env.append("VERBOSE=false\n");
 		env.append("EXTRA_LEARNING_PACKAGE_PATH=\"" + directoryP.getParent()+ "\"\n");
 		
+		env.append("# Be careful, this will display A LOT of messages\n");
+		env.append("# List IP addresses of headsets you want the middleware to scrcpy\n");
+		env.append("# Each IP should be separated with a \";\" as shown below\n");
+		env.append("# HEADSETS_IP=\"192.168.68.178;192.168.68.180;\"\n");
+		
+		env.append("# Will pro-actively entirely remove player from GAMA / Middleware if device disconnect\n");
+		env.append("# Default to `false`\n");
+		env.append("# AGGRESSIVE_DISCONNECT=false\n");
 		
 		try (FileWriter fw2 = new FileWriter(projectPath + "/.env")) {
 			fw2.write(env.toString());
