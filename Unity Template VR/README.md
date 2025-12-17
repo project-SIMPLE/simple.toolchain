@@ -3,18 +3,17 @@
 This project allows to adapt a GAMA simulation to a VR environment created with Unity. It provides the VR developer with a game and connection management system, including GameObjects, methods and events that can be hooked. A list of these elements and how to use them is provided in the [**Documentation**](#documentation) section.
 
 
-A description of the use of the template with a tutorial can be found [here](https://github.com/project-SIMPLE/simple.toolchain/wiki/Tutorial-%E2%80%90-From-GAMA-model-to-Virtual-Universe-%E2%80%90-case-of-a-traffic-model).
+A description of the use of the template with a tutorial can be found [here](
+https://github.com/project-SIMPLE/simple.toolchain/wiki/02-Tutorial-%E2%80%90-From-GAMA-model-to-Virtual-Universe-%E2%80%90-case-of-a-traffic-model).
 
 ## Installation
 
 > [!WARNING]
-> The project is being developped using **Unity Editor 6000.2.14f1**. It should work with newer versions also, as it doesn't use any version-specific features (for now), it is strongly recommanded to use exactly the same Editor version.
+> The project is being developped using **Unity Editor 6000.3.0f1**. It should work with newer versions also, as it doesn't use any version-specific features (for now), it is strongly recommanded to use exactly the same Editor version.
 
 ### Prerequisites
 
-Once the project is opened in Unity, if you have any errors, you can check the following points:
-- Make sure that **Newtonsoft Json** is installed. Normaly, [cloning this repo](https://github.com/project-SIMPLE/simple.toolchain/) should ensure that it is installed. But if it's not the case, follow the tutorial on this [link](https://github.com/applejag/Newtonsoft.Json-for-Unity/wiki/Install-official-via-UPM).
-- To work properly, we assume that you already have a compatible GAMA model. It is also highly recommended that you install [**Gama Server Middleware**](https://github.com/project-SIMPLE/GamaServerMiddleware) as well.
+To work properly, we assume that you already have a compatible GAMA model. It is also highly recommended that you install [**Gama Server Middleware**](https://github.com/project-SIMPLE/GamaServerMiddleware) as well.
 
 > [!TIP]
 > **For Windows users**, make sure that the folder Assets/Plugins contains a .dll file called websocket-sharp. If not, download it from [this repo](https://github.com/sta/websocket-sharp). And place it in Assets/Plugins in your Unity project.
@@ -56,8 +55,8 @@ Composed of two types of elements:
 
 ### Quick Start
 
-1. Download the silmple.template.project ([here](https://github.com/project-SIMPLE/simple.toolchain/archive/refs/heads/2024-06.zip))
-2. Import it as a Unity project. **Make sure to use the right Editor version (Unity Editor Unity 6.2)**.
+1. Download the silmple.template.project ([here](https://github.com/project-SIMPLE/simple.toolchain/archive/refs/heads/Unity-6.zip))
+2. Import it as a Unity project. **Make sure to use the right Editor version (Unity Editor Unity 6.3)**.
 ![qs-1](https://github.com/user-attachments/assets/58dfd971-b89a-44aa-aaf6-77767784a596)
 3. In the Menu "File" select "Build Settings..."
 <img width="1027" alt="Build-setting_menu" src="https://github.com/user-attachments/assets/f8e5583d-c3f6-4e22-826b-c36cea979e52" />
