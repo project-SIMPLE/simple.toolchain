@@ -57,14 +57,15 @@ Composed of two types of elements:
 
 1. Download the silmple.template.project ([here](https://github.com/project-SIMPLE/simple.toolchain/archive/refs/heads/Unity-6.zip))
 2. Import it as a Unity project. **Make sure to use the right Editor version (Unity Editor Unity 6.3)**.
-![qs-1](https://github.com/user-attachments/assets/58dfd971-b89a-44aa-aaf6-77767784a596)
-3. In the Menu "File" select "Build Settings..."
-<img width="1027" alt="Build-setting_menu" src="https://github.com/user-attachments/assets/f8e5583d-c3f6-4e22-826b-c36cea979e52" />
+   <img width="1056" alt="Capture d’écran 2026-01-09 à 10 57 40" src="https://github.com/user-attachments/assets/f47bdea1-fa3e-435b-8093-89766091d8f0" />
+4. In the Menu "File" select "Build Profiles"
+<img width="1027"  alt="Capture d’écran 2026-01-09 à 10 59 05" src="https://github.com/user-attachments/assets/080fc718-2115-4a89-9d00-577b28d9cbf1" />
 
-4. Select "Android" in "Platform", then click on "Switch Platform". You can after build and deploy the application on the headset by clicking on "Build and Run".
-<img width="642" alt="Build-setting" src="https://github.com/user-attachments/assets/5fab90c2-c11d-4a5b-a5c8-c0503b2a413f" />
+6. Select "Android" in "Platform", then click on "Switch Platform". You can after build and deploy the application on the headset by clicking on "Build and Run".
 
-5. To run the application in conjunction with GAMA, make sure you have installed [GAMA 2024.07](https://github.com/gama-platform/gama/releases/tag/2024.07.0) and the [Unity Plugin for GAMA](https://github.com/project-SIMPLE/simple.toolchain/tree/2024-06/GAMA%20Plugin). Information on installing the plugin is available [here](https://github.com/project-SIMPLE/simple.toolchain/tree/2024-06/GAMA%20Plugin#installation). The plugin provides a set of model (added in Plugin models/LinkToUnity) that works with the Unity project.
+<img width="793" alt="Capture d’écran 2026-01-09 à 11 09 11" src="https://github.com/user-attachments/assets/d49ee2dd-fb29-4169-8847-73acda1c92a0" />
+
+7. To run the application in conjunction with GAMA, make sure you have installed [GAMA 2025.06](https://gama-platform.org/download) and the [Unity Plugin for GAMA](https://github.com/project-SIMPLE/simple.toolchain/tree/Unity-6/GAMA%20Plugin). Information on installing the plugin is available [here](https://github.com/project-SIMPLE/simple.toolchain/tree/Unity-6/GAMA%20Plugin#installation). The plugin provides a set of model (added in Plugin models/LinkToUnity) that works with the Unity project.
 
 
 ## Documentation
