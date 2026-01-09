@@ -269,7 +269,7 @@ public class VRModelGenerator {
 	 */
 	public String experimentStr() {
 		StringBuilder modelExp =
-				new StringBuilder("experiment vr_xp ").append(experimentName != null ? "parent:\"" + experimentName : "\"")
+				new StringBuilder("experiment vr_xp ").append(experimentName != null ? "parent:\"" + experimentName +"\"": "")
 						.append(" autorun: false type: unity {\n");
 		modelExp.append("\tfloat minimum_cycle_duration <- ").append(minimumCycleDuration).append(";\n");
 		modelExp.append("\tstring unity_linker_species <- string(unity_linker);\n");
