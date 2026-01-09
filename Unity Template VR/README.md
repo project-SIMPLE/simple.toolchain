@@ -9,7 +9,7 @@ https://github.com/project-SIMPLE/simple.toolchain/wiki/02-Tutorial-%E2%80%90-Fr
 ## Installation
 
 > [!WARNING]
-> The project is being developped using **Unity Editor 6000.3.0f1**. It should work with newer versions also, as it doesn't use any version-specific features (for now), it is strongly recommanded to use exactly the same Editor version.
+> The project is being developped using **Unity Editor 6000.3.0f1**. It should work with newer versions also, as it doesn't use any version-specific features (for now), it is strongly recommanded to use exactly the same Editor version. It is recommended to install the “Visual Studio Code” and “Android Build Support” modules with Unity.
 
 ### Prerequisites
 
