@@ -557,8 +557,7 @@ public class SimulationManager : MonoBehaviour
 
         int cptPrefab = 0;
         int cptGeom = 0;
-       Debug.Log("GenerateGeometries : initGame: " + initGame);
-
+     
         for (int i = 0; i < infoWorld.names.Count; i++)
         {
             string name = infoWorld.names[i];
@@ -567,15 +566,13 @@ public class SimulationManager : MonoBehaviour
             PropertiesGAMA prop = propertyMap[propId];
 
             GameObject obj = null;
-            Debug.Log("name: " + name + " propId: " + propId + " prop:" + prop);
-
+         
             if (prop.hasPrefab)
             {
                 if (initGame || !geometryMap.ContainsKey(name))
                 {
                     obj = instantiatePrefab(name, prop, initGame);
-                    Debug.Log("initGame: " + name);
-
+         
                 }
                 else
                 {
@@ -740,7 +737,6 @@ public class SimulationManager : MonoBehaviour
         Debug.Log("GroundParameters : Beginnig ground initialization");
         if (Ground == null)
         {
-           // Debug.LogError("SimulationManager: Ground not set");
             return;
         }
         Vector3 ls = converter.fromGAMACRS(parameters.world[0], parameters.world[1], 0);
