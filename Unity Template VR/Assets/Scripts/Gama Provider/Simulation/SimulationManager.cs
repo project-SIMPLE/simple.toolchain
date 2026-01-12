@@ -626,14 +626,15 @@ public class SimulationManager : MonoBehaviour
                 {
                     obj = polyGen.GeneratePolygons(false, name, pt, prop, parameters.precision);
                     obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y + yOffset, obj.transform.position.z);
-                    instantiateGO(obj, name, prop);
-                    if(!initGame) geometryMap.Add(name, new List<object> { obj, prop });
-                    if(prop.hasCollider)
+                   if(prop.hasCollider)
                     {
                         MeshCollider mc = obj.AddComponent<MeshCollider>();
                         mc.sharedMesh = obj.GetComponent<MeshFilter>().sharedMesh;
                         if (prop.isGrabable) mc.convex = true;
                     }
+                    instantiateGO(obj, name, prop);
+                    if(!initGame) geometryMap.Add(name, new List<object> { obj, prop });
+                    
                 }
                 else
                 {
@@ -872,7 +873,7 @@ public class SimulationManager : MonoBehaviour
             }
             if (interaction.colliders.Count == 0)
             {
-                Collider[] cs = obj.GetComponentsInChildren<Collider>();
+                Collider[] cs = obj.GetComponentsInChildren<Collider>(true);
                 if (cs != null)
                 {
                     foreach (Collider c in cs)
