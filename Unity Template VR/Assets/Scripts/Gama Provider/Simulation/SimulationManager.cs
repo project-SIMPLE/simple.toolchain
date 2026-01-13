@@ -869,7 +869,7 @@ public class SimulationManager : MonoBehaviour
             }
             if (interaction.colliders.Count == 0)
             {
-                Collider[] cs = obj.GetComponentsInChildren<Collider>(true);
+                Collider[] cs = obj.GetComponentsInChildren<Collider>();
                 if (cs != null)
                 {
                     foreach (Collider c in cs)
@@ -908,6 +908,9 @@ public class SimulationManager : MonoBehaviour
                 {
                     GameObject b = l.renderers[0].gameObject;
                     Collider c = b.GetComponent<Collider>();
+                    if (c != null && c.bounds.extents.x == 0) 
+                        c = null;
+                
                     if (c == null)
                     {
                         BoxCollider bc = b.AddComponent<BoxCollider>();
@@ -921,6 +924,8 @@ public class SimulationManager : MonoBehaviour
             else
             {
                 Collider c = obj.GetComponent<Collider>();
+               if (c != null && c.bounds.extents.x == 0) 
+                    c = null;
                 if (c == null)
                 {
                     BoxCollider bc = obj.AddComponent<BoxCollider>();
@@ -1013,12 +1018,24 @@ public class SimulationManager : MonoBehaviour
 
     }
 
+
+    private static readonly string[] colorNames = { "_BaseColor", "_Color", "_MainColor", "Color", "BaseColor" };
     static public void ChangeColor(GameObject obj, Color color)
     {
         Renderer[] renderers = obj.gameObject.GetComponentsInChildren<Renderer>();
         for (int i = 0; i < renderers.Length; i++)
         {
-            renderers[i].material.color = color;
+            Material mat = renderers[i].material;
+           
+            foreach (string prop in colorNames)
+            { 
+                if (mat.HasProperty(prop))
+                {
+                    mat.SetColor(prop, color);
+                    break; 
+                }
+            }
+           
         }
     }
     protected virtual void AdditionalInitAfterGeomLoading()
