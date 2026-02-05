@@ -9,7 +9,7 @@ https://github.com/project-SIMPLE/simple.toolchain/wiki/02-Tutorial-%E2%80%90-Fr
 ## Installation
 
 > [!WARNING]
-> The project is being developped using **Unity Editor 6000.3.0f1**. It should work with newer versions also, as it doesn't use any version-specific features (for now), it is strongly recommanded to use exactly the same Editor version. It is recommended to install the “Visual Studio Code” and “Android Build Support” modules with Unity.
+> The project is being developped using **Unity Editor 6000.3.0f1**. It should work with newer versions also, as it doesn't use any version-specific features (for now), it is strongly recommended to use exactly the same Editor version. It is recommended to install the “Visual Studio Code” and “Android Build Support” modules with Unity.
 
 ### Prerequisites
 
@@ -47,7 +47,7 @@ Composed of two types of elements:
  - Materials: includes different materials, especially for water and terrain.
  - Prefabs: includes different prefabs:
      - GAMA Link: Prefabs dedicated to the connection with GAMA, in particular "Connection Manager" to manage the connection between Unity and GAMA, and "Game Manager" to manage the game and the messages sent to/from GAMA.
-     - Player: Prefabs dedicated to the management of the VR player. It includes two types of players - FPS player, where the player walks on a ground and can teleport; Sky view player, where the player flies in the sky (no gravity) and can move horizontally and vertically.
+     - Player: Prefabs dedicated to the management of the VR player. It includes two types of players - FPS player, where the player walks on a ground and can teleport and Sky view player, where the player flies in the sky (no gravity) and can move horizontally and vertically.
      - Utils: contains a Debug overlay that will display all the elements display in the console (using the Debug.Log() method).
      - Visual Prefabs: contains a set of 3D assets that can be used for different purposes.
 
@@ -55,7 +55,7 @@ Composed of two types of elements:
 
 ### Quick Start
 
-1. Download the silmple.template.project ([here](https://github.com/project-SIMPLE/simple.toolchain/archive/refs/heads/Unity-6.zip))
+1. Download the simple.template.project ([here](https://github.com/project-SIMPLE/simple.toolchain/archive/refs/heads/Unity-6.zip))
 2. Import it as a Unity project. **Make sure to use the right Editor version (Unity Editor Unity 6.3)**.
    <img width="1056" alt="Capture d’écran 2026-01-09 à 10 57 40" src="https://github.com/user-attachments/assets/f47bdea1-fa3e-435b-8093-89766091d8f0" />
 4. In the Menu "File" select "Build Profiles"
@@ -71,7 +71,7 @@ Composed of two types of elements:
 ## Documentation
 
 This section focuses only on the C# scripts which are useful for a Unity developer. The scripts not mentioned here are at least commented.
-**Important note:** As all the scripts which name finishes by "Manager" are instantiated when Unity is launched in the "Managers" GameObject, they are all developed using the Singleton Pattern. Hence trying to instantiate in some external scripts could break the default mechanisms. To call a method from one of these classes, one should rather use the following code snippet :
+**Important note:** As all the scripts whose name finishes by "Manager" are instantiated when Unity is launched in the "Managers" GameObject, they are all developed using the Singleton Pattern. Hence trying to instantiate in some external scripts could break the default mechanisms. To call a method from one of these classes, one should rather use the following code snippet :
 
 ```csharp
 NameOfClassManager.Instance.SomeMethod();
