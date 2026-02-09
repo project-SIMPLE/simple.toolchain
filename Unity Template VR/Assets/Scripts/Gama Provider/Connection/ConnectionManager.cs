@@ -34,9 +34,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
     
     // ############################################# UNITY FUNCTIONS #############################################
     void Awake() {
-        UseMiddleware = DesktopMode ? UseMiddlewareDM : PlayerPrefs.GetString("MIDDLEWARE").Equals("Y");
-        Debug.Log("ConnectionManager: Awake : " + PlayerPrefs.GetString("MIDDLEWARE"));
-        Debug.Log("ConnectionManager Awake host: " + PlayerPrefs.GetString("IP") + " PORT: " + PlayerPrefs.GetString("PORT") + " UseMiddleware: "+ UseMiddleware);
+        Debug.Log("ConnectionManager Awake host: " + PlayerPrefs.GetString("IP") + " PORT: " + PlayerPrefs.GetString("PORT"));
 
         Instance = this;
 
@@ -80,8 +78,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
 
     protected override void HandleConnectionOpen()
     {
-        if (UseMiddleware)
-        {
+        
             var jsonId = new Dictionary<string, string> {
                 {"type", "connection"},
                 { "id", StaticInformation.getId() },
@@ -90,7 +87,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
             string jsonStringId = JsonConvert.SerializeObject(jsonId);
             SendMessageToServer(jsonStringId);
             Debug.Log("ConnectionManager: Connection opened");
-        }
+        
        
     }
 
@@ -102,9 +99,7 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
             string type = (string)jsonObj["type"];
            
         
-            if (UseMiddleware)
-            {
-                switch (type)
+            switch (type)
                 {
                     case "ping":
                         var jsonId = new Dictionary<string, string> {{"type", "pong"}};
@@ -151,17 +146,8 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
                     default:
                         break;
                 }
-            } 
-            else if (type.Equals("SimulationOutput"))
-            {
-                JValue content = (JValue)jsonObj["content"];
-               // Debug.Log("MessageSeparator: " + MessageSeparator);
-                foreach (String mes in content.ToString().Split(MessageSeparator))
-                {
-                    if (!mes.IsNullOrEmpty())
-                        OnServerMessageReceived?.Invoke(null, mes);
-                }
-            }
+            
+            
         
     }
 
@@ -179,25 +165,13 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
     // ############################################# UTILITY FUNCTIONS #############################################
     public void TryConnectionToServer() {
         if(IsConnectionState(ConnectionState.DISCONNECTED)) {
-            Debug.Log("ConnectionManager: Attempting to connect to " + (UseMiddleware?"middleware":"GAMA")+ ": ws://" + host + ":" + port + "/");
+            Debug.Log("ConnectionManager: Attempting to connect to middleware - ws://" + host + ":" + port + "/");
             connectionRequested = true;
             UpdateConnectionState(ConnectionState.PENDING);
 
             GetSocket().Connect();
              
-            if (! UseMiddleware)  
-            {
-                Debug.Log("Create player direct :" + ConnectionManager.Instance.GetConnectionId());
-
-                  Dictionary<string, string> args = new Dictionary<string, string> {
-                    {"id", "\""+ConnectionManager.Instance.GetConnectionId()+"\""}
-                  };
-                  SendExecutableAsk("create_init_player", args);
-
-                 
-                UpdateConnectionState(ConnectionState.AUTHENTICATED); 
-
-            }
+           
         } else {
             Debug.LogWarning("ConnectionManager: Already connected to middleware: " + this.currentState);
         }
@@ -292,10 +266,6 @@ private String AgentToSendInfo = "simulation[0].unity_linker[0]";
     }
 
 
-    public bool getUseMiddleware()
-    {
-        return UseMiddleware;
-    }
 
     public void Reconnect()
     {

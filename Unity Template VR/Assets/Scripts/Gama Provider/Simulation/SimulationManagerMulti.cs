@@ -18,7 +18,7 @@ public class SimulationManagerMulti : SimulationManager
 
     protected override void ManageOtherInformation()
     {
-        string id = ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId() : ("\"" + ConnectionManager.Instance.GetConnectionId() + "\"");
+        string id =  ConnectionManager.Instance.GetConnectionId() ;
          int index  = infoWorld.players.IndexOf(id);
         ranking = infoWorld.ranking[index];
         numTokens = infoWorld.numTokens;
@@ -72,7 +72,7 @@ public class SimulationManagerMulti : SimulationManager
         {
             GameObject grabbedObject = ev.interactableObject.transform.gameObject;
 
-            string id = ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId() : ("\"" + ConnectionManager.Instance.GetConnectionId() + "\"");
+            string id = ConnectionManager.Instance.GetConnectionId() ;
 
             Dictionary<string, string> args = new Dictionary<string, string> {
                          {"id", grabbedObject.name },

@@ -14,9 +14,7 @@ public abstract class WebSocketConnector : MonoBehaviour
     protected string host ;
      protected string port;
 
-    protected bool UseMiddleware;
-
-
+   
     private WebSocket socket;
 
 
@@ -37,21 +35,11 @@ public abstract class WebSocketConnector : MonoBehaviour
 
         if (DesktopMode)
         {
-            UseMiddleware = UseMiddlewareDM;
             host = "localhost";
-
-            if (UseMiddleware)  
-            {
-                port = "8080";
-            }
-            else 
-            {
-                port = "1000";
-            }
+            port = "8080";
             
         } else if (fixedProperties)
         {
-            UseMiddleware = UseMiddlewareDM;
             host = DefaultIP;
             port = DefaultPort;
             
@@ -62,7 +50,7 @@ public abstract class WebSocketConnector : MonoBehaviour
                 host = DefaultIP;
             }
         }
-        Debug.Log("WebSocketConnector host: " + host + " PORT: " + port + " MIDDLEWARE:" + UseMiddleware);
+        Debug.Log("WebSocketConnector host: " + host + " PORT: " + port );
 
         socket = new WebSocket("ws://" + host + ":" + port + "/");
 

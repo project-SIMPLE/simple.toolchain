@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
-
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Simulation;
 
 public class SimulationManager : MonoBehaviour
 {
@@ -98,12 +98,16 @@ public class SimulationManager : MonoBehaviour
     protected float TimerSendInit ;
 
     //Cache
-    Dictionary<string, string> connectionID;
+    Dictionary<string, string> connectionID = new Dictionary<string, string>();
     HashSet<string> toRemove = new HashSet<string>();
+
+    bool hasSimulator ;
 
     // ############################################ UNITY FUNCTIONS ############################################
     void Awake()
-    {
+    { 
+        hasSimulator = UnityEngine.Object.FindFirstObjectByType<XRDeviceSimulator>() != null;
+        connectionID.Add("id", ConnectionManager.Instance.GetConnectionId());
         Debug.Log("Simulation Manager");
         Instance = this;
         SelectedObjects = new List<GameObject>();
@@ -117,13 +121,7 @@ public class SimulationManager : MonoBehaviour
         playerMovement(false);
         toFollow = new List<GameObject>();
 
-        connectionID = new Dictionary<string, string>
-        {
-            {"id", ConnectionManager.Instance.getUseMiddleware()
-                    ? ConnectionManager.Instance.GetConnectionId()
-                    : ("\"" + ConnectionManager.Instance.GetConnectionId() + "\"")
-            }
-        };
+       
     }
 
 
@@ -169,7 +167,7 @@ public class SimulationManager : MonoBehaviour
     {
 
         if (sendMessageToReactivatePositionSent)
-        {
+        { 
             ConnectionManager.Instance.SendExecutableAsk("player_position_updated", connectionID);
             sendMessageToReactivatePositionSent = false;
         }
@@ -179,7 +177,7 @@ public class SimulationManager : MonoBehaviour
             InitGroundParameters();
             handleGroundParametersRequested = false;
 
-            Debug.Log("handleGroundParametersRequested: " + handleGroundParametersRequested);
+           // Debug.Log("handleGroundParametersRequested: " + handleGroundParametersRequested);
 
         }
 
@@ -225,7 +223,7 @@ public class SimulationManager : MonoBehaviour
             infoAnimation = null;
         }
 
-        if (IsGameState(GameState.LOADING_DATA) && ConnectionManager.Instance.getUseMiddleware())
+        if (IsGameState(GameState.LOADING_DATA))
         {
             if (TimerSendInit > 0)
                 TimerSendInit -= Time.deltaTime;
@@ -238,7 +236,8 @@ public class SimulationManager : MonoBehaviour
 
         if (IsGameState(GameState.GAME))
         {
-            if (readyToSendPosition && TimerSendPosition <= 0.0f && readyToSendPositionInit)
+           // Debug.Log("readyToSendPosition: " + readyToSendPosition + " readyToSendPositionInit:" + readyToSendPositionInit + " TimerSendPosition: "+ TimerSendPosition);
+            if ((readyToSendPosition && TimerSendPosition <= 0.0f)|| readyToSendPositionInit)
                 UpdatePlayerPosition();
             UpdateGameToFollowPosition();
             if (infoWorld != null && !infoWorld.isInit)
@@ -686,13 +685,10 @@ public class SimulationManager : MonoBehaviour
                 if (!loadedAlready)
                 {
                     Debug.Log("SimulationManager: UpdateGameState -> LOADING_DATA");
-                    if (ConnectionManager.Instance.getUseMiddleware())
-                    {
-                        Dictionary<string, string> args = new Dictionary<string, string> {
-                             {"id", ConnectionManager.Instance.GetConnectionId() }
-                        };
-                        ConnectionManager.Instance.SendExecutableAsk("send_init_data", args);
-                    }
+                    
+                        
+                        ConnectionManager.Instance.SendExecutableAsk("send_init_data", connectionID);
+                    
                     TimerSendInit = TimeSendInit;
                     loadedAlready = true;
                 }
@@ -701,13 +697,10 @@ public class SimulationManager : MonoBehaviour
             case GameState.GAME:
                 Debug.Log("SimulationManager: UpdateGameState -> GAME");
                 loadedAlready = false;
-                if (ConnectionManager.Instance.getUseMiddleware())
-                {
-                    Dictionary<string, string> args = new Dictionary<string, string> {
-                         {"id", ConnectionManager.Instance.GetConnectionId() }
-                    };
-                    ConnectionManager.Instance.SendExecutableAsk("player_ready_to_receive_geometries", args);
-                }
+                
+                   
+                    ConnectionManager.Instance.SendExecutableAsk("player_ready_to_receive_geometries", connectionID);
+                
                 break;
 
             case GameState.END:
@@ -802,18 +795,18 @@ public class SimulationManager : MonoBehaviour
 
 
       //  Vector3 v = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y - yOffsetCamera, Camera.main.transform.position.z);
-        Vector3 v = new Vector3(XROrigin.localPosition.x, XROrigin.localPosition.y, XROrigin.localPosition.z);
+        Vector3 v = hasSimulator ? new Vector3(Camera.main.transform.localPosition.x + XROrigin.localPosition.x, Camera.main.transform.localPosition.y + XROrigin.localPosition.y,Camera.main.transform.localPosition.z + XROrigin.localPosition.z)
+ : new Vector3(XROrigin.localPosition.x, XROrigin.localPosition.y, XROrigin.localPosition.z);
 
         List<int> p = converter.toGAMACRS3D(v);
         Dictionary<string, string> args = new Dictionary<string, string> {
-            {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") },
+            {"id",ConnectionManager.Instance.GetConnectionId()  },
             {"x", "" +p[0]},
-            {"y", "" +p[1]},
+            {"y", "" +p[1]}, 
             {"z", "" +p[2]},
             {"angle", "" +angle}
         };
         
-            
         ConnectionManager.Instance.SendExecutableAsk("move_player_external", args);
 
         TimerSendPosition = TimeSendPosition;

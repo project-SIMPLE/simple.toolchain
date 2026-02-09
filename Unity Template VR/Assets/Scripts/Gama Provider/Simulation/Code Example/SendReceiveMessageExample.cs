@@ -25,7 +25,7 @@ public class SendReceiveMessageExample : SimulationManager
             string mes = "A message from Unity at time: " + Time.time;
           //call the action "receive_message" from the unity_linker agent with two arguments: the id of the player and a message
          Dictionary<string, string> args = new Dictionary<string, string> {
-         {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") },
+         {"id",ConnectionManager.Instance.GetConnectionId() },
          {"mes",  mes }};
 
             Debug.Log("sent to GAMA: " + mes);

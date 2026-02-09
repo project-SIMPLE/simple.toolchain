@@ -85,7 +85,7 @@ public class SimulationMultiPlayerExample : SimulationManager
             {
                 Dictionary<string, string> args = new Dictionary<string, string> {
                          {"id", obj.name },
-                         {"player",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") },
+                         {"player", ConnectionManager.Instance.GetConnectionId()  },
 
                     };
                 ConnectionManager.Instance.SendExecutableAsk("change_color", args);
