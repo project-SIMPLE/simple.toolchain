@@ -29,8 +29,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import gama.core.metamodel.shape.GamaPoint;
-import gama.core.util.GamaColor;
+import gama.api.types.color.GamaColorFactory;
+import gama.api.types.color.IColor;
+import gama.api.types.geometry.GamaPointFactory;
 import gaml.extension.unity.commands.wizard.VRModelGenerator.Player;
 
 /**
@@ -109,7 +110,7 @@ public class WizardPagePlayer extends UnityWizardPage {
 				Double y = Double.valueOf(text_y.getText());
 				Double z = Double.valueOf(text_z.getText());
 				if (x != null && y != null && z != null) {
-					generator.getPlayer(currentPlayer).location = new GamaPoint(x, y, z);
+					generator.getPlayer(currentPlayer).location =  GamaPointFactory.create(x, y, z);
 				}
 			};
 			text_x.addModifyListener(ml);
@@ -128,12 +129,12 @@ public class WizardPagePlayer extends UnityWizardPage {
 		{
 			label(grpAttributes, "Color in GAMA");
 			cs_color = new ColorSelector(grpAttributes);
-			GamaColor c = generator.getDefaultPlayerColor();
+			IColor c = generator.getDefaultPlayerColor();
 			RGB def = new RGB(c.red(), c.green(), c.blue());
 			cs_color.setColorValue(def);
 			cs_color.addListener(event -> {
-				RGB col = cs_color.getColorValue();
-				generator.getPlayer(currentPlayer).color = GamaColor.get(col.red, col.green, col.blue);
+				RGB col = cs_color.getColorValue(); 
+				generator.getPlayer(currentPlayer).color = GamaColorFactory.createWithDoubleAlpha(col.red, col.green, col.blue, 0.0);
 			});
 			cs_color.getButton().setLayoutData(
 					GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER).create());
@@ -174,13 +175,13 @@ public class WizardPagePlayer extends UnityWizardPage {
 
 	private void updateControlsWithPlayer() {
 		Player p = generator.getPlayer(currentPlayer);
-		text_x.setText("" + p.location.x);
-		text_y.setText("" + p.location.y);
-		text_z.setText("" + p.location.z);
+		text_x.setText("" + p.location.getX());
+		text_y.setText("" + p.location.getY());
+		text_z.setText("" + p.location.getZ());
 		// text_distance.setText("" + p.minDistance);
 		// text_radius.setText("" + p.perceptionRadius);
 		text_size.setText("" + p.size);
-		GamaColor c = p.color;
+		IColor c = p.color;
 		cs_color.setColorValue(new RGB(c.red(), c.green(), c.blue()));
 		propertiesEditor.setSelection(p.property, true);
 	}

@@ -12,7 +12,7 @@ package gaml.extension.unity.species;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.Iterator; 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,45 +21,60 @@ import java.util.Set;
 import org.eclipse.xtext.util.Strings;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 
-import gama.annotations.precompiler.GamlAnnotations.action;
-import gama.annotations.precompiler.GamlAnnotations.arg;
-import gama.annotations.precompiler.GamlAnnotations.doc;
-import gama.annotations.precompiler.GamlAnnotations.getter;
-import gama.annotations.precompiler.GamlAnnotations.setter;
-import gama.annotations.precompiler.GamlAnnotations.species;
-import gama.annotations.precompiler.GamlAnnotations.variable;
-import gama.annotations.precompiler.GamlAnnotations.vars;
-import gama.core.common.interfaces.IKeyword;
-import gama.core.kernel.root.PlatformAgent;
-import gama.core.metamodel.agent.GamlAgent;
-import gama.core.metamodel.agent.IAgent;
-import gama.core.metamodel.population.IPopulation;
-import gama.core.metamodel.shape.GamaPoint;
-import gama.core.metamodel.shape.IShape;
-import gama.core.runtime.GAMA;
-import gama.core.runtime.IScope;
-import gama.core.runtime.exceptions.GamaRuntimeException;
-import gama.core.util.GamaListFactory;
-import gama.core.util.GamaMap;
-import gama.core.util.GamaMapFactory;
-import gama.core.util.IList;
-import gama.core.util.IMap;
+import gama.annotations.getter;
+import gama.annotations.setter;
+import gama.annotations.species;
+import gama.annotations.variable;
+import gama.annotations.arg;
+import gama.api.gaml.GAML;
+import gama.api.gaml.statements.IStatement.WithArgs;
+import gama.api.gaml.symbols.Arguments;
+import gama.api.gaml.types.Cast;
+import gama.api.gaml.types.IType;
+import gama.api.gaml.types.Types;
+import gama.api.kernel.PlatformAgent;
+import gama.api.kernel.agent.IAgent;
+import gama.api.kernel.agent.IPopulation;
+import gama.api.kernel.simulation.ITopLevelAgent;
+import gama.api.kernel.species.ISpecies;
+import gama.api.runtime.scope.IScope;
+import gama.api.types.geometry.GamaPoint;
+import gama.api.types.geometry.GamaPointFactory;
+import gama.api.types.geometry.IPoint;
+import gama.api.types.geometry.IShape;
+import gama.api.types.list.GamaListFactory;
+import gama.api.types.list.IList;
+import gama.api.types.map.IMap; 
+import gama.core.agent.GamlAgent;
+import gama.core.simulation.SimulationAgent;
 import gama.core.util.matrix.GamaField;
 import gama.core.util.matrix.GamaMatrix;
 import gama.extension.serialize.gaml.SerialisationOperators;
-import gama.gaml.descriptions.ConstantExpressionDescription;
-import gama.gaml.operators.Cast;
+
 import gama.gaml.operators.spatial.SpatialCreation;
 import gama.gaml.operators.spatial.SpatialPunctal;
 import gama.gaml.operators.spatial.SpatialQueries;
 import gama.gaml.operators.spatial.SpatialTransformations;
-import gama.gaml.species.ISpecies;
-import gama.gaml.statements.Arguments;
-import gama.gaml.statements.IStatement.WithArgs;
-import gama.gaml.types.IType;
-import gama.gaml.types.Types;
+import gaml.compiler.descriptions.ConstantExpressionDescription;
 import gaml.extension.unity.types.UnityProperties;
 import gaml.extension.unity.types.UnityPropertiesType;
+import gama.annotations.action;
+import gama.annotations.doc;
+import gama.annotations.getter;
+import gama.annotations.variable;
+import gama.annotations.vars;
+import gama.annotations.constants.IKeyword;
+import gama.api.GAMA;
+import gama.api.exceptions.GamaRuntimeException;
+import gama.api.gaml.types.IType;
+import gama.api.runtime.scope.IScope;
+import gama.api.types.color.GamaColorFactory;
+import gama.api.types.color.IColor;
+import gama.api.types.map.GamaMap;
+import gama.api.types.map.GamaMapFactory;
+import gama.api.types.misc.IValue;
+import gama.api.utils.json.IJson;
+import gama.api.utils.json.IJsonValue;
 
 /**
  * The Class AbstractUnityLinker.
@@ -149,7 +164,7 @@ import gaml.extension.unity.types.UnityPropertiesType;
 				name = AbstractUnityLinker.PLAYER_UNITY_PROPERTIES,
 						type = IType.LIST,
 						of = UnityPropertiesType.UNITYPROPERTIESTYPE_ID,
-						
+						 
 			//	type = UnityPropertiesType.UNITYPROPERTIESTYPE_ID,
 				doc = { @doc ("Properties used to send the player agent geometry to Unity - if nil/empty, the player agents are not sent") }),
 
@@ -814,11 +829,11 @@ public class AbstractUnityLinker extends GamlAgent {
 	 * @return the player location init
 	 */
 	@getter (AbstractUnityLinker.INIT_LOCATIONS)
-	public static IList<GamaPoint> getPlayerLocationInit(final IAgent agent) {
-		return (IList<GamaPoint>) agent.getAttribute(INIT_LOCATIONS);
+	public static IList<IPoint> getPlayerLocationInit(final IAgent agent) {
+		return (IList<IPoint>) agent.getAttribute(INIT_LOCATIONS);
 	}
 
-	/**
+	/** 
 	 * Sets the player location init.
 	 *
 	 * @param agent
@@ -981,7 +996,7 @@ public class AbstractUnityLinker extends GamlAgent {
 	private Object doAction1Arg(final IScope scope, final String actionName, final String argName,
 			final Object ArgVal) {
 		Arguments args = new Arguments();
-		args.put(argName, ConstantExpressionDescription.createNoCache(ArgVal));
+		args.put(argName, GAML.getExpressionDescriptionFactory().createConstantNoCache(ArgVal));
 		WithArgs act = getAgent().getSpecies().getAction(actionName);
 		act.setRuntimeArgs(scope, args);
 		return act.executeOn(scope);
@@ -1007,11 +1022,11 @@ public class AbstractUnityLinker extends GamlAgent {
 	private Object doAction2Arg(final IScope scope, final String actionName, final String argName1,
 			final Object ArgVal1, final String argName2, final Object ArgVal2) {
 		Arguments args = new Arguments();
-		args.put(argName1, ConstantExpressionDescription.createNoCache(ArgVal1));
-		args.put(argName2, ConstantExpressionDescription.createNoCache(ArgVal2));
+		args.put(argName1, GAML.getExpressionDescriptionFactory().createConstantNoCache(ArgVal1));
+		args.put(argName2, GAML.getExpressionDescriptionFactory().createConstantNoCache(ArgVal2));
 		WithArgs act = getAgent().getSpecies().getAction(actionName);
 		act.setRuntimeArgs(scope, args);
-		return act.executeOn(scope);
+		return act.executeOn(scope); 
 	}
 
 	/**
@@ -1039,9 +1054,9 @@ public class AbstractUnityLinker extends GamlAgent {
 			final Object ArgVal1, final String argName2, final Object ArgVal2, final String argName3,
 			final Object ArgVal3) {
 		Arguments args = new Arguments();
-		args.put(argName1, ConstantExpressionDescription.createNoCache(ArgVal1));
-		args.put(argName2, ConstantExpressionDescription.createNoCache(ArgVal2));
-		args.put(argName3, ConstantExpressionDescription.createNoCache(ArgVal3));
+		args.put(argName1, GAML.getExpressionDescriptionFactory().createConstantNoCache(ArgVal1));
+		args.put(argName2, GAML.getExpressionDescriptionFactory().createConstantNoCache(ArgVal2));
+		args.put(argName3, GAML.getExpressionDescriptionFactory().createConstantNoCache(ArgVal3));
 		WithArgs act = getAgent().getSpecies().getAction(actionName);
 		act.setRuntimeArgs(scope, args);
 		return act.executeOn(scope);
@@ -1050,20 +1065,19 @@ public class AbstractUnityLinker extends GamlAgent {
 			final Object ArgVal1, final String argName2, final Object ArgVal2, final String argName3,
 			final Object ArgVal3, final String argName4, final Object ArgVal4) {
 		Arguments args = new Arguments();
-		args.put(argName1, ConstantExpressionDescription.createNoCache(ArgVal1));
-		args.put(argName2, ConstantExpressionDescription.createNoCache(ArgVal2));
-		args.put(argName3, ConstantExpressionDescription.createNoCache(ArgVal3));
-		args.put(argName4, ConstantExpressionDescription.createNoCache(ArgVal4));
+		args.put(argName1, GAML.getExpressionDescriptionFactory().createConstantNoCache(ArgVal1));
+		args.put(argName2, GAML.getExpressionDescriptionFactory().createConstantNoCache(ArgVal2));
+		args.put(argName3, GAML.getExpressionDescriptionFactory().createConstantNoCache(ArgVal3));
+		args.put(argName4, GAML.getExpressionDescriptionFactory().createConstantNoCache(ArgVal4));
 		WithArgs act = getAgent().getSpecies().getAction(actionName);
 		act.setRuntimeArgs(scope, args);
 		return act.executeOn(scope);
 	}
 
 	@Override
-	public Object _init_(final IScope scope) {
-		Object init = super._init_(scope);
+	public void _init_(final IScope scope) {
+		super._init_(scope);
 		startSimulation(scope);
-		return init;
 	}
 
 	/**
@@ -1075,8 +1089,8 @@ public class AbstractUnityLinker extends GamlAgent {
 	 *            the ag
 	 */
 	private void interactionWithPlayer(final IScope scope, final IAgent ag) {
-		GamaPoint pt = scope.getGui().getMouseLocationInModel();
-		if (pt != null) {
+		IPoint pt = scope.getGui().getMouseLocationInModel();
+		if (pt != null) { 
 			IList<IAgent> ags = GamaListFactory.create();
 			for (String playerName : getPlayers(ag).keySet()) {
 				IAgent a = getPlayers(ag).get(playerName);
@@ -1091,7 +1105,7 @@ public class AbstractUnityLinker extends GamlAgent {
 						.filter(a -> (Boolean) a.getAttribute("selected")).findFirst();
 				if (selected.isPresent()) {
 					IAgent pl = selected.get();
-					pt.z = pl.getLocation().z;
+					pt.setZ(pl.getLocation().getZ());
 					doAction2Arg(scope, "move_player", "player",pl , "loc", pt); }
 			} else {
 				IAgent player = (IAgent) SpatialQueries.closest_to(scope, ags, pt);
@@ -1136,13 +1150,13 @@ public class AbstractUnityLinker extends GamlAgent {
 		if(currentMessage == null) {
 			return;
 		}
-		PlatformAgent pa = GAMA.getPlatformAgent();
+		PlatformAgent  pa = (PlatformAgent) GAMA.getPlatformAgent();
 		String mes = "";
 		if (getUseMiddleware(getAgent())) {
-			
+			 
 			mes = SerialisationOperators.toJson(scope, currentMessage, false);
 			
-			pa.sendMessage(scope, ConstantExpressionDescription.createNoCache(mes));
+			pa.sendMessage(scope, GAML.getExpressionDescriptionFactory().createConstantNoCache(mes));
 		} else {
 			Iterator<IMap> it =
 					(Iterator<IMap>) ((IList<IMap>) currentMessage.get(CONTENTS)).iterable(scope).iterator();
@@ -1153,7 +1167,7 @@ public class AbstractUnityLinker extends GamlAgent {
 			}
 			if (!mes.isBlank() && !"{}".equals(mes)) {
 				try {
-					pa.sendMessage(scope, ConstantExpressionDescription.createNoCache(mes));
+					pa.sendMessage(scope, GAML.getExpressionDescriptionFactory().createConstantNoCache(mes));
 				} catch (WebsocketNotConnectedException e) {
 					if (!getUseMiddleware(getAgent())) {
 						getPlayers(pa).get(0).dispose();
@@ -1238,9 +1252,9 @@ public class AbstractUnityLinker extends GamlAgent {
 		newMessage.put(CONTENT_MESSAGE, mes);
 		((IList) message.get(CONTENTS)).add(newMessage);
 
-		PlatformAgent pa = GAMA.getPlatformAgent();
+		PlatformAgent pa = (PlatformAgent) GAMA.getPlatformAgent();
 		String mesStr = SerialisationOperators.toJson(scope, message, false);
-		pa.sendMessage(scope, ConstantExpressionDescription.createNoCache(mesStr));
+		pa.sendMessage(scope, GAML.getExpressionDescriptionFactory().createConstantNoCache(mesStr));
 
 	}
 	
@@ -1406,7 +1420,7 @@ public class AbstractUnityLinker extends GamlAgent {
 
 		for (IShape g : geoms) {
 			pointsGeom.add(doAction1Arg(scope, "message_geometry_shape", "geom", g));
-			yOffset.add((int)(g.getLocation().z * precision));
+			yOffset.add((int)(g.getLocation().getZ() * precision));
 		}
 		toSend.put("teleportId", id);
 		toSend.put("offsetYGeom", yOffset);
@@ -1465,7 +1479,7 @@ public class AbstractUnityLinker extends GamlAgent {
 					l = SpatialTransformations.enlarged_by(scope, l, wallWidth);
 					
 					pointsGeom.add(doAction1Arg(scope, "message_geometry_shape", "geom", l));
-					yOffset.add((int)(g.getLocation().z * precision));
+					yOffset.add((int)(g.getLocation().getZ() * precision));
 				}
 				
 			}
@@ -1514,7 +1528,7 @@ public class AbstractUnityLinker extends GamlAgent {
 		if (name == null || name.isBlank()) { 
 			if (up == null) 
 				return "geometry";
-			name = up.getId() +"_" + (int)g.getLocation().x +"_" + (int)g.getLocation().y ;
+			name = up.getId() +"_" + (int)g.getLocation().getX() +"_" + (int)g.getLocation().getY() ;
 		}
 		return name;
 	}
@@ -1591,7 +1605,7 @@ public class AbstractUnityLinker extends GamlAgent {
 				pointsLoc.add(doAction1Arg(scope, "message_geometry_loc", "geom", g));
 			} else {
 				pointsGeom.add(doAction1Arg(scope, "message_geometry_shape", "geom", g));
-				yOffset.add((int)(g.getLocation().z * precision));
+				yOffset.add((int)(g.getLocation().getZ() * precision));
 			}
 		}
 		toSend.put("pointsLoc", pointsLoc);
@@ -1642,17 +1656,17 @@ public class AbstractUnityLinker extends GamlAgent {
 		if (geom == null) return  GamaMapFactory.create();
 		int precision = getPrecision(getAgent());
 
-		for (GamaPoint pt : geom.getPoints()) {
-			vals.add((int) (pt.x * precision));
-			vals.add((int) (pt.y * precision));
+		for (IPoint pt : geom.getPoints()) { 
+			vals.add((int) (pt.getX() * precision));
+			vals.add((int) (pt.getY() * precision));
 			// vals.add((int)(pt.z * precision));
 
 		}
 		IMap<String, Object> map = GamaMapFactory.create();
 		map.put("c", vals);
 		Arguments args = new Arguments();
-		args.put("map", ConstantExpressionDescription.createNoCache(map));
-		args.put("geom", ConstantExpressionDescription.createNoCache(geom));
+		args.put("map", GAML.getExpressionDescriptionFactory().createConstantNoCache(map));
+		args.put("geom", GAML.getExpressionDescriptionFactory().createConstantNoCache(geom));
 		WithArgs actATM = getAgent().getSpecies().getAction(ADD_TO_MAP);
 
 		actATM.setRuntimeArgs(scope, args);
@@ -1683,9 +1697,9 @@ public class AbstractUnityLinker extends GamlAgent {
 		IList<Integer> vals = GamaListFactory.create();
 		IShape geom = (IShape) scope.getArg("geom", IType.GEOMETRY);
 		int precision = getPrecision(getAgent());
-		vals.add((int) (geom.getLocation().x * precision));
-		vals.add((int) (geom.getLocation().y * precision));
-		vals.add((int) (geom.getLocation().z * precision));
+		vals.add((int) (geom.getLocation().getX() * precision));
+		vals.add((int) (geom.getLocation().getY() * precision));
+		vals.add((int) (geom.getLocation().getZ() * precision));
 		Double hd = (Double) geom.getAttribute("heading");
 		if (hd == null) { hd = 0.0; }
 		vals.add((int) (hd * precision));
@@ -1693,8 +1707,8 @@ public class AbstractUnityLinker extends GamlAgent {
 		map.put("c", vals);
 
 		Arguments args = new Arguments();
-		args.put("map", ConstantExpressionDescription.createNoCache(map));
-		args.put("geom", ConstantExpressionDescription.createNoCache(geom));
+		args.put("map", GAML.getExpressionDescriptionFactory().createConstantNoCache(map));
+		args.put("geom", GAML.getExpressionDescriptionFactory().createConstantNoCache(geom));
 		WithArgs actATM = getAgent().getSpecies().getAction(ADD_TO_MAP);
 
 		actATM.setRuntimeArgs(scope, args);
@@ -1768,9 +1782,9 @@ public class AbstractUnityLinker extends GamlAgent {
 		if (field != null) {
 			numCols = field.numCols;
 			numRows = field.numRows;
-			GamaPoint s= field.getCellSize(scope);
-			sizeX = numCols * s.x; 
-			sizeY = numRows * s.y; 
+			IPoint s= field.getCellSize(scope);
+			sizeX = numCols * s.getX(); 
+			sizeY = numRows * s.getY(); 
 		} else  {
 			numCols = matrix.numCols;
 			numRows = matrix.numRows;
@@ -1885,7 +1899,7 @@ public class AbstractUnityLinker extends GamlAgent {
 				}
 				if (iV > valMax) {
 					valMax = iV;
-				}
+				} 
 				v.add(iV);
 			}
 			mat.add(row);
@@ -2073,11 +2087,11 @@ public class AbstractUnityLinker extends GamlAgent {
 		Map<String, Object> init = GamaMapFactory.create();
 		if (getPlayerLocationInit(ag).size() <= players.length(scope)) {
 			getPlayerLocationInit(ag).add(SpatialPunctal.any_location_in(scope, scope.getSimulation()));
-		}
+		} 
 		init.put(IKeyword.LOCATION, getPlayerLocationInit(ag).get(players.length(scope)));
 		init.put(IKeyword.NAME, id);
 
-		IAgent player = sp.getPopulation(scope).createAgentAt(scope, getPlayers(ag).length(scope), init, false, true);
+		IAgent player = sp.getPopulation(scope).createAgentAtIndex(scope, getPlayers(ag).length(scope), init, false, true);
 		getPlayers(getAgent()).put(id, player);
 		
 		if (propertiesForPlayer == null)
@@ -2115,7 +2129,7 @@ public class AbstractUnityLinker extends GamlAgent {
 			doc = { @doc (
 					value = "Action called by the send_world action that returns the sub-list of geometries to send to Unity from a given list of geometries according to a max distance to the player") })
 	public void primAddBackgroundGeometries(final IScope scope) throws GamaRuntimeException {
-		IList<IShape> geometries = Cast.asList(scope, scope.getListArg("geometries"));
+		IList<IShape> geometries = scope.getListArg("geometries");
 		IAgent ag = getAgent();
 		Map gb = getBackgroundGeometries(ag);
 		UnityProperties property = (UnityProperties) scope.getArg("property",UnityPropertiesType.UNITYPROPERTIESTYPE_ID);
@@ -2154,11 +2168,11 @@ public class AbstractUnityLinker extends GamlAgent {
 			doc = { @doc (
 					value = "Action allows to define the list of geometries to send to Unity") })
 	public void primAddGeometriesToSend(final IScope scope) throws GamaRuntimeException {
-		IList<IShape> geometries = Cast.asList(scope, scope.getListArg("geometries"));
+		IList<IShape> geometries = scope.getListArg("geometries");
 		IAgent ag = getAgent();
 		Map gts = getGeometriesToSend(ag);
 		Map gas = getAttributesToSend(ag);
-		Map<String, IList> attributes = scope.hasArg("attributes") ? Cast.asMap(scope, scope.getArg("attributes", IType.MAP), false): null;
+		Map<String, IList> attributes = scope.hasArg("attributes") ? (Map<String, IList>) scope.getArg("attributes", IType.MAP): null;
 		UnityProperties property = (UnityProperties) scope.getArg("property", UnityPropertiesType.UNITYPROPERTIESTYPE_ID);
 		if (geometriesToFollow == null) { geometriesToFollow = GamaMapFactory.create(); }
 		int cpt = 0;
@@ -2188,7 +2202,7 @@ public class AbstractUnityLinker extends GamlAgent {
 			doc = { @doc (
 					value = "Action allows to define the list of geometries to keep in Unity (and not sent)") })
 	public void primAddGeometriesToKeep(final IScope scope) throws GamaRuntimeException {
-		IList<IShape> geometries = Cast.asList(scope, scope.getListArg("geometries"));
+		IList<IShape> geometries = scope.getListArg("geometries");
 		IAgent ag = getAgent();
 		Map gts = getGeometriesToSend(ag);
 		UnityProperties property = (UnityProperties) scope.getArg("property", UnityPropertiesType.UNITYPROPERTIESTYPE_ID);
@@ -2222,10 +2236,10 @@ public class AbstractUnityLinker extends GamlAgent {
 			doc = { @doc (
 					value = "Action called by the send_world action that returns the sub-list of geometries to send to Unity from a given list of geometries according to a max distance to the player") })
 	public void primUpdateAnimation(final IScope scope) throws GamaRuntimeException {
-		IList<IShape> geometries = Cast.asList(scope, scope.getListArg("geometries"));
+		IList<IShape> geometries = scope.getListArg("geometries");
 		IAgent ag = getAgent();
-		IList<IAgent> players = Cast.asList(scope, scope.getListArg("players"));
-		IMap<String, Object> parameters = Cast.asMap(scope, scope.getArg("parameters", IType.MAP), false);
+		IList<IAgent> players = scope.getListArg("players");
+		IMap<String, Object> parameters = (IMap<String, Object>) scope.getArg("parameters", IType.MAP);
 		if (players == null || players.isEmpty()|| geometries == null || geometries.isEmpty())
 			return;
 		GamaMap<String, Object> toSend = (GamaMap<String, Object>) GamaMapFactory.create();
@@ -2315,7 +2329,7 @@ public class AbstractUnityLinker extends GamlAgent {
 				double x = (0.0 + Integer.valueOf(ptsStr.get(cpt))) / precision;
 				double y = (0.0 + Integer.valueOf(ptsStr.get(cpt + 1))) / precision;
 				double z = (0.0 + Integer.valueOf(ptsStr.get(cpt + 2))) / precision;
-				geom.setLocation(new GamaPoint(x, y, z));
+				geom.setLocation(GamaPointFactory.create(x, y, z));
 
 			}
 			cpt = cpt + 3;
@@ -2499,7 +2513,7 @@ public class AbstractUnityLinker extends GamlAgent {
 		if (getReadyToMovePlayers(ag) != null && getReadyToMovePlayers(ag).contains(thePlayer)) {
 			if (rot != null) { thePlayer.setAttribute("heading", angle.floatValue() / precision + rot); }
 			if (x != null && y != null) {
-				thePlayer.setLocation(new GamaPoint(x.floatValue() / precision, y.floatValue() / precision,
+				thePlayer.setLocation(GamaPointFactory.create(x.floatValue() / precision, y.floatValue() / precision,
 						z.floatValue() / precision));
 			}
 			thePlayer.setAttribute("to_display", true);
@@ -2529,8 +2543,8 @@ public class AbstractUnityLinker extends GamlAgent {
 		IAgent ag = getAgent();
 		IAgent thePlayer = getPlayers(ag).get(scope.getStringArg("id"));
 		if (thePlayer == null) return;
-		PlatformAgent pa = GAMA.getPlatformAgent();
-		pa.sendMessage(scope, ConstantExpressionDescription.createNoCache("pong"));
+		PlatformAgent pa = (PlatformAgent) GAMA.getPlatformAgent();
+		pa.sendMessage(scope, GAML.getExpressionDescriptionFactory().createConstantNoCache("pong"));
 	}
 
 	/**
@@ -2540,7 +2554,7 @@ public class AbstractUnityLinker extends GamlAgent {
 	 *            the scope
 	 * @throws GamaRuntimeException
 	 *             the gama runtime exception
-	 */
+	 */ 
 	@action (
 			name = "player_position_updated",
 			args = { @arg (
@@ -2580,9 +2594,9 @@ public class AbstractUnityLinker extends GamlAgent {
 		IAgent player = (IAgent) scope.getArg("player", IType.AGENT);
 		int precision = getPrecision(ag);
 		IList<Integer> pos = GamaListFactory.create();
-		pos.add((int) (player.getLocation().x * precision));
-		pos.add((int) (player.getLocation().y * precision));
-		pos.add((int) (player.getLocation().z * precision));
+		pos.add((int) (player.getLocation().getX() * precision));
+		pos.add((int) (player.getLocation().getY() * precision));
+		pos.add((int) (player.getLocation().getZ() * precision));
 		getNewPlayerPosition(ag).put(player.getName(), pos);
 	}
 
@@ -2597,10 +2611,10 @@ public class AbstractUnityLinker extends GamlAgent {
 			for (IAgent player : getPlayers(getAgent()).values()) {
 				doAction2Arg(scope, "enable_player_movement", "player", player, "enable", true);
 			}
-			scope.getSimulation().resume(scope); 
+			scope.getSimulation().resume(scope);  
 		}
 	}
-
+ 
 	/**
 	 * Prim add to sent parameter.
 	 *
@@ -2736,7 +2750,7 @@ public class AbstractUnityLinker extends GamlAgent {
 			name = LOC_TO_SEND,
 			doc = @doc (
 					returns = "the location to send to Unity"))
-	public GamaPoint primLocToSend(final IScope scope) throws GamaRuntimeException {
+	public IPoint primLocToSend(final IScope scope) throws GamaRuntimeException {
 		return scope.getAgent().getLocation();
 
 	}

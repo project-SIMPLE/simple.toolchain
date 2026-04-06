@@ -13,7 +13,7 @@ package gaml.extension.unity.commands.wizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
-import gama.core.kernel.model.IModel;
+import gama.api.kernel.species.IModelSpecies;
 
 /**
  * The Class ModelToVRWizard.
@@ -36,7 +36,7 @@ public class ModelToVRWizard extends Wizard {
 	 * @param file
 	 *            the file
 	 */
-	public ModelToVRWizard(final IModel model) {
+	public ModelToVRWizard(final IModelSpecies model) {
 		generator = new VRModelGenerator(model);
 		setWindowTitle("VR Experiment generation");
 	}

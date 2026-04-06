@@ -12,17 +12,17 @@ package gaml.extension.unity.types;
 
 import java.util.Map;
 
-import gama.annotations.precompiler.GamlAnnotations.doc;
-import gama.annotations.precompiler.GamlAnnotations.variable;
-import gama.annotations.precompiler.GamlAnnotations.vars;
-import gama.core.common.interfaces.IValue;
-import gama.core.runtime.IScope;
-import gama.core.runtime.exceptions.GamaRuntimeException;
-import gama.core.util.GamaMapFactory;
-import gama.core.util.IList;
-import gama.core.util.file.json.Json;
-import gama.core.util.file.json.JsonValue;
-import gama.gaml.types.IType;
+import gama.annotations.doc;
+import gama.annotations.variable;
+import gama.api.exceptions.GamaRuntimeException;
+import gama.api.gaml.types.IType;
+import gama.api.runtime.scope.IScope;
+import gama.api.types.list.IList;
+import gama.api.types.map.GamaMapFactory;
+import gama.api.types.misc.IValue;
+import gama.api.utils.json.IJson;
+import gama.api.utils.json.IJsonValue;
+import gama.annotations.vars;
 
 /**
  * The Class BDIPlan.
@@ -109,10 +109,22 @@ public class UnityInteraction implements IValue {
 		return null;
 	}
 
+
+
 	@Override
-	public JsonValue serializeToJson(Json json) {
+	public IType<?> getGamlType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+
+	@Override
+	public IJsonValue serializeToJson(IJson json) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 }

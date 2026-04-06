@@ -24,7 +24,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
-import gama.core.util.GamaColor;
+import gama.api.types.color.GamaColorFactory;
+import gama.api.types.color.IColor;
 import gama.dev.DEBUG;
 import gaml.extension.unity.commands.wizard.VRModelGenerator.UnityProperties;
 
@@ -223,12 +224,12 @@ class UnityPropertiesEditor {
 
 		UnityWizardPage.label(grpGeom, "Color:");
 		colorSelector = new ColorSelector(grpGeom);
-		GamaColor c = wizardPage.generator.getDefaultSpeciesColor();
+		IColor c = wizardPage.generator.getDefaultSpeciesColor();
 		RGB def = new RGB(c.red(), c.green(), c.blue());
 		colorSelector.setColorValue(def);
 		colorSelector.addListener(event -> {
 			RGB col = colorSelector.getColorValue();
-			getUnityProperties().color = GamaColor.get(col.red, col.green, col.blue);
+			getUnityProperties().color = GamaColorFactory.createWithDoubleAlpha(col.red, col.green, col.blue, 0.0);
 		});
 
 		UnityWizardPage.label(grpGeom, "Material:");
@@ -286,7 +287,7 @@ class UnityPropertiesEditor {
 		UnityProperties prop = wizardPage.generator.getUnityProperties(s);
 		text_tag.setText(prop.tag);
 		text_scale.setText(String.valueOf(prop.size));
-		colorSelector.setColorValue(new RGB(prop.color.getRed(), prop.color.getGreen(), prop.color.getBlue()));
+		colorSelector.setColorValue(new RGB(prop.color.red(), prop.color.green(), prop.color.blue()));
 		text_material.setText(prop.material);
 		text_buffer.setText(String.valueOf(prop.buffer));
 		text_path.setText(prop.path);

@@ -17,10 +17,10 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-import gama.core.kernel.model.IModel;
+import gama.api.kernel.species.IModelSpecies;
 import gama.ui.shared.utils.WorkbenchHelper;
-import gaml.compiler.gaml.validation.GamlModelBuilder;
 import gaml.compiler.ui.editor.GamlEditor;
+import gaml.compiler.validation.GamlModelBuilder;
 import gaml.extension.unity.commands.wizard.ModelToVRWizard;
 
 /**
@@ -33,25 +33,25 @@ public class GenerateVrModelHandler extends AbstractHandler {
 		final GamlEditor editor =
 				(GamlEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
-		final IModel model = editor.getDocument()
-				.readOnly(state -> GamlModelBuilder.getDefaultInstance().compile(state.getURI(), null));
-		if (model == null) return null;
+		final IModelSpecies model = editor.getDocument()
+				.readOnly(state -> GamlModelBuilder.getInstance().compile(state.getURI(), null));
+		if (model == null) return null; 
 
 		createVRModel(model);
-		return null;
+		return null; 
 	}
 
 	/**
 	 * Creates the VR model.
-	 *
+	 * 
 	 * @param path
-	 *            the path
+	 *            the path 
 	 * @param model
 	 *            the model
 	 * @param file
 	 *            the file
 	 */
-	protected void createVRModel(final IModel model) {
+	protected void createVRModel(final IModelSpecies model) {
 		Shell shell = WorkbenchHelper.getShell();
 		ModelToVRWizard wizard = new ModelToVRWizard(model);
 		WizardDialog dialog = new WizardDialog(shell, wizard);

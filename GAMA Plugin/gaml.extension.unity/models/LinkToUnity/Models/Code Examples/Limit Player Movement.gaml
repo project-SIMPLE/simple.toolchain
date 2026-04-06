@@ -23,7 +23,7 @@ global {
  	}
 
 	//called when the global variable enable_movement is modified
-	action update_player_movement  {
+	action update_player_movement()  {
 		ask unity_linker {
 			//for each player, call the enable_player_movement action from the unity_linker that enable/disable the movement of a player
 			loop p over: unity_player {
@@ -138,7 +138,7 @@ experiment vr_xp parent:main autorun: false type: unity {
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				do die();
 			}
 		}
 	}

@@ -27,7 +27,7 @@ global {
 	
 	init {
 		//creation of the pylon and definition of the init space
-		create pylon with:(shape: circle(5), color: #gray);
+		create pylon(shape: circle(5), color: #gray);
 		init_space <- copy(shape);
 		ask pylon {
 			init_space <- init_space - circle(7);
@@ -59,7 +59,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	init {
 		//define the unity properties
-		do define_properties;
+		do define_properties();
 		
 		//we add the pylon with its properties as a background geometry (it will only be sent at the beginning of the game) 
 		do add_background_geometries(pylon,up_pylon);
@@ -68,7 +68,7 @@ species unity_linker parent: abstract_unity_linker {
 	}
 	
 	//return for each player a random location inside the init_space
-	list<point> random_loc {
+	list<point> random_loc() {
 		list<point> points;
 		loop times: max_num_players {
 			points << any_location_in(init_space);
@@ -80,7 +80,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	
 	//action that defines the different unity properties
-	action define_properties {
+	action define_properties() {
 		
 		//define a unity_aspect called ghost_aspect that will display in Unity a player with the Ghost prefab, with a scale of 2.0, no y-offset, 
 		//a rotation coefficient of -1.0, a rotation offset of 90°, and we use the default precision. 
@@ -136,7 +136,7 @@ species unity_linker parent: abstract_unity_linker {
 			// change the color of the pylon agent
 			the_pylon.color <- the_player.color; 
 			//send a massage to all the players to change the color of the given pylon for all the players
-			do send_message players: unity_player as list mes: ["id"::id, "color"::[the_pylon.color.red,the_pylon.color.green,the_pylon.color.blue, the_pylon.color.alpha]];
+			do send_message (players: unity_player as list, mes: ["id"::id, "color"::[the_pylon.color.red,the_pylon.color.green,the_pylon.color.blue, the_pylon.color.alpha]]);
 		}
 	}
 	

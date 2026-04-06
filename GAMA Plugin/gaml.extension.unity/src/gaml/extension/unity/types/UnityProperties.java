@@ -12,16 +12,17 @@ package gaml.extension.unity.types;
 
 import java.util.Map;
 
-import gama.annotations.precompiler.GamlAnnotations.doc;
-import gama.annotations.precompiler.GamlAnnotations.variable;
-import gama.annotations.precompiler.GamlAnnotations.vars;
-import gama.core.common.interfaces.IValue;
-import gama.core.runtime.IScope;
-import gama.core.runtime.exceptions.GamaRuntimeException;
-import gama.core.util.GamaMapFactory;
-import gama.core.util.file.json.Json;
-import gama.core.util.file.json.JsonValue;
-import gama.gaml.types.IType;
+import gama.annotations.doc;
+import gama.annotations.variable;
+import gama.annotations.vars;
+import gama.api.exceptions.GamaRuntimeException;
+import gama.api.gaml.types.IType;
+import gama.api.runtime.scope.IScope;
+import gama.api.types.map.GamaMapFactory;
+import gama.api.types.misc.IValue;
+import gama.api.utils.json.IJson;
+import gama.api.utils.json.IJsonValue;
+
 
 @vars ({ @variable (
 		name = "id",
@@ -40,8 +41,8 @@ import gama.gaml.types.IType;
 				type = IType.STRING,
 				doc = @doc ("the tag associated to the Unity properties"))
 					
-		 })
-public class UnityProperties implements IValue {
+		 })  
+public class UnityProperties implements IValue { 
 
 	private String id;
 	private UnityAspect aspect;
@@ -111,9 +112,17 @@ public class UnityProperties implements IValue {
 	}
 
 	@Override
-	public JsonValue serializeToJson(Json json) {
+	public IType<?> getGamlType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public IJsonValue serializeToJson(IJson json) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 }

@@ -44,17 +44,17 @@ global {
 		list<geometry> generated_lines <- generate_pedestrian_network([],[free_place],true,false,5,0.001,true,0.01,0.01,0.0,0.0);
 		
 		create pedestrian_path from: generated_lines  {
-			do initialize bounds:[free_place] distance: min(10.0,(block_ag closest_to self) distance_to self) masked_by: [block_ag] distance_extremity: 1.0;
+			do initialize (bounds:[free_place], distance: min(10.0,(block_ag closest_to self) distance_to self), masked_by: [block_ag], distance_extremity: 1.0);
 		}
 		
 		
 		network <- as_edge_graph(pedestrian_path);
 		
 		ask pedestrian_path {
-			do build_intersection_areas pedestrian_graph: network;
+			do build_intersection_areas (pedestrian_graph: network);
 		}
-		create simple_agentA number: nb_agentsA with: (location:any_location_in(free_place));
-		create simple_agentB number: nb_agentsB with: (location:any_location_in(free_place));
+		create simple_agentA(location:any_location_in(free_place)) number: nb_agentsA ;
+		create simple_agentB(location:any_location_in(free_place)) number: nb_agentsB ;
 		
 	}
 	
@@ -78,12 +78,12 @@ species block_ag {
 	
 	user_command test_hotspot {
 		if (not is_hotspot) {
-			do become_hotspot;
+			do become_hotspot();
 		} else {
-			do remove_hotspot;
+			do remove_hotspot();
 		}
 	}
-	action update_hotspots {
+	action update_hotspots() {
 		list<block_ag> hotspots <- block_ag where each.is_hotspot;
 		if (empty(hotspots)) {
 			ask simple_agentA + simple_agentB {
@@ -99,13 +99,13 @@ species block_ag {
 			}
 		}
 	}
-	action become_hotspot {
+	action become_hotspot() {
 		is_hotspot <- true;
-		do update_hotspots;
+		do update_hotspots();
 	}
-	action remove_hotspot {
+	action remove_hotspot() {
 		is_hotspot <- false;
-		do update_hotspots;
+		do update_hotspots();
 	}
 	aspect default {
 		if (is_hotspot) {
@@ -167,9 +167,9 @@ species simple_agentA  skills: [pedestrian ] {
 			} else {
 				do choose_target(free_place);
 			}
-			do compute_virtual_path pedestrian_graph:network target: target;
+			do compute_virtual_path (pedestrian_graph:network, target: target);
 		}
-		do walk ;
+		do walk ();
 	}	
 	
 	aspect default {

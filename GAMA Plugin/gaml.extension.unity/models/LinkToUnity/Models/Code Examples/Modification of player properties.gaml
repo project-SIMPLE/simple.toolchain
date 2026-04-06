@@ -57,7 +57,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	
 	//action that defines the different unity properties
-	action define_properties {
+	action define_properties() {
 		//define a unity_aspect called geom_aspect that will display the agents using their geometries, with a height of 10 meters, the gray color, and we use the default precision. 
 		unity_aspect geom_aspect <- geometry_aspect(10.0, #gray, precision);
 		

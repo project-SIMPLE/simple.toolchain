@@ -71,7 +71,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	init {
 		//define the unity properties
-		do define_properties;
+		do define_properties();
 		
 		//add the gray square agents as static geoemtry to send to unity with the up_no_interaction unity properties.
 		do add_background_geometries([square_ag[0]],up_no_interaction);
@@ -92,7 +92,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	
 	//action that defines the different unity properties
-	action define_properties {
+	action define_properties() {
 		
 		//define a unity_aspect called gray_square_aspect that will display in Unity the agents with the Gray Cube prefab, with a scale of 1.0, a y-offset of 0.5, 
 		//a rotation coefficient of 1.0 (no change of rotation from the prefab), no rotation offset, and we use the default precision. 
@@ -231,7 +231,7 @@ experiment vr_xp parent:main autorun: false type: unity {
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				do die();
 			}
 		}
 	}

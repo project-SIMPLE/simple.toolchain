@@ -50,19 +50,19 @@ global {
 	
 	
 	//add water in the river and compute its dispersion - a set a water is created from this computing representing the area where the level of water is higher than 0.5m
-	action add_water  {
+	action add_water()  {
 		global_water_level <- cycle_ref < 40 ?  global_water_level + 0.1 : global_water_level - 0.1  ;
 		ask cell {
 			do add_water(global_water_level);
 		}
 		list<cell> water_cells <- cell where (each.water_level > 0.5);
 		if empty(water_cells) {
-			ask water {do die;}
+			ask water {do die();}
 		} else {
 			geometry g <- union (water_cells collect each.shape_union );
 		
 			if (g != nil) {
-				ask water {do die;}
+				ask water {do die();}
 				create water from: g.geometries collect (each simplification 1.0);
 			
 			}
@@ -76,7 +76,7 @@ global {
 	
 	reflex add_water_reflex when: every(10#cycle) {
 		//add the water and compute the water dispersion ("water" agent)
-		do add_water;
+		do add_water();
 		
 		//if there is at least a player, send the geometries of the water agents with the up_water Unity property
 		if not empty(water) and not empty(unity_player){
@@ -85,8 +85,8 @@ global {
 				do add_geometries_to_send(water collect (each.shape at_location {each.location.x,each.location.y, global_water_level}),up_water);
 				
 				//force the action to send the world (and send the current message) as the "do_send_world" to false to just send the world information at the right moment.
-				do send_world;
-				do send_current_message;
+				do send_world();
+				do send_current_message();
 			}
 		}
 	}
@@ -135,14 +135,14 @@ species unity_linker parent: abstract_unity_linker {
 	 	
 	init {
 		//define the unity properties
-		do define_properties;
+		do define_properties();
 		
 	
 	}
 	 
 	
 	//action that defines the different unity properties
-	action define_properties {
+	action define_properties() {
 		//define a unity_aspect called water_aspect that will display in Unity the agents from its geometry, with a height of 1m, the material "Water Material", and the default precision
 		unity_aspect water_aspect <- geometry_aspect(1.0, "Materials/Water/Water Material",precision);
 		
@@ -240,7 +240,7 @@ experiment vr_xp parent:main autorun: false type: unity {
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				do die();
 			}
 		}
 	}

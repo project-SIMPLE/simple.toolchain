@@ -86,7 +86,7 @@ species unity_linker parent: abstract_unity_linker {
 	 	
 	init {
 		//define the unity properties
-		do define_properties;
+		do define_properties();
 		
 		//add the sphere_ag agent as static geometry to send to unity with the up_sphere unity properties.
 		do add_background_geometries(sphere_ag,up_sphere);
@@ -95,7 +95,7 @@ species unity_linker parent: abstract_unity_linker {
 	 
 	
 	//action that defines the different unity properties
-	action define_properties {
+	action define_properties() {
 		//define a unity_aspect called sphere_aspect that will display in Unity the agents with the SphereRigidBody prefab, with a scale of 1.0, no y-offset, 
 		//a rotation coefficient of 1.0 (no change of rotation from the prefab), no rotation offset, and we use the default precision. 
 		unity_aspect sphere_aspect <- prefab_aspect("Prefabs/Visual Prefabs/Basic shape/SphereRigidBody",1.0,0.0,1.0,0.0, precision);

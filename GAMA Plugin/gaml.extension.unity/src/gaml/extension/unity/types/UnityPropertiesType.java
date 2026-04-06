@@ -10,18 +10,20 @@
  ********************************************************************************************************/
 package gaml.extension.unity.types;
 
-import gama.annotations.precompiler.GamlAnnotations.doc;
-import gama.annotations.precompiler.GamlAnnotations.type;
-import gama.annotations.precompiler.IConcept;
-import gama.core.runtime.IScope;
-import gama.core.runtime.exceptions.GamaRuntimeException;
-import gama.gaml.types.GamaType;
-import gama.gaml.types.IType;
+import gama.annotations.doc;
+import gama.annotations.type;
+import gama.annotations.support.IConcept;
+import gama.api.exceptions.GamaRuntimeException;
+import gama.api.gaml.types.GamaType;
+import gama.api.gaml.types.IType;
+import gama.api.gaml.types.ITypesManager;
+import gama.api.runtime.scope.IScope; 
+
 
 /**
  * The Class UnityPropertiesType.
  */
-
+   
 @type (
 		name = "unity_property",
 		id = UnityPropertiesType.UNITYPROPERTIESTYPE_ID,
@@ -31,12 +33,17 @@ import gama.gaml.types.IType;
 public class UnityPropertiesType extends GamaType<UnityProperties> {
 
 	/** The Constant id. */
-	public final static int UNITYPROPERTIESTYPE_ID = IType.AVAILABLE_TYPES + 123163525;
-
-	@Override
-	public boolean canCastToConst() {
-		return true;
+	public final static int UNITYPROPERTIESTYPE_ID = IType.BEGINNING_OF_CUSTOM_TYPES + 123163525;
+ 
+	public UnityPropertiesType(ITypesManager typesManager) {
+		super(typesManager);
 	}
+
+	
+	@Override 
+	public boolean canCastToConst() {
+		return true; 
+	} 
 
 	@Override
 	@doc ("cast an object into a unity_properties if it is an instance of a unity_properties")

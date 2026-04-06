@@ -10,19 +10,19 @@
  ********************************************************************************************************/
 package gaml.extension.unity.operators;
 
-import gama.annotations.precompiler.GamlAnnotations.doc;
-import gama.annotations.precompiler.GamlAnnotations.example;
-import gama.annotations.precompiler.GamlAnnotations.no_test;
-import gama.annotations.precompiler.GamlAnnotations.operator;
-import gama.core.runtime.exceptions.GamaRuntimeException;
-import gama.core.util.GamaColor;
-import gama.core.util.GamaListFactory;
-import gama.core.util.IList;
+import gama.annotations.doc;
+import gama.annotations.example;
+import gama.annotations.no_test;
+import gama.annotations.operator;
+import gama.api.exceptions.GamaRuntimeException;
+import gama.api.types.color.IColor;
+import gama.api.types.list.GamaListFactory;
+import gama.api.types.list.IList;
 import gaml.extension.unity.types.UnityAspect;
 import gaml.extension.unity.types.UnityInteraction;
 import gaml.extension.unity.types.UnityProperties;
 
-/**
+/** 
  * The Class Operators.
  */
 public class Operators {
@@ -35,7 +35,7 @@ public class Operators {
 	@doc (
 			value = "creates a new unity prefab aspect for Unity with the given properties: path of the prefab, size, y-offset, rotation coeff, rotation offset",
 			masterDoc = true,
-			examples = @example (
+			examples = @example ( 
 					value = "prefab_aspect(\"Prefabs/Car\",1.0,0.5,1.0,90.0)",
 					isExecutable = false))
 	@no_test
@@ -52,16 +52,16 @@ public class Operators {
 	@doc (
 			value = "creates a new unity geometry aspect for Unity with the given properties: geometry to display, height, color",
 			masterDoc = true,
-			examples = @example (
+			examples = @example ( 
 					value = "geometry_aspect(10.0, #red, precision)",
 					isExecutable = false))
 	@no_test
-	public static UnityAspect newUnityGeometryAspect(final double height, final GamaColor color, final int precision) throws GamaRuntimeException {
+	public static UnityAspect newUnityGeometryAspect(final double height, final IColor color, final int precision) throws GamaRuntimeException {
 		return new UnityAspect(height,color, precision); 
 	}
 	
 	@operator (
-			value = "geometry_aspect",
+			value = "geometry_aspect", 
 			can_be_const = true,
 			category = { "Unity" },
 			concept = {"Unity"})
@@ -72,7 +72,7 @@ public class Operators {
 					value = "geometry_aspect(0.1,\"Materials/Water/Water Material\", #white, precision)",
 					isExecutable = false))
 	@no_test
-	public static UnityAspect newUnityGeometryAspect(final double height, final String material, final GamaColor color, final int precision) throws GamaRuntimeException {
+	public static UnityAspect newUnityGeometryAspect(final double height, final String material, final IColor color, final int precision) throws GamaRuntimeException {
 		return new UnityAspect(height, material, color, precision); 
 	}
 	

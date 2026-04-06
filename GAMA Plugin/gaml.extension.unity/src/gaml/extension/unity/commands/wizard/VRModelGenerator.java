@@ -10,7 +10,6 @@
  ********************************************************************************************************/
 package gaml.extension.unity.commands.wizard;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,12 +21,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import gama.core.kernel.experiment.IExperimentPlan;
-import gama.core.kernel.model.IModel;
-import gama.core.metamodel.shape.GamaPoint;
-import gama.core.outputs.IOutput;
-import gama.core.util.GamaColor;
-import gama.gaml.species.ISpecies;
+import gama.api.kernel.species.IExperimentSpecies;
+import gama.api.kernel.species.IModelSpecies;
+import gama.api.kernel.species.ISpecies;
+import gama.api.types.color.GamaColorFactory;
+import gama.api.types.color.IColor;
+import gama.api.types.geometry.GamaPointFactory;
+import gama.api.types.geometry.IPoint;
+import gama.api.ui.IOutput;
 import one.util.streamex.StreamEx;
 
 /**
@@ -35,7 +36,7 @@ import one.util.streamex.StreamEx;
  */
 public class VRModelGenerator {
 
-	IModel model;
+	IModelSpecies model;
 
 	Map<String, Player> players = new HashMap<>();
 	Map<String, UnityProperties> properties = new HashMap<>(Map.of("default", new UnityProperties()));
@@ -69,7 +70,7 @@ public class VRModelGenerator {
 	/** The has max number player. */
 	private boolean hasMaxNumberPlayer;
 
-	public VRModelGenerator(final IModel model) {
+	public VRModelGenerator(final IModelSpecies model) {
 		this.model = model;
 		buildInitialListOfSpecies();
 		buildInitialListOfExperimentsAndDisplays();
@@ -85,8 +86,8 @@ public class VRModelGenerator {
 	}
 
 	public class Player {
-		GamaPoint location = getDefaultLocationInit();
-		GamaColor color = getDefaultPlayerColor();
+		IPoint location = getDefaultLocationInit();
+		IColor color = getDefaultPlayerColor();
 		Double size = getDefaultPlayerSize();
 		String property;
 	}
@@ -94,7 +95,7 @@ public class VRModelGenerator {
 	public class UnityProperties {
 		String tag = "";
 		Double size = 1d;
-		GamaColor color = getDefaultSpeciesColor();
+		IColor color = getDefaultSpeciesColor();
 		String material = "";
 		Double buffer = 0d;
 		String path = "Prefabs/Visual Prefabs/City/Vehicles/Car";
@@ -125,7 +126,7 @@ public class VRModelGenerator {
 	}
 
 	private void buildInitialListOfExperimentsAndDisplays() {
-		for (IExperimentPlan ep : model.getExperiments()) {
+		for (IExperimentSpecies ep : model.getExperiments()) {
 			if (experimentName == null) { experimentName = ep.getName(); }
 			List<String> itemsD = new ArrayList<>();
 			for (IOutput d : ep.getOriginalSimulationOutputs()) {
@@ -536,16 +537,16 @@ public class VRModelGenerator {
 	 *
 	 * @return the player color
 	 */
-	public GamaColor getDefaultPlayerColor() { return GamaColor.get(Color.red); }
+	public IColor getDefaultPlayerColor() { return GamaColorFactory.RED; }
 
-	public GamaColor getDefaultSpeciesColor() { return GamaColor.get("gray"); }
+	public IColor getDefaultSpeciesColor() { return GamaColorFactory.GRAY; }
 
 	/**
 	 * Gets the location init.
 	 *
 	 * @return the location init
 	 */
-	public GamaPoint getDefaultLocationInit() { return new GamaPoint(50, 50, 0); }
+	public IPoint getDefaultLocationInit() { return GamaPointFactory.create(50, 50, 0); }
 
 	/**
 	 * Sets the location init.

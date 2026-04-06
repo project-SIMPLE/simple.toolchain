@@ -10,10 +10,10 @@
  ********************************************************************************************************/
 package gaml.extension.unity.constants;
 
-import gama.annotations.precompiler.GamlAnnotations.constant;
-import gama.annotations.precompiler.GamlAnnotations.doc;
-import gama.annotations.precompiler.IConcept;
-import gama.annotations.precompiler.IConstantCategory;
+import gama.annotations.constant;
+import gama.annotations.doc;
+import gama.annotations.support.IConcept;
+import gama.annotations.support.IConstantCategory;
 import gaml.extension.unity.types.UnityInteraction;
 
 /**

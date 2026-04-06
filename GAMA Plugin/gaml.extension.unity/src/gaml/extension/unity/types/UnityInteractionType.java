@@ -10,17 +10,18 @@
  ********************************************************************************************************/
 package gaml.extension.unity.types;
 
-import gama.annotations.precompiler.GamlAnnotations.doc;
-import gama.annotations.precompiler.GamlAnnotations.type;
-import gama.annotations.precompiler.IConcept;
-import gama.core.runtime.IScope;
-import gama.core.runtime.exceptions.GamaRuntimeException;
-import gama.gaml.types.GamaType;
-import gama.gaml.types.IType;
+import gama.annotations.doc;
+import gama.annotations.type;
+import gama.annotations.support.IConcept;
+import gama.api.exceptions.GamaRuntimeException;
+import gama.api.gaml.types.GamaType;
+import gama.api.gaml.types.IType;
+import gama.api.gaml.types.ITypesManager;
+import gama.api.runtime.scope.IScope;
 
 /**
  * The Class UnityInteractionType.
- */
+ */ 
 
 @type (
 		name = "unity_interaction",
@@ -30,13 +31,17 @@ import gama.gaml.types.IType;
 @doc ("a type representing a set of properties concerning the interaction for the geometry/agent to send to Unity")
 public class UnityInteractionType extends GamaType<UnityInteraction> {
 
+	public UnityInteractionType(ITypesManager typesManager) {
+		super(typesManager);
+	}
+
 	/** The Constant id. */
-	public final static int UNITYINTERACTIONTYPE_ID = IType.AVAILABLE_TYPES + 383736;
+	public final static int UNITYINTERACTIONTYPE_ID = IType.BEGINNING_OF_CUSTOM_TYPES + 383736;
 
 	@Override
 	public boolean canCastToConst() {
 		return true;
-	}
+	} 
 
 	@Override
 	@doc ("cast an object into a unity_interaction if it is an instance of a unity_interaction")

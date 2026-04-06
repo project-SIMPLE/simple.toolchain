@@ -10,13 +10,14 @@
  ********************************************************************************************************/
 package gaml.extension.unity.types;
 
-import gama.annotations.precompiler.GamlAnnotations.doc;
-import gama.annotations.precompiler.GamlAnnotations.type;
-import gama.annotations.precompiler.IConcept;
-import gama.core.runtime.IScope;
-import gama.core.runtime.exceptions.GamaRuntimeException;
-import gama.gaml.types.GamaType;
-import gama.gaml.types.IType;
+import gama.annotations.doc;
+import gama.annotations.type;
+import gama.annotations.support.IConcept;
+import gama.api.exceptions.GamaRuntimeException;
+import gama.api.gaml.types.GamaType;
+import gama.api.runtime.scope.IScope;
+import gama.api.gaml.types.IType;
+import gama.api.gaml.types.ITypesManager;
 
 /**
  * The Class UnityAspectType.
@@ -28,9 +29,13 @@ import gama.gaml.types.IType;
 		concept = { IConcept.TYPE, "Unity" })
 @doc ("a type representing the way a geometry will be displayed in Unity")
 public class UnityAspectType extends GamaType<UnityAspect> {
+ 
+	public UnityAspectType(ITypesManager typesManager) {
+		super(typesManager);
+	}
 
 	/** The Constant id. */
-	public final static int UNITYASPECTTYPE_ID = IType.AVAILABLE_TYPES + 352583;
+	public final static int UNITYASPECTTYPE_ID = IType.BEGINNING_OF_CUSTOM_TYPES + 352583;
  
 	@Override
 	public boolean canCastToConst() {
@@ -43,7 +48,7 @@ public class UnityAspectType extends GamaType<UnityAspect> {
 			throws GamaRuntimeException {
 		if (obj instanceof UnityAspect) return (UnityAspect) obj;
 		return null;
-	}
+	} 
  
 	@Override
 	public UnityAspect getDefault() { return null; }

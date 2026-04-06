@@ -36,7 +36,7 @@ species unity_linker parent: abstract_unity_linker {
 		player_unity_properties <- [ up_lg,up_turtle, up_slime, up_ghost ];
 		
 	}
-	list<point> random_loc {
+	list<point> random_loc() {
 		list<point> locs ;
 		list<cell> free_cells <- list(cell);
 		ask token {
@@ -50,7 +50,7 @@ species unity_linker parent: abstract_unity_linker {
 		return locs;
 	} 
 	
-	map<string, int> rank {
+	map<string, int> rank() {
 		map<string, int> ranking;
 		loop p over: unity_player {
 			if (not (p.name in score_players.keys)) {
@@ -95,7 +95,7 @@ species unity_linker parent: abstract_unity_linker {
 		do add_geometries_to_send(token,up_token);
 	}
 	
-	action define_properties {
+	action define_properties() {
 		unity_aspect wall_aspect <- geometry_aspect(4.0,#black,precision);
 		up_wall <- geometry_properties("wall","",wall_aspect,#collider,false);
 		unity_properties << up_wall;
@@ -126,7 +126,7 @@ species unity_linker parent: abstract_unity_linker {
 		if (ag != nil) {
 			ask ag {
 				remove key: self from: myself.geometries_to_send;
-				do die;
+				do die();
 			}
 			if not(player in score_players.keys ) {
 				score_players[player] <- 0;
@@ -174,7 +174,7 @@ experiment vr_xp parent:begin_race autorun: false type: unity {
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				do die();
 			}
 		}
 	}

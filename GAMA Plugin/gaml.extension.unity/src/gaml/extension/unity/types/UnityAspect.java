@@ -10,27 +10,27 @@
  ********************************************************************************************************/
 package gaml.extension.unity.types;
 
-import java.awt.Color;
 import java.util.Map;
 
-import gama.annotations.precompiler.GamlAnnotations.doc;
-import gama.annotations.precompiler.GamlAnnotations.getter;
-import gama.annotations.precompiler.GamlAnnotations.variable;
-import gama.annotations.precompiler.GamlAnnotations.vars;
-import gama.core.common.interfaces.IValue;
-import gama.core.runtime.IScope;
-import gama.core.runtime.exceptions.GamaRuntimeException;
-import gama.core.util.GamaColor;
-import gama.core.util.GamaMapFactory;
-import gama.core.util.file.json.Json;
-import gama.core.util.file.json.JsonValue;
-import gama.gaml.types.IType;
+import gama.annotations.doc;
+import gama.annotations.getter;
+import gama.annotations.variable;
+import gama.annotations.vars;
+import gama.api.exceptions.GamaRuntimeException;
+import gama.api.gaml.types.IType;
+import gama.api.runtime.scope.IScope;
+import gama.api.types.color.GamaColorFactory;
+import gama.api.types.color.IColor;
+import gama.api.types.map.GamaMapFactory;
+import gama.api.types.misc.IValue;
+import gama.api.utils.json.IJson;
+import gama.api.utils.json.IJsonValue;
 
 /**
- * The Class UnityAspect.
+ * The Class UnityAspect.  
  */
 
-@vars ({ @variable (
+@vars ({ @variable ( 
 		name = "prefab",
 		type = IType.STRING,
 		doc = @doc ("The prefab used to display the agent/geometry")),
@@ -63,10 +63,10 @@ import gama.gaml.types.IType;
 		type = IType.COLOR,
 		doc = @doc ("Geometry: color of the geometry displayed in Unity"))
 
-
+ 
 })
 public class UnityAspect implements IValue {
-
+ 
 	private String prefab;
 	private String material;
 	private double size;
@@ -75,7 +75,7 @@ public class UnityAspect implements IValue {
 	private double y_offset;
 	
 	private double height;
-	private GamaColor color = null;
+	private IColor color = null;
 	
 	private boolean prefabAspect;
 	
@@ -83,7 +83,7 @@ public class UnityAspect implements IValue {
 	
 	
 	
-	public UnityAspect(double height, GamaColor color, int precision) {
+	public UnityAspect(double height, IColor color, int precision) {
 		super();
 		this.precision =  precision;
 		this.height = height;
@@ -91,7 +91,7 @@ public class UnityAspect implements IValue {
 		this.prefabAspect = false;
 	}
 	
-	public UnityAspect(double height, String material,GamaColor color, int precision) {
+	public UnityAspect(double height, String material,IColor color, int precision) {
 		super();
 		this.precision =  precision;
 		this.height = height;
@@ -117,7 +117,7 @@ public class UnityAspect implements IValue {
 		this.rotation_coeff = rotation_coeff;
 		this.rotation_offset = rotation_offset;
 		this.y_offset = y_offset;
-		this.color =  GamaColor.get(Color.gray);
+		this.color =  GamaColorFactory.GRAY;
 		this.prefabAspect = true;
 	}
 
@@ -165,7 +165,7 @@ public class UnityAspect implements IValue {
 	}
 
 	@getter ("color")
-	public GamaColor getColor() {
+	public IColor getColor() {
 		return color;
 	}
 
@@ -221,8 +221,16 @@ public class UnityAspect implements IValue {
 		return null;
 	}
 
+
+
 	@Override
-	public JsonValue serializeToJson(Json json) {
+	public IType<?> getGamlType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IJsonValue serializeToJson(IJson json) {
 		// TODO Auto-generated method stub
 		return null;
 	}

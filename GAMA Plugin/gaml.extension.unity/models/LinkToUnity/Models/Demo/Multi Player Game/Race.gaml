@@ -12,10 +12,10 @@ global {
 	int number_tokens <- 20;
 	
 	init {
-		do generate_maze;
-		do generate_tokens;
+		do generate_maze();
+		do generate_tokens();
 	}
-	action generate_maze {
+	action generate_maze() {
 		list<geometry> geoms <- split_lines(union(cell collect each.shape.contour));
 		create wall from: geoms;
 		list<cell> visited_cells;
@@ -32,7 +32,7 @@ global {
 				stack << current_cell;
 				cell chosen_cell <- one_of(neighs);
 				ask wall overlapping line([current_cell.location, chosen_cell.location]) {
-					do die;
+					do die();
 				}
 				visited_cells << chosen_cell;
 				stack << chosen_cell;
@@ -43,7 +43,7 @@ global {
 		} 
 	}
 	
-	action generate_tokens {
+	action generate_tokens() {
 		list<cell> free_cells <- list(cell);
 		create token number: min(number_tokens, length(free_cells) - 4) {
 			cell c <- one_of(free_cells);

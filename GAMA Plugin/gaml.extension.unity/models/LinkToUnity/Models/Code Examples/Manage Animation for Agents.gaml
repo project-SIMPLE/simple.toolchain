@@ -19,7 +19,7 @@ global {
  	}
  	
  	//action triggered by clicking on the screen to select the new target of the boy agent
- 	action change_boy_target {
+ 	action change_boy_target() {
  		ask boy_agent {
 			target <- #user_location;
 			color <- #magenta;
@@ -92,7 +92,7 @@ species unity_linker parent: abstract_unity_linker {
 	 
 	
 	//action that defines the different unity properties
-	action define_properties {
+	action define_properties() {
 		//define a unity_aspect called boy_aspect that will display in Unity the agents with the Boy prefab, with a scale of 2.0, a y-offset of 0.2, 
 		//a rotation coefficient of 1.0 (no change of rotation from the prefab), a rotation offset of 90, and we use the default precision. 
 		unity_aspect boy_aspect <- prefab_aspect("Prefabs/Visual Prefabs/Character/Boy",2.0,0.2,1.0,90.0,precision);

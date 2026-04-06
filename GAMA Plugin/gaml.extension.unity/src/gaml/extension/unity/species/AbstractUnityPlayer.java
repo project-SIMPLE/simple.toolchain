@@ -10,27 +10,26 @@
  ********************************************************************************************************/
 package gaml.extension.unity.species;
 
-import gama.annotations.precompiler.GamlAnnotations.action;
-import gama.annotations.precompiler.GamlAnnotations.doc;
-import gama.annotations.precompiler.GamlAnnotations.getter;
-import gama.annotations.precompiler.GamlAnnotations.setter;
-import gama.annotations.precompiler.GamlAnnotations.species;
-import gama.annotations.precompiler.GamlAnnotations.variable;
-import gama.annotations.precompiler.GamlAnnotations.vars;
-import gama.core.common.interfaces.IKeyword;
-import gama.core.metamodel.agent.GamlAgent;
-import gama.core.metamodel.agent.IAgent;
-import gama.core.metamodel.population.IPopulation;
-import gama.core.metamodel.shape.GamaPoint;
-import gama.core.metamodel.shape.IShape;
-import gama.core.runtime.IScope;
-import gama.core.runtime.exceptions.GamaRuntimeException;
-import gama.core.util.GamaColor;
+import gama.annotations.action;
+import gama.annotations.doc;
+import gama.annotations.getter;
+import gama.annotations.setter;
+import gama.annotations.species;
+import gama.annotations.variable;
+import gama.annotations.vars;
+import gama.annotations.constants.IKeyword;
+import gama.api.exceptions.GamaRuntimeException;
+import gama.api.gaml.types.IType;
+import gama.api.kernel.agent.IAgent;
+import gama.api.kernel.agent.IPopulation;
+import gama.api.runtime.scope.IScope;
+import gama.api.types.color.IColor;
+import gama.api.types.geometry.GamaPointFactory;
+import gama.api.types.geometry.IShape;
+import gama.core.agent.GamlAgent;
 import gama.gaml.operators.spatial.SpatialCreation;
 import gama.gaml.operators.spatial.SpatialOperators;
 import gama.gaml.operators.spatial.SpatialTransformations;
-import gama.gaml.types.IType;
-
 /**
  * The Class AbstractUnityPlayer.
  */
@@ -212,11 +211,11 @@ public class AbstractUnityPlayer extends GamlAgent{
 	}
 	
 	@getter (IKeyword.COLOR)
-	public static GamaColor getColor(final IAgent agent) {
-		return (GamaColor) agent.getAttribute(IKeyword.COLOR);
+	public static IColor getColor(final IAgent agent) {
+		return (IColor) agent.getAttribute(IKeyword.COLOR);
 	}
 	@setter(IKeyword.COLOR)
-	public static void setColor(final IAgent agent, final GamaColor val) {
+	public static void setColor(final IAgent agent, final IColor val) {
 		agent.setAttribute(IKeyword.COLOR, val);
 	}
 	
@@ -296,7 +295,7 @@ public class AbstractUnityPlayer extends GamlAgent{
 		Double cone_amplitude = getConeAmplitude(agent);
 		IShape g = SpatialCreation.cone(scope, (int)(rotation - cone_amplitude/2),(int)(rotation + cone_amplitude/2));
 		g = SpatialOperators.inter(scope, g, SpatialCreation.circle(scope, getConeDistance(agent)));
-		g = SpatialTransformations.translated_by(scope, g, new GamaPoint(0,0,getZOffset(agent)));
+		g = SpatialTransformations.translated_by(scope, g, GamaPointFactory.create(0,0,getZOffset(agent)));
 		return g;
 		
 	}
