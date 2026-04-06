@@ -58,7 +58,7 @@ species unity_linker parent: abstract_unity_linker {
 							}
 							geometry g <- union(triangles collect (each+ tol));
 							loop gg over: g.geometries {
-								create object with:(shape: gg, name:names[cpt]);
+								create object_(shape: gg, name:names[cpt]);
 							}
 							
 						}
@@ -76,7 +76,7 @@ species unity_linker parent: abstract_unity_linker {
 			 
 			write "Geometries received";			
 			ask world {
-				do pause;
+				do pause();
 			}
 		}
 		
@@ -86,7 +86,7 @@ species unity_linker parent: abstract_unity_linker {
 }
 
 //Species to represent the object imported
-species object {
+species object_ {
 
 	aspect default {
 		draw shape color: #white ;
@@ -131,7 +131,7 @@ species unity_player parent: abstract_unity_player {
 experiment main type: gui {
 	output {
 		display map type: 3d{
-			species object;
+			species object_;
 		}
 	}
 }
@@ -159,7 +159,7 @@ experiment LoadGeometriesFromUnity parent:main autorun: true type: unity {
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				do die();
 			}
 		}
 	}

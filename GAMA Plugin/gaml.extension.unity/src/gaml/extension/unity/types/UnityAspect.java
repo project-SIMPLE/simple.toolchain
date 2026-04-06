@@ -18,6 +18,7 @@ import gama.annotations.variable;
 import gama.annotations.vars;
 import gama.api.exceptions.GamaRuntimeException;
 import gama.api.gaml.types.IType;
+import gama.api.gaml.types.Types;
 import gama.api.runtime.scope.IScope;
 import gama.api.types.color.GamaColorFactory;
 import gama.api.types.color.IColor;
@@ -225,8 +226,7 @@ public class UnityAspect implements IValue {
 
 	@Override
 	public IType<?> getGamlType() {
-		// TODO Auto-generated method stub
-		return null;
+		return Types.get(UnityAspectType.UNITYASPECTTYPE_ID);
 	}
 
 	@Override

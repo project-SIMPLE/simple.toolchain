@@ -17,6 +17,7 @@ import gama.annotations.variable;
 import gama.annotations.vars;
 import gama.api.exceptions.GamaRuntimeException;
 import gama.api.gaml.types.IType;
+import gama.api.gaml.types.Types;
 import gama.api.runtime.scope.IScope;
 import gama.api.types.map.GamaMapFactory;
 import gama.api.types.misc.IValue;
@@ -113,8 +114,9 @@ public class UnityProperties implements IValue {
 
 	@Override
 	public IType<?> getGamlType() {
-		// TODO Auto-generated method stub
-		return null;
+		{
+			return Types.get(UnityPropertiesType.UNITYPROPERTIESTYPE_ID);
+		}
 	}
 
 	@Override

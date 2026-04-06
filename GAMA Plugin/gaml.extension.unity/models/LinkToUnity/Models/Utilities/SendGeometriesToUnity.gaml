@@ -61,7 +61,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	init {
 		//define the unity properties
-		do define_properties;
+		do define_properties();
 		
 		do add_background_geometries(road collect (each.shape + 3.0),up_road);
 		do add_background_geometries(building,up_building);
@@ -69,7 +69,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	
 	//action that defines the different unity properties
-	action define_properties {
+	action define_properties(){
 		unity_aspect road_aspect <- geometry_aspect(0.1, #black, precision);
 		
 		//define the up_tree unity property, with the name "tree", no specific layer, no interaction, and the agents location are not sent back 
@@ -157,7 +157,7 @@ experiment SendGeometriesToUnity parent:main autorun: false type: unity {
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				do die();
 			}
 		}
 	}

@@ -33,12 +33,12 @@ species unity_linker parent: abstract_unity_linker {
 	
 	
 	init {
-		do define_properties;
+		do define_properties();
 		do add_background_geometries(block_ag,up_geom);
 		do add_background_geometries(static_object,up_tree);
 	}
 	
-	action define_properties {
+	action define_properties() {
 		unity_aspect car_aspect <- prefab_aspect("Prefabs/Visual Prefabs/City/Vehicles/Car",30,0.2,1.0,-90.0, precision);
 		up_car <- geometry_properties("car","car", car_aspect, #ray_interactable, false);
 		unity_properties << up_car;
@@ -73,7 +73,7 @@ species unity_linker parent: abstract_unity_linker {
 		if (ag != nil) {
 			ask ag {
 				remove key: self from: myself.geometries_to_send;
-				do die;
+				do die();
 			}
 		}
 	}
@@ -83,9 +83,9 @@ species unity_linker parent: abstract_unity_linker {
 		if (b != nil) {
 			ask b {
 				if (not b.is_hotspot) {
-					do become_hotspot;
+					do become_hotspot();
 				} else {
-					do remove_hotspot;
+					do remove_hotspot();
 				}
 			}
 			
@@ -144,7 +144,7 @@ experiment vr_xp parent: simple_simulation autorun: false type: unity  {
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				do die();
 			}
 		}
 	}

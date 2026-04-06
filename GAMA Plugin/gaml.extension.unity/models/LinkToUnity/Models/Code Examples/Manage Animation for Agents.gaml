@@ -48,7 +48,7 @@ species boy_agent skills: [moving] {
 	
 	//reflex that make the agent moves towards its target when this one is not nil
 	reflex move_to_target when: target != nil {
-		do goto target: target;
+		do goto (target: target);
 		
 		//if arrived at destination
 		if target = location {
@@ -87,7 +87,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	init {
 		//define the unity properties
-		do define_properties;
+		do define_properties();
 	}
 	 
 	
@@ -181,7 +181,7 @@ experiment vr_xp parent:main autorun: false type: unity {
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				do die();
 			}
 		}
 	}
@@ -244,7 +244,7 @@ experiment vr_xp parent:main autorun: false type: unity {
 				float t <- gama.machine_time;
 				if (t - t_ref) > 1000 and cycle > 0{
 					ask world {
-						do change_boy_target;
+						do change_boy_target();
 					}
 					t_ref <- t;
 				}

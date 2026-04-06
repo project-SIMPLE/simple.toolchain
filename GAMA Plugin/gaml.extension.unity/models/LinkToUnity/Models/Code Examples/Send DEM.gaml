@@ -33,7 +33,7 @@ global {
 	
 	init {
 		//create a sphere agent (ball)
-		create sphere_ag with:(location:{20,20,70});
+		create sphere_ag (location:{20,20,70});
 	}
 	
 	
@@ -106,7 +106,6 @@ species unity_linker parent: abstract_unity_linker {
 		
 		// add the up_sphere unity_property to the list of unity_properties
 		unity_properties << up_sphere;
-		
 		
 	}
 }
@@ -190,7 +189,7 @@ experiment vr_xp parent:main autorun: false type: unity {
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				do die();
 			}
 		}
 	}

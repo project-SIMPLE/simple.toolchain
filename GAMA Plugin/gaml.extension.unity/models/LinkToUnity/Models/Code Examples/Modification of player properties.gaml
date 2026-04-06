@@ -48,7 +48,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	init {
 		//define the unity properties
-		do define_properties;
+		do define_properties();
 		
 		//add the static_geometry agents as static agents/geometries to send to unity with the up_geom unity properties.
 		do add_background_geometries(static_geometry_agent,up_geom);
@@ -152,7 +152,7 @@ experiment vr_xp parent:main autorun: false type: unity {
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				do die();
 			}
 		}
 	}

@@ -31,7 +31,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 
 	init {
-		do define_properties;
+		do define_properties();
 		do add_background_geometries(wall,up_wall);
 		player_unity_properties <- [ up_lg,up_turtle, up_slime, up_ghost ];
 		
@@ -91,7 +91,7 @@ species unity_linker parent: abstract_unity_linker {
 	}
 	
 	
-	reflex send_agents {
+	reflex send_agents { 
 		do add_geometries_to_send(token,up_token);
 	}
 	

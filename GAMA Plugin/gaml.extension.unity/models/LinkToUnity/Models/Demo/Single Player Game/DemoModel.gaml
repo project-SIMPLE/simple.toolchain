@@ -18,7 +18,7 @@ global {
 	geometry free_place ;
 	graph network;
 	init {
-		create static_object with:(location: {5, 50}) {
+		create static_object (location: {5, 50}) {
 			taken_place <- rectangle(10.0, 100.0) at_location {5, 50};
 		}
 		
