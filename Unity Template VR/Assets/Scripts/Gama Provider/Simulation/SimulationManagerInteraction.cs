@@ -13,13 +13,7 @@ public class SimulationManagerInteraction : SimulationManager
     //Defines what happens when a ray passes over an object 
     protected override void HoverEnterInteraction(HoverEnterEventArgs ev)
     {
-         GameObject obj = ev.interactableObject.transform.gameObject;
-        Debug.Log("HoverEnterInteraction : " + obj);
-        if (obj.tag.Equals("pedestrian"))
-        {
-             Debug.Log("HoverEnterInteraction : " + obj);
-             SimulationManagerSolo.ChangeColor(obj, Color.blue);
-        } 
+     
         
             
     }
@@ -28,33 +22,14 @@ public class SimulationManagerInteraction : SimulationManager
     //Defines what happens when a ray passes not anymore over an object 
     protected override void HoverExitInteraction(HoverExitEventArgs ev)
     {
-        GameObject obj = ev.interactableObject.transform.gameObject;
-        if (obj.tag.Equals("pedestrian"))
-        {
-             SimulationManagerSolo.ChangeColor(obj, Color.white);
-        }
+        
     }
 
     //Defines what happens when a object is selected
     protected override void SelectInteraction(SelectEnterEventArgs ev)
     {
 
-        if (remainingTime <= 0.0)
-        {
-            GameObject grabbedObject = ev.interactableObject.transform.gameObject;
- Debug.Log("grabbedObject : " + grabbedObject);
-       
-            if (grabbedObject.tag.Equals("pedestrian") )
-            {
-                Dictionary<string, string> args = new Dictionary<string, string> {
-                         {"id", grabbedObject.name }
-                    };
-                ConnectionManager.Instance.SendExecutableAsk("remove_pedestrian", args);
-
-            } 
-
-
-        }
+        
 
     }
 
