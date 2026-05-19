@@ -16,19 +16,12 @@ In addition, the plugin integrates a tool accessible from the UnityVR menu that 
 
 Finally, the plugin includes several templates illustrating how to use the plugin (Single player and Multi-player Demos) or how to send or receive geometries from GAMA to Unity or from Unity to GAMA.
 
-A description of the use of the plugin with a tutorial can be found [here](https://github.com/project-SIMPLE/simple.toolchain/wiki/02-Tutorial-%E2%80%90-From-GAMA-model-to-Virtual-Universe-%E2%80%90-case-of-a-traffic-model).
+A description of the use of the plugin with a tutorial can be found [here](https://doc.project-simple.eu/tutorials/Tutorial-From-GAMA-to-VU).
 
-# Installation
+## Documentation
 
-## From GAMA
-To use the plugin from a release version of GAMA (version 2025-01), it can be installed directly from the plugin installer. The latest version of GAMA can be downloaded [here](https://github.com/gama-platform/gama/releases/tag/2025.01.0).
+All the project documentation can be found here : https://doc.project-simple.eu
 
-
-Specifically, select "Support/Install new plugins..." from the menu
-<img width="1065" alt="InstallPlugin" src="https://github.com/user-attachments/assets/e2df2f5d-a579-46df-8622-708be654a121" />
-
-then "Work with", copy the address [https://project-simple.github.io/simple.toolchain/](https://project-simple.github.io/simple.toolchain/) and select the plugin afterwards.
-<img width="1796" alt="Plugin" src="https://github.com/user-attachments/assets/923f923f-93e1-41de-8e6e-a0d7abeae414" />
-
-## Developer mode
-If you have a developer version of GAMA (branch 2024/06), you can clone the project directly to add the plugin to GAMA.
+Quick link to install documentation
+- [From GAMA](https://doc.project-simple.eu/gama/installation)
+- [Developer mode](https://doc.project-simple.eu/advanced/building-from-source#gama-plugin)
