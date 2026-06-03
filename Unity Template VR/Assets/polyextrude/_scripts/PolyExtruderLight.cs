@@ -2,7 +2,7 @@
  * PolyExtruderLight.cs
  *
  * Description: Lightweight implementation of the original PolyExtruder.cs class
- *              combining the three original meshes (bottom, top, surround) into one mesh at runtime.
+ * combining the three original meshes (bottom, top, surround) into one mesh at runtime.
  *
  * New in this version:
  * - Accepts a custom Material.
@@ -269,7 +269,9 @@ public class PolyExtruderLight : MonoBehaviour
         {
             this.prismColor = color;
         }
-        if (this.prismMeshRenderer != null && this.prismMeshRenderer.material != null)
+        
+        // [CORRIGÉ] : Utilisation de sharedMaterial au lieu de material pour éviter une fuite d'instances de matériaux en mode Edition.
+        if (this.prismMeshRenderer != null && this.prismMeshRenderer.sharedMaterial != null)
         {
             this.prismMeshRenderer.sharedMaterial.color = this.prismColor;
         }
@@ -321,21 +323,24 @@ public class PolyExtruderLight : MonoBehaviour
     /// </summary>
     private void CombineMesh()
     {
-        // Create child objects for bottom, top, and surround.
+        // [CORRIGÉ] : Création explicite de new Mesh() et assignation à sharedMesh pour éviter l'erreur .mesh
         GameObject goB = new GameObject();
         goB.transform.parent = this.transform;
         MeshFilter mfB = goB.AddComponent<MeshFilter>();
-        Mesh bottomMesh = mfB.mesh;
+        Mesh bottomMesh = new Mesh();
+        mfB.sharedMesh = bottomMesh; 
 
         GameObject goT = new GameObject();
         goT.transform.parent = this.transform;
         MeshFilter mfT = goT.AddComponent<MeshFilter>();
-        Mesh topMesh = mfT.mesh;
+        Mesh topMesh = new Mesh();
+        mfT.sharedMesh = topMesh;
 
         GameObject goS = new GameObject();
         goS.transform.parent = this.transform;
         MeshFilter mfS = goS.AddComponent<MeshFilter>();
-        Mesh surroundMesh = mfS.mesh;
+        Mesh surroundMesh = new Mesh();
+        mfS.sharedMesh = surroundMesh;
 
         // Triangulate bottom.
         List<Vector2> pointsB = new List<Vector2>();
@@ -420,12 +425,32 @@ public class PolyExtruderLight : MonoBehaviour
         Mesh combinedMesh = new Mesh();
         combinedMesh.CombineMeshes(combine);
 
-        // Assign to main prism.
-        this.prismMeshFilter.mesh = combinedMesh;
+        // [CORRIGÉ] : Utilisation de sharedMesh au lieu de mesh
+        this.prismMeshFilter.sharedMesh = combinedMesh;
 
-        // Clean up child objects.
-        Destroy(goB);
-        Destroy(goS);
-        Destroy(goT);
+        // [CORRIGÉ] : Nettoyage propre compatible avec le mode Edition (évite les objets fantômes et les fuites)
+        SafeDestroy(bottomMesh);
+        SafeDestroy(topMesh);
+        SafeDestroy(surroundMesh);
+        SafeDestroy(goB);
+        SafeDestroy(goS);
+        SafeDestroy(goT);
+    }
+
+    /// <summary>
+    /// Helper to destroy objects correctly whether in Play Mode or Edit Mode.
+    /// </summary>
+    private void SafeDestroy(Object obj)
+    {
+        if (obj == null) return;
+        
+        if (Application.isPlaying)
+        {
+            Destroy(obj);
+        }
+        else
+        {
+            DestroyImmediate(obj);
+        }
     }
 }

@@ -47,7 +47,7 @@ public class GAMAGeometryExportUI : EditorWindow
         EditorGUILayout.BeginHorizontal();
         GUILayout.Space(10);
 
-
+ 
         if (GUILayout. Button( "Export geometries" ))
         {
             UnityEngine.Debug.Log("Button press");
@@ -55,10 +55,10 @@ public class GAMAGeometryExportUI : EditorWindow
             EditorUtility.DisplayDialog("Exporting of Geometries",
                   "Waiting for exporting geometries to GAMA", "Ok");
 
-            exporter = new GAMAGeometryExport();
            
-
-
+            GameObject connectionObject = new GameObject("GamaConnection");
+            GAMAGeometryExport exporter = connectionObject.AddComponent<GAMAGeometryExport>();
+        
             UnityEngine.Debug.Log("GAMAGeometryExport: " + toExport);
             exporter.ManageGeometries(toExport, ip, port, GamaCRSCoefX, GamaCRSCoefY, GamaCRSOffsetX, GamaCRSOffsetY);
 
