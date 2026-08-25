@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 7c74aa6a911a2eb4bb984e1446e96c35
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Jaldi
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 339704c70f23c59409c5d8e3b5550898, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
