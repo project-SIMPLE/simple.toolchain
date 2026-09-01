@@ -463,6 +463,9 @@ public class VRModelGenerator {
 				}
 			}
 
+			// Disable the `ask closing` pop-up for VR experiment only
+			modelUnityLinker.append("\n\t\tgama.pref_experiment_ask_closing <- false;");
+
 			modelUnityLinker.append("\n\t}");
 
 		}
